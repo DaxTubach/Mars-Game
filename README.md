@@ -1,1 +1,1 @@
-# Mars-Game
+# Mars Game

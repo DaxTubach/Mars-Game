@@ -1,0 +1,297 @@
+* {
+  background: transparent;
+  border: 0;
+  font-weight: 400;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  background: #000;
+  min-height: 100%;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+  margin: auto;
+  width: 30vw;
+}
+
+.logo {
+  margin: 30px auto;
+  width: 15vw;
+  z-index: 3;
+}
+
+.sign-in {
+  border: solid #fff 2px;
+  border-radius: 10px;
+  opacity: 0.7;
+  padding: 10px 15px;
+  z-index: 3;
+}
+
+input[type='text'],
+input[type='password'],
+input[type='email'] {
+  color: #fff;
+  font-size: 100%;
+}
+
+.sign-in__input-container {
+  border: solid #fff 2px;
+  border-radius: 7px;
+  margin: 20px 10px;
+}
+
+.sign-in__input {
+  padding: 15px 10px;
+}
+
+::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  color: #fff;
+  font-size: 120%;
+  opacity: 0.5;
+}
+::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #fff;
+  font-size: 120%;
+  opacity: 0.5;
+}
+:-ms-input-placeholder {
+  /* IE 10+ */
+  color: #fff;
+  font-size: 120%;
+  opacity: 0.5;
+}
+:-moz-placeholder {
+  /* Firefox 18- */
+  color: #fff;
+  font-size: 120%;
+  opacity: 0.5;
+}
+
+.sign-in__button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.sign-in__button {
+  background: #000;
+  border: solid #fff 2px;
+  border-radius: 7px;
+  color: #fff;
+  padding: 10px 15px;
+  position: absolute;
+  font-size: 120%;
+  transition: all 0.5s ease;
+}
+.sign-in__button:hover {
+  background: #b22222;
+  color: #fff;
+  letter-spacing: 5px;
+}
+
+.register {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-around;
+  margin: -100vh 0 0 80vw;
+  position: absolute;
+  width: 20vw;
+  z-index: 3;
+}
+
+.register__input-container {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 7px;
+  width: 80%;
+}
+
+.register__input {
+  padding: 15px 10px;
+}
+
+.register__button-container {
+}
+
+.register__button {
+  border: solid rgba(0, 0, 0, 0.2) 3px;
+  border-radius: 50%;
+  color: rgba(0, 0, 0, 0.2);
+  font-size: 150%;
+  font-weight: bold;
+  height: 50px;
+  transition: all 0.5s ease;
+  width: 50px;
+}
+.register__button:hover {
+  background: rgba(0, 0, 0, 0.7);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================================================================== 
+Nick Mkrtchyan
+https://www.facebook.com/sonick.pk
+http://www.Mkrtchyan.zz.mu
+================================================================================================= */
+@keyframes move-stars-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+@-webkit-keyframes move-stars-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+@-moz-keyframes move-stars-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+@-ms-keyframes move-stars-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+
+@keyframes move-twink-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+@-webkit-keyframes move-twink-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+@-moz-keyframes move-twink-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+@-ms-keyframes move-twink-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -10000px 5000px;
+  }
+}
+
+/* @keyframes move-clouds-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 10000px 0;
+  }
+}
+@-webkit-keyframes move-clouds-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 10000px 0;
+  }
+}
+@-moz-keyframes move-clouds-back {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 10000px 0;
+  }
+}
+@-ms-keyframes move-clouds-back {
+  from {
+    background-position: 0;
+  }
+  to {
+    background-position: 10000px 0;
+  }
+} */
+
+.stars,
+.twinkling,
+.clouds {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.stars {
+  background: #000 url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat top center;
+  z-index: 1;
+
+  -moz-animation: move-stars-back 1500s linear infinite;
+  -ms-animation: move-stars-back 1500s linear infinite;
+  -o-animation: move-stars-back 1500s linear infinite;
+  -webkit-animation: move-stars-back 1500s linear infinite;
+  animation: move-stars-back 1500s linear infinite;
+}
+
+.twinkling {
+  background: transparent url(http://www.script-tutorials.com/demos/360/images/twinkling.png) repeat
+    top center;
+  z-index: 2;
+
+  -moz-animation: move-twink-back 500s linear infinite;
+  -ms-animation: move-twink-back 500s linear infinite;
+  -o-animation: move-twink-back 500s linear infinite;
+  -webkit-animation: move-twink-back 500s linear infinite;
+  animation: move-twink-back 500s linear infinite;
+}
+
+/* .clouds {
+  background: transparent url(http://www.script-tutorials.com/demos/360/images/clouds3.png) repeat
+    top center;
+  z-index: 3;
+
+  -moz-animation: move-clouds-back 200s linear infinite;
+  -ms-animation: move-clouds-back 200s linear infinite;
+  -o-animation: move-clouds-back 200s linear infinite;
+  -webkit-animation: move-clouds-back 200s linear infinite;
+  animation: move-clouds-back 200s linear infinite;
+} */

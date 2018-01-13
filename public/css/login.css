@@ -265,11 +265,11 @@ http://www.Mkrtchyan.zz.mu
   background: #000 url(http://www.script-tutorials.com/demos/360/images/stars.png) repeat top center;
   z-index: 1;
 
-  -moz-animation: move-stars-back 1500s linear infinite;
-  -ms-animation: move-stars-back 1500s linear infinite;
-  -o-animation: move-stars-back 1500s linear infinite;
-  -webkit-animation: move-stars-back 1500s linear infinite;
-  animation: move-stars-back 1500s linear infinite;
+  -moz-animation: move-stars-back 750s linear infinite;
+  -ms-animation: move-stars-back 750s linear infinite;
+  -o-animation: move-stars-back 750s linear infinite;
+  -webkit-animation: move-stars-back 750s linear infinite;
+  animation: move-stars-back 750s linear infinite;
 }
 
 .twinkling {

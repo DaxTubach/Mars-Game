@@ -1,6 +1,7 @@
 * {
   background: transparent;
   border: 0;
+  font-family: 'Varela Round', sans-serif;
   font-weight: 400;
   margin: 0;
   outline: 0;
@@ -12,8 +13,11 @@ html {
 }
 
 body {
-  background: #000;
   min-height: 100%;
+}
+
+a {
+  text-decoration: none;
 }
 
 .main {
@@ -23,11 +27,27 @@ body {
   justify-content: center;
   margin: auto;
   width: 30vw;
+  min-width: 300px;
+}
+
+.register-button-container {
+  color: #fff;
+  font-size: 100%;
+  margin: 20px 0 0 20px;
+  position: absolute;
+  transition: all 0.5s ease;
+  width: 100px;
+  z-index: 3;
+}
+.register-button-container:hover {
+  cursor: pointer;
+  letter-spacing: 1px;
 }
 
 .logo {
   margin: 30px auto;
   width: 15vw;
+  min-width: 150px;
   z-index: 3;
 }
 
@@ -43,7 +63,6 @@ input[type='text'],
 input[type='password'],
 input[type='email'] {
   color: #fff;
-  font-size: 100%;
 }
 
 .sign-in__input-container {
@@ -97,8 +116,9 @@ input[type='email'] {
   transition: all 0.5s ease;
 }
 .sign-in__button:hover {
-  background: #b22222;
+  background: #ff5555;
   color: #fff;
+  cursor: pointer;
   letter-spacing: 5px;
 }
 
@@ -109,10 +129,23 @@ input[type='email'] {
   flex-direction: column;
   height: 100%;
   justify-content: space-around;
-  margin: -100vh 0 0 80vw;
+  margin: -100vh 0 0 0;
+  overflow-x: hidden;
   position: absolute;
-  width: 20vw;
+  transition: all 0.5s ease;
+  width: 0;
   z-index: 3;
+}
+
+.register__close-button {
+  font-size: 32px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 1);
+  transition: all 0.5s ease;
+}
+.register__close-button:hover {
+  color: #ff5555;
+  font-weight: 1000;
 }
 
 .register__input-container {
@@ -125,30 +158,26 @@ input[type='email'] {
   padding: 15px 10px;
 }
 
-.register__button-container {
+.register__confirm-button-container {
 }
 
-.register__button {
-  border: solid rgba(0, 0, 0, 0.2) 3px;
+.register__confirm-button {
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 50%;
-  color: rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.5);
   font-size: 150%;
   font-weight: bold;
   height: 50px;
   transition: all 0.5s ease;
   width: 50px;
 }
-.register__button:hover {
-  background: rgba(0, 0, 0, 0.7);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  color: rgba(255, 255, 255, 0.5);
+.register__confirm-button:hover {
+  color: #fff;
+  background: #5fd38d;
+  cursor: pointer;
 }
 
-/* ============================================================================================== 
-Nick Mkrtchyan
-https://www.facebook.com/sonick.pk
-http://www.Mkrtchyan.zz.mu
-================================================================================================= */
+/* Stars Background */
 @keyframes move-stars-back {
   from {
     background-position: 0 0;
@@ -215,42 +244,8 @@ http://www.Mkrtchyan.zz.mu
   }
 }
 
-/* @keyframes move-clouds-back {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 10000px 0;
-  }
-}
-@-webkit-keyframes move-clouds-back {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 10000px 0;
-  }
-}
-@-moz-keyframes move-clouds-back {
-  from {
-    background-position: 0 0;
-  }
-  to {
-    background-position: 10000px 0;
-  }
-}
-@-ms-keyframes move-clouds-back {
-  from {
-    background-position: 0;
-  }
-  to {
-    background-position: 10000px 0;
-  }
-} */
-
 .stars,
-.twinkling,
-.clouds {
+.twinkling {
   position: absolute;
   top: 0;
   left: 0;
@@ -283,15 +278,3 @@ http://www.Mkrtchyan.zz.mu
   -webkit-animation: move-twink-back 500s linear infinite;
   animation: move-twink-back 500s linear infinite;
 }
-
-/* .clouds {
-  background: transparent url(http://www.script-tutorials.com/demos/360/images/clouds3.png) repeat
-    top center;
-  z-index: 3;
-
-  -moz-animation: move-clouds-back 200s linear infinite;
-  -ms-animation: move-clouds-back 200s linear infinite;
-  -o-animation: move-clouds-back 200s linear infinite;
-  -webkit-animation: move-clouds-back 200s linear infinite;
-  animation: move-clouds-back 200s linear infinite;
-} */

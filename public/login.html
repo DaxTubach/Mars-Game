@@ -6,9 +6,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HQ Mars</title>
   <link href="css/login.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
 </head>
 
+
 <body>
+  <div class="register-button-container">
+    <span onclick="openRegister()">Register</span>
+    <script>
+      function openRegister() {
+        document.getElementsByClassName("register")[0].style.width = "20vw";
+      }
+
+      function closeRegister() {
+        document.getElementsByClassName("register")[0].style.width = "0";
+      }
+    </script>
+  </div>
+
+
   <div class="main">
     <img class="logo" src="images/logo-light.png" alt="HQ Mars logo" />
 
@@ -27,6 +43,7 @@
   </div>
 
   <form class="register">
+    <a class="register__close-button" href="javascript:void(0)" onclick="closeRegister()">&times;</a>
     <div class="register__input-container">
       <input class="register__input" type="email" placeholder="Email" name="email" required />
     </div>
@@ -42,19 +59,13 @@
     <div class="register__input-container">
       <input class="register__input" type="password" placeholder="Confirm Password" name="confirm-pwd" required />
     </div>
-    <div class="register__button-container">
-      <button class="register__button" type="submit">&check;</button>
+    <div class="register__confirm-button-container">
+      <button class="register__confirm-button" type="submit">&check;</button>
     </div>
   </form>
 
-  <!-- ============================================================================================== 
-  Nick Mkrtchyan
-  https://www.facebook.com/sonick.pk
-  http://www.Mkrtchyan.zz.mu
-  ================================================================================================= -->
   <div class="stars"></div>
   <div class="twinkling"></div>
-  <!-- <div class="clouds"></div> -->
 
 </body>
 

@@ -1,0 +1,80 @@
+* {
+  background: transparent;
+  border: 0;
+  font-family: 'Varela Round', sans-serif;
+  font-weight: 400;
+  margin: 0;
+  outline: 0;
+  padding: 0;
+}
+
+html,
+body {
+  color: #fff;
+  background: #000;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 0 0 0 70px;
+  height: 15vh;
+  min-height: 50px;
+}
+
+.main {
+  display: flex;
+  padding: 0 50px;
+  height: 70vh;
+  min-height: 200px;
+}
+
+.colony-type-container {
+  margin: 0 20px;
+  height: 100%;
+  cursor: pointer;
+}
+.colony-type-container:hover {
+  background: #333333;
+}
+
+.colony-type-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 15%;
+}
+
+.colony-type-graphic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #000; /* TEMP UNTIL IMG IS PLACED */
+  background: #fff;
+  border-radius: 30px;
+  height: 60%;
+}
+
+.colony-type-description {
+  display: flex;
+  align-items: center;
+  height: 25%;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 70px 0 0;
+  height: 15vh;
+  min-height: 50px;
+}
+
+.continue-button {
+  padding: 10px;
+  color: white;
+  background: #5fd38d;
+  border-radius: 10px;
+  cursor: pointer;
+}

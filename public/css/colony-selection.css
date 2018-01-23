@@ -31,9 +31,12 @@ body {
 }
 
 .colony-type-container {
-  margin: 0 20px;
+  border-radius: 20px;
+  margin: 0 5px;
+  padding: 0 15px;
   height: 100%;
   cursor: pointer;
+  transition: all 0.5s ease;
 }
 .colony-type-container:hover {
   background: #333333;
@@ -54,6 +57,10 @@ body {
   background: #fff;
   border-radius: 30px;
   height: 60%;
+}
+
+.colony-type-icon {
+  height: 100px;
 }
 
 .colony-type-description {

@@ -1,0 +1,41 @@
+[debug] [2018-01-17T23:31:41.768Z] ----------------------------------------------------------------------
+[debug] [2018-01-17T23:31:41.784Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Marcy\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] [2018-01-17T23:31:41.786Z] CLI Version:   3.16.0
+[debug] [2018-01-17T23:31:41.786Z] Platform:      win32
+[debug] [2018-01-17T23:31:41.787Z] Node Version:  v7.4.0
+[debug] [2018-01-17T23:31:41.788Z] Time:          Wed Jan 17 2018 18:31:41 GMT-0500 (Eastern Standard Time)
+[debug] [2018-01-17T23:31:41.788Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-01-17T23:31:41.886Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-01-17T23:31:41.888Z] > authorizing via signed-in user
+[debug] [2018-01-17T23:31:41.902Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-01-17T23:31:41.903Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/cphYScqNKB63LlLwDet2D4-cwEKSrWok3nQDmBVHlq0',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Wed Jan 17 2018 18:31:41 GMT-0500 (Eastern Standard Time)
+[debug] [2018-01-17T23:31:42.337Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-17T23:31:42.399Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/mars-hq  
+  
+ Wed Jan 17 2018 18:31:42 GMT-0500 (Eastern Standard Time)
+[debug] [2018-01-17T23:31:42.941Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-17T23:31:42.943Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/mars-hq/tokens  
+  
+ Wed Jan 17 2018 18:31:42 GMT-0500 (Eastern Standard Time)
+[debug] [2018-01-17T23:31:43.445Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\Marcy\Documents\College\COURSES\FALL 17\FALL2017\SeniorDesign\MARS\website\Mars-Game-master\Mars-Game-master'...
+[info] 
+[debug] [2018-01-17T23:31:43.461Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/mars-hq  
+  
+ Wed Jan 17 2018 18:31:43 GMT-0500 (Eastern Standard Time)
+[debug] [2018-01-17T23:31:43.837Z] <<< HTTP RESPONSE 200
+[debug] [2018-01-17T23:31:43.838Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/521104559480/clients/_:getWebAppConfig  
+  
+ Wed Jan 17 2018 18:31:43 GMT-0500 (Eastern Standard Time)
+[debug] [2018-01-17T23:31:44.444Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] +  hosting: Local server: http://localhost:5000
+

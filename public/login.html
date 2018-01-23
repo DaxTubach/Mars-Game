@@ -7,10 +7,213 @@
   <title>HQ Mars</title>
   <link href="css/login.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+
+  <!-- firebase setup -->
+  <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
+  <!-- Import and configure the Firebase SDK -->
+  <!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
+  <!-- If you do not serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyBBFrScSC__f_I53oamxNZTVpLZYmrmlfI",
+      authDomain: "mars-hq.firebaseapp.com",
+      databaseURL: "https://mars-hq.firebaseio.com",
+      projectId: "mars-hq",
+      storageBucket: "mars-hq.appspot.com",
+      messagingSenderId: "521104559480"
+    };
+    firebase.initializeApp(config);
+  </script>
+
+  <script type="text/javascript">
+
+      // Sign In Button Press: ------------------------------
+      function toggleSignIn() {
+        if (firebase.auth().currentUser) {
+
+          firebase.auth().signOut();
+
+        } else {
+          var email = document.getElementById('email').value;
+          var password = document.getElementById('pwd').value;
+          if (email.length < 4) {
+            alert('Please enter a valid email address.');
+            return;
+          }
+          if (password.length < 4) {
+            alert('Please enter a valid password.');
+            return;
+          }
+          // Sign in with email and pass---------------------
+          firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+
+            if (errorCode === 'auth/wrong-password') {
+              alert('Wrong password.');
+            } else {
+              alert(errorMessage);
+            }
+            console.log(error);
+            document.getElementById('native-sign-in').disabled = false;
+
+          });
+
+        }
+        document.getElementById('native-sign-in').disabled = true;
+      //  document.getElementById('google-signin').disabled = true;
+      }
+
+    // Google Sign In  Button Press: ------------------------------
+    function toggleGoogleSignIn() {
+      if (firebase.auth().currentUser) {
+        firebase.auth().signOut();
+      } else {
+          var provider = new firebase.auth.GoogleAuthProvider();
+          provider.addScope('https://www.googleapis.com/auth/plus.login');
+
+          // disallows automatic gmail sign in
+          provider.setCustomParameters({
+          prompt: 'select_account'
+        });
+
+        // Handle Errors Here
+          firebase.auth().signInWithPopup(provider).catch(function(error) {
+              var errorCode = error.code;
+              var errorMessage = error.message;
+
+              alert(errorMessage);
+              console.log(error.code)
+              console.log(error.message)
+          });
+      }
+    }
+
+
+      // Sign Up Button Press -------------------------------------
+      function handleSignUp() {
+        var email = document.getElementById('reg-email').value;
+        var password = document.getElementById('reg-pwd').value;
+
+          //confirm pwd and user
+        if (email.length < 4) {
+          //RAF, style alert msg
+          alert('Please enter an email address.');
+          return;
+        }
+        if (password.length < 4) {
+          //RAF, style alert msg
+          alert('Please enter a password.');
+          return;
+        }
+        // Sign in with email and password --------------------------
+        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+
+          if (errorCode == 'auth/weak-password') {
+            //RAF, style alert msg
+            alert('The password is too weak.');
+
+
+          }
+          else if (errorCode == 'auth/invalid-email'){
+            //RAF, style alert msg
+           alert("Invalid email format.");
+          }
+          else {
+           alert(errorMessage);
+          }
+          console.log(error);
+
+          });
+      }
+
+      // Send Email Verification ----------------------------
+      function sendEmailVerification() {
+        firebase.auth().currentUser.sendEmailVerification().then(function() {
+          alert('An Email Verification has been sent!');
+        });
+      }
+
+      // Send Password Reset Email --------------------------
+      function sendPasswordReset() {
+        var email = document.getElementById('email').value;
+
+        firebase.auth().sendPasswordResetEmail(email).then(function() {
+          alert('A Password Reset Email has been sent!');
+        }).catch(function(error) {
+
+          // Error Handeling ----------------------
+          var errorCode = error.code;
+          var errorMessage = error.message;
+
+          if (errorCode == 'auth/invalid-email') {
+            alert(errorMessage);
+
+          } else if (errorCode == 'auth/user-not-found') {
+            alert(errorMessage);
+          }
+          console.log(error);
+        });
+      }
+
+      //initApp handles setting up UI event listeners and registering Firebase auth listeners:
+      //firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or out, and that is where we update the UI.
+
+      function initApp() {
+        // Listening for auth state changes.
+        firebase.auth().onAuthStateChanged(function(user) {
+
+          if (user) {
+            // User is signed in.
+            var displayName = user.displayName;
+            var email = user.email;
+            var emailVerified = user.emailVerified;
+
+            document.getElementById('native-sign-in-status').textContent = 'Signed in';
+            document.getElementById('native-sign-in').textContent = 'Sign out';
+            document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
+  		      //document.getElementById('google-signin').disabled = true;
+
+          } else {
+            // User is signed out.
+  		     // document.getElementById('google-signin').disabled = false;
+            document.getElementById('native-sign-in-status').textContent = 'Signed out';
+            document.getElementById('native-sign-in').textContent = 'Sign in';
+            document.getElementById('quickstart-account-details').textContent = 'null';
+          }
+
+          document.getElementById('native-sign-in').disabled = false;
+        });
+
+        document.getElementById('native-sign-in').addEventListener('click', toggleSignIn, false);
+        document.getElementById('sign-up').addEventListener('click', handleSignUp, false);
+
+        //RAF, use these ID names when creating verify email and password reset buttons, I think omission of google sign in for now
+        /*
+        document.getElementById('verify-email').addEventListener('click', sendEmailVerification, false);
+        document.getElementById('password-reset').addEventListener('click', sendPasswordReset, false);
+        document.getElementById('google-signin').addEventListener('click', toggleGoogleSignIn, false);
+        */
+      }
+
+
+    window.onload = function() {
+    initApp();
+  };
+</script>
 </head>
 
-<body>
 
+
+
+
+<body>
   <div class="register-button-container">
     <span onclick="openRegister()">Register</span>
     <script>
@@ -24,47 +227,54 @@
     </script>
   </div>
 
+
   <div class="main">
     <img class="logo" src="images/logo-light.png" alt="HQ Mars logo" />
 
-    <form class="sign-in">
+    <container class="sign-in">
       <div class="sign-in__input-container">
-        <input class="sign-in__input" type="text" placeholder="Username" name="uname" required />
+        <input class="sign-in__input" type="text" id="email" placeholder="Email/Username" name="email" required />
       </div>
       <div class="sign-in__input-container">
-        <input class="sign-in__input" type="password" placeholder="Password" name="pwd" required />
+        <input class="sign-in__input" id="pwd" type="password" placeholder="Password" name="pwd" required />
       </div>
       <div class="sign-in__button-container">
-        <button class="sign-in__button" type="submit">LAUNCH</button>
+        <button class="sign-in__button" id="native-sign-in" type="submit">LAUNCH</button>
       </div>
-    </form>
+    </container>
 
   </div>
 
-  <form class="register">
+  <container class="register">
     <a class="register__close-button" href="javascript:void(0)" onclick="closeRegister()">&times;</a>
     <div class="register__input-container">
-      <input class="register__input" type="email" placeholder="Email" name="email" required />
+      <input class="register__input" type="email"  id="reg-email" placeholder="Email\Username" name="email" required />
     </div>
+    <!---<div class="register__input-container">
+      <input class="register__input" type="email" id="reg-confirm-email" placeholder="Confirm Email" name="confirm-email" required />
+    </div> -->
     <div class="register__input-container">
-      <input class="register__input" type="email" placeholder="Confirm Email" name="confirm-email" required />
+      <input class="register__input" type="password" id="reg-pwd" placeholder="Password" name="pwd" required />
     </div>
-    <div class="register__input-container">
-      <input class="register__input" type="text" placeholder="Username" name="uname" required />
-    </div>
-    <div class="register__input-container">
-      <input class="register__input" type="password" placeholder="Password" name="pwd" required />
-    </div>
-    <div class="register__input-container">
-      <input class="register__input" type="password" placeholder="Confirm Password" name="confirm-pwd" required />
-    </div>
+    <!--<div class="register__input-container">
+      <input class="register__input" type="password" id="reg-confirm-pwd" placeholder="Confirm Password" name="confirm-pwd" required />
+    </div>-->
     <div class="register__confirm-button-container">
-      <button class="register__confirm-button" type="submit">&check;</button>
+      <button class="register__confirm-button"  id="sign-up" type="submit">&check;</button>
     </div>
-  </form>
+  </container>
 
   <div class="stars"></div>
   <div class="twinkling"></div>
+
+
+  <!-- Testing/Development only -->
+  <!-- Container where we'll display the user details -->
+<div class="quickstart-user-details-container">
+  Firebase sign-in status: <span id="native-sign-in-status">Unknown</span>
+  <div>Firebase auth <code>currentUser</code> object value:</div>
+  <pre><code id="quickstart-account-details">null</code></pre>>
+</div>
 
 </body>
 

@@ -6,6 +6,14 @@ app.set('port',8080);
 
 app.use(express.static(__dirname + '/public'));
 
+app.get('/',function(req,res){
+	res.sendFile(path.join(__dirname+'/public/login.html'));
+});
+
+app.get('/scripts/keyboard.js',function(req,res){
+	res.sendFile(path.join(__dirname+'/scripts/keyboard.js'));
+});
+
 app.get('/scripts/game_world.js',function(req,res){
 	res.sendFile(path.join(__dirname+'/scripts/game_world.js'));
 });

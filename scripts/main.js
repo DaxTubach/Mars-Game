@@ -1,10 +1,11 @@
 var type = "WebGL"
 var stage;
 var renderer;
-var sprites = [];
+var spriteContainer;
+var offsetVX, offsetVY, speedModifier, zoomDelta, zoom;
+
 
 let awsE = "https://s3.us-east-2.amazonaws.com/hq.mars/Entities/";
-
 
 function initialize(){
 	if(!PIXI.utils.isWebGLSupported()){
@@ -30,6 +31,8 @@ function initialize(){
 
 	renderer.backgroundColor = 0xFF8C00;
 
+	//document.addEventListener("mousewheel",mouseWheelHandler, false);
+
 	renderer.render(stage);
 
 	/*
@@ -41,6 +44,8 @@ function initialize(){
 
     sound.play();*/
 
+    initKeyboard();
+    //setupWorld();
     loadImages();
 }
 
@@ -54,23 +59,34 @@ function loadImages(){
 }
 
 function setupWorld(){
-	var spriteArray = populateWorld();
-	var arrayLength = spriteArray.length;
-
-	sprites = spriteArray;
-
-	for(var i=0; i<arrayLength;i++){
-		stage.addChild(spriteArray[i]);
-	}
+	spriteContainer = populateWorld();
+	stage.addChild(spriteContainer);
 
 	gameLoop();
 }
 
 function gameLoop(){
 	requestAnimationFrame(gameLoop);
+
+	//PIXI.Matrix.translate(offsetVX,offsetVY);
+	spriteContainer.x -= offsetVX * speedModifier;
+	spriteContainer.y += offsetVY * speedModifier;
+	
+	if(zoom + zoomDelta > 2)
+		zoom = 2;
+	else if(zoom + zoomDelta < .05)
+		zoom = .05;
+	else
+		zoom += zoomDelta;
+	
+
+	spriteContainer.scale.set(zoom);
+	//spriteContainer.x = spriteContainer.x - zoomDelta*10;
+	//spriteContainer.y = spriteContainer.y + zoomDelta*10;
+
 	renderer.render(stage);
 
-	const x = renderer.plugins.interaction.mouse.global.x;
+	/*const x = renderer.plugins.interaction.mouse.global.x;
 	const y = renderer.plugins.interaction.mouse.global.y;
 
 	if(Math.abs(sprites[0].x-x) <= 2 && Math.abs(sprites[0].y-y) <= 2)
@@ -79,7 +95,7 @@ function gameLoop(){
 	sprites[0].rotation = Math.atan2(y - sprites[0].y, x - sprites[0].x) + Math.PI;
 
 	sprites[0].x -= Math.cos(sprites[0].rotation);
-	sprites[0].y -= Math.sin(sprites[0].rotation);
+	sprites[0].y -= Math.sin(sprites[0].rotation);*/
 }
 
 initialize();

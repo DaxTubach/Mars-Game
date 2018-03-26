@@ -18,9 +18,26 @@ body {
 .header {
   display: flex;
   align-items: center;
-  padding: 0 0 0 85px;
+  justify-content: space-between;
+  padding: 0 85px;
   height: 15vh;
   min-height: 50px;
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 70px;
+  font-size: 15pt;
+}
+
+.player-info__input {
+  border-bottom: solid 2px white;
+  color: white;
+  margin: 0 0 0 20px;
+  font-size: 15pt;
 }
 
 .main {
@@ -41,6 +58,9 @@ body {
 }
 .colony-type-container:hover {
   background: #333333;
+}
+.colony-type-container:active {
+  border: solid 2px white;
 }
 
 .colony-type-header {

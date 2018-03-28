@@ -88,6 +88,7 @@ a {
 .equipment-type-container {
   margin: 0 0 50px 0;
   width: 30%;
+  min-width: 300px;
 }
 
 .equipment-type-title {
@@ -95,6 +96,15 @@ a {
 }
 
 .equipment-checklist {
+  color: #cccccc;
+}
+
+input[type='checkbox']:checked + label {
+  font-weight: bold;
+  background: white;
+  color: black;
+  padding: 2px 5px;
+  border-radius: 5px;
 }
 
 .equipment-checkbox-container {

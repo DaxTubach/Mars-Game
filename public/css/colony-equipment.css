@@ -102,15 +102,3 @@ body {
 .equipment-price {
   color: #ff5555;
 }
-
-.equipment-submit {
-  background: white;
-  margin: 20px 0 0 0;
-  padding: 5px;
-  border-radius: 5px;
-}
-.equipment-submit:hover {
-  background: #5fd38d;
-  color: white;
-  cursor: pointer;
-}

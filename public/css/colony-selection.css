@@ -19,6 +19,18 @@ a {
   text-decoration: none;
 }
 
+.sign-out-button {
+  position: absolute;
+  margin: 3px 5px 0 0;
+  top: 0;
+  right: 0;
+  color: #cccccc;
+}
+.sign-out-button:hover {
+  color: white;
+  cursor: pointer;
+}
+
 .header {
   display: flex;
   align-items: center;

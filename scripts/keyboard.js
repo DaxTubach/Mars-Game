@@ -1,9 +1,4 @@
 function initKeyboard(){
-	offsetVX = 0;
-    offsetVY = 0;
-    zoomDelta = 0;
-    zoom = 1;
-    speedModifier = 1;
 
     let w = keyboard(87),
     a = keyboard(65),
@@ -14,59 +9,59 @@ function initKeyboard(){
     e = keyboard(69);
 
     w.press = () => {
-    	offsetVY += 5;
+    	camera.dy = -1;
     };
 
     w.release = () => {
-    	offsetVY -= 5;
+    	camera.dy = 0;
     };
 
     a.press = () => {
-    	offsetVX -= 5;
+    	camera.dx = -1;
     };
 
     a.release = () => {
-    	offsetVX += 5;
+    	camera.dx = 0;
     };
 
     s.press = () => {
-    	offsetVY -= 5;
+    	camera.dy = 1;
     };
 
     s.release = () => {
-    	offsetVY += 5;
+    	camera.dy = 0;
     };
 
     d.press = () => {
-    	offsetVX += 5;
+    	camera.dx = 1;
     };
 
     d.release = () => {
-    	offsetVX -= 5;
+    	camera.dx = 0;
     };
 
     shift.press = () => {
-    	speedModifier = 3;
+    	camera.speedModifier = true;
     };
 
     shift.release = () => {
-    	speedModifier = 1;
+    	camera.speedModifier = false;
     }
 
     q.press = () => {
-    	zoomDelta += .03;
+    	camera.dzoom = 1;
     }
 
     q.release = () => {
-    	zoomDelta -= .03;
+    	camera.dzoom = 0;
     }
 
     e.press = () => {
-    	zoomDelta -= .03;
+    	camera.dzoom = -1;
     }
 
     e.release = () => {
-    	zoomDelta += .03;
+    	camera.dzoom = 0;
     }
 }
 

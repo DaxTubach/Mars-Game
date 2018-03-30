@@ -7,6 +7,33 @@
   <title>Colony Selection</title>
   <link href="css/colony-selection.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-firestore.js"></script>
+  <script type="text/javascript" src="auth.js"></script>
+  
+  <script>
+    window.onload = function() {
+      initApp();
+      //document.getElementById('native-sign-in').addEventListener('click', createColony(x,y), true);
+
+      function createColony(name){
+       var user = firebase.auth().currentUser
+       var uid = user.uid;
+       db.collection('users').doc(uid)
+        .update({
+            name: "Dax",
+            colony: "hello"
+        })
+        .then(() => {
+            console.log('Document successfully written! With ID ', uid);
+        })
+        .catch((error) => {
+            console.error('Error writing document: ', error);
+        });
+       //}
+  }
+  </script>
+
 </head>
 
 <body>
@@ -100,7 +127,7 @@
   </div>
 
   <div class="footer">
-    <button class="continue-button">Continue &#62;</button>
+    <a href="colony-equipment.html" class="continue-button">Continue &rightarrow;</a>
   </div>
 </body>
 

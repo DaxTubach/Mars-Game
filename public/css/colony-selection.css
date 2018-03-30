@@ -15,6 +15,10 @@ body {
   height: 100%;
 }
 
+a {
+  text-decoration: none;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -44,7 +48,7 @@ body {
   display: flex;
   padding: 0 50px;
   height: 70vh;
-  min-height: 200px;
+  min-height: 500px;
 }
 
 .colony-type-container {
@@ -101,12 +105,14 @@ body {
 
 .continue-button {
   padding: 10px;
+  font-size: 15pt;
   color: white;
   background: #5fd38d;
   border-radius: 10px;
   cursor: pointer;
+  opacity: 0.7;
   transition: all 0.5s ease;
 }
 .continue-button:hover {
-  border: solid 2px #5fd38d;
+  opacity: 1;
 }

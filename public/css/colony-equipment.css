@@ -8,6 +8,111 @@
   padding: 0;
 }
 
+html,
 body {
-  background: green;
+  background: black;
+  color: white;
+  height: 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 15vh;
+  width: 100%;
+  min-height: 50px;
+  position: fixed;
+  background: black;
+  box-shadow: 0px 0px 50px 50px rgba(0, 0, 0, 1);
+}
+
+.back-button {
+  opacity: 0.5;
+  font-size: 20pt;
+  color: white;
+}
+.back-button:hover {
+  opacity: 1;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.header2 {
+  position: fixed;
+  width: 100%;
+  margin: 85vh 0 0 0;
+  right: 100px;
+}
+
+.continue-button {
+  float: right;
+  padding: 10px;
+  font-size: 15pt;
+  color: white;
+  background: #5fd38d;
+  border-radius: 10px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: all 0.5s ease;
+}
+.continue-button:hover {
+  opacity: 1;
+}
+
+.equipment-funds-remaining-container {
+  font-size: 15pt;
+}
+
+.equipment-funds-remaining {
+  background: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  color: #5fd38d;
+  font-size: 20pt;
+  font-weight: bold;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 200px 0 0 0;
+}
+
+.equipment-type-container {
+  margin: 0 0 50px 0;
+  width: 30%;
+  min-width: 300px;
+}
+
+.equipment-type-title {
+  margin: 0 0 20px 0;
+}
+
+.equipment-checklist {
+  color: #cccccc;
+}
+
+input[type='checkbox']:checked + label {
+  font-weight: bold;
+  background: white;
+  color: black;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
+
+.equipment-checkbox-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 7px 0;
+}
+
+.equipment-price {
+  color: #ff5555;
 }

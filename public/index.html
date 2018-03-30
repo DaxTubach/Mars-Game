@@ -6,62 +6,115 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HQ Mars</title>
   <link href="css/login.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+
+  <!-- firebase setup -->
+  <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-firestore.js"></script>
+  <script type="text/javascript" src="auth.js"></script>
+  <script type="text/javascript" src="signin.js"></script>
+
+  <!-- Import and configure the Firebase SDK -->
+  <!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
+  <!-- If you do not serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
+  <script>
+
+
+  </script>
+
+  <script type="text/javascript">
+      initApp();
+      function enterClick(boxID, buttonID)
+      {
+        var input = document.getElementById(boxID);
+         input.addEventListener("keyup", function(event) {
+          event.preventDefault();
+          if (event.keyCode === 13) {
+            document.getElementById(buttonID).click();
+          }
+        });
+      }
+
+
+      window.onload = function() {
+       
+       document.getElementById('native-sign-in').addEventListener('click', toggleSignIn, true);
+       document.getElementById('sign-up').addEventListener('click', handleSignUp, true);
+       enterClick("pwd", "native-sign-in");
+       enterClick("reg-pwd", "sign-up");
+
+  
+      };
+
+
+</script>
 </head>
 
 <body>
+  <div class="register-button-container">
+    <span onclick="openRegister()">Register</span>
+    <script>
+      function openRegister() {
+        document.getElementsByClassName("register")[0].style.width = "20vw";
+      }
+
+      function closeRegister() {
+        document.getElementsByClassName("register")[0].style.width = "0";
+      }
+    </script>
+  </div>
+
+
   <div class="main">
     <img class="logo" src="https://s3.us-east-2.amazonaws.com/hq.mars/Public+Assets/logo-light.png" alt="HQ Mars logo" />
 
-    <form class="sign-in">
+    <container class="sign-in">
       <div class="sign-in__input-container">
-        <input class="sign-in__input" type="text" placeholder="Username" name="uname" required />
+        <input class="sign-in__input" type="text" id="email" placeholder="Email/Username" name="email" required />
       </div>
       <div class="sign-in__input-container">
-        <input class="sign-in__input" type="password" placeholder="Password" name="pwd" required />
+        <input class="sign-in__input" id="pwd" type="password" placeholder="Password" name="pwd" required />
       </div>
       <div class="sign-in__button-container">
-        <button class="sign-in__button" type="submit">LAUNCH</button>
+        <button class="sign-in__button" id="native-sign-in" type="submit">LAUNCH</button>
       </div>
-    </form>
+    </container>
 
   </div>
 
-  <form class="register">
+  <container class="register">
+    <a class="register__close-button" href="javascript:void(0)" onclick="closeRegister()">&times;</a>
     <div class="register__input-container">
-      <input class="register__input" type="email" placeholder="Email" name="email" required />
+      <input class="register__input" type="email"  id="reg-email" placeholder="Email\Username" name="email" required />
     </div>
+    <!---<div class="register__input-container">
+      <input class="register__input" type="email" id="reg-confirm-email" placeholder="Confirm Email" name="confirm-email" required />
+    </div> -->
     <div class="register__input-container">
-      <input class="register__input" type="email" placeholder="Confirm Email" name="confirm-email" required />
+      <input class="register__input" type="password" id="reg-pwd" placeholder="Password" name="pwd" required />
     </div>
-    <div class="register__input-container">
-      <input class="register__input" type="text" placeholder="Username" name="uname" required />
+    <!--<div class="register__input-container">
+      <input class="register__input" type="password" id="reg-confirm-pwd" placeholder="Confirm Password" name="confirm-pwd" required />
+    </div>-->
+    <div class="register__confirm-button-container">
+      <button class="register__confirm-button"  id="sign-up" type="submit">&check;</button>
     </div>
-    <div class="register__input-container">
-      <input class="register__input" type="password" placeholder="Password" name="pwd" required />
-    </div>
-    <div class="register__input-container">
-      <input class="register__input" type="password" placeholder="Confirm Password" name="confirm-pwd" required />
-    </div>
-    <div class="register__button-container">
-      <button class="register__button" type="submit">&check;</button>
-    </div>
-  </form>
+  </container>
 
-  <!-- ==============================================================================================
-  Nick Mkrtchyan
-  https://www.facebook.com/sonick.pk
-  http://www.Mkrtchyan.zz.mu
-  ================================================================================================= -->
   <div class="stars"></div>
   <div class="twinkling"></div>
-  <!-- <div class="clouds"></div> -->
 
-  <!--<audio autoplay loop>
-    <source src="https://s3.us-east-2.amazonaws.com/hq.mars/Public+Assets/Dust.mp3" type="audio/mpeg">
-  </audio>-->
-  <form method="post" action="/start">
-    <button class="register__button" type="submit" value="TEST">TEST</button>
-  </form>
+
+  <!-- Testing/Development only -->
+  <!-- Container where we'll display the user details -->
+<div class="quickstart-user-details-container">
+  Firebase sign-in status: <span id="native-sign-in-status">Unknown</span>
+  <div>Firebase auth <code>currentUser</code> object value:</div>
+  <pre><code id="quickstart-account-details">null</code></pre>>
+</div>
+
 </body>
-
+<form  method="post" id="game" action="/start">
+  <button class="register__button" type="submit" value="TEST">TEST</button>
+</form>
 </html>

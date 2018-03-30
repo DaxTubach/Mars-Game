@@ -8,6 +8,7 @@ var HUDcontainer;
 var worldContainer;
 var background;
 var grid;
+var colonies = [];
 var showGrid = false;
 var highlightedCell;
 var freezeCamera = false;
@@ -39,6 +40,8 @@ function initialize() {
 
     /* This is PIXI JS Version*/
     PIXI.utils.sayHello(type);
+
+    getColonyCoord();
 
     /* Create renderer*/
     renderer = PIXI.autoDetectRenderer(256, 256, {
@@ -134,22 +137,28 @@ function setupWorld(){
 }
 
 function createLabels(){
-	addTag("Olympus Mons",2206884,3365895);
-	addTag("Valles Marineris",5004308,4647494);
-	addTag("Alba Mons",3318364,2319287);
-	addTag("Argyre Basin",6541268,6541268);
-	addTag("Tempe Terra",4971447,2227977);
-	addTag("Chryse Planitia",6884887,2481355);
-	addTag("Arabia Terra",8868223,2691047);
-	addTag("Noachis Terra",9470148,6909455);
-	addTag("Hellas Basin",11666604,6192019);
-	addTag("Isidis Basin",12704126,3642364);
+	addLocationTag("Olympus Mons",2206884,3365895);
+	addLocationTag("Valles Marineris",5004308,4647494);
+	addLocationTag("Alba Mons",3318364,2319287);
+	addLocationTag("Argyre Basin",6541268,6541268);
+	addLocationTag("Tempe Terra",4971447,2227977);
+	addLocationTag("Chryse Planitia",6884887,2481355);
+	addLocationTag("Arabia Terra",8868223,2691047);
+	addLocationTag("Noachis Terra",9470148,6909455);
+	addLocationTag("Hellas Basin",11666604,6192019);
+	addLocationTag("Isidis Basin",12704126,3642364);
 	//addTag("Hesperia Planum",2206884,3365895);
-	addTag("Elysium Mons",15507643,3046341);
-	addTag("Utopia Basin",13463582,2619682);
+	addLocationTag("Elysium Mons",15507643,3046341);
+	addLocationTag("Utopia Basin",13463582,2619682);
+
+	for(i in colonies){
+		if(colonies[i].x!=null&&colonies[i].y!=null){
+			addColonyTag(colonies[i].Name,colonies[i].x*5000,colonies[i].y*5000);
+		}
+	}
 }
 
-function addTag(text,x,y){
+function addLocationTag(text,x,y){
 	var testText = new PIXI.Text(text,
 		{
 			fontFamily:'Arial',
@@ -165,7 +174,21 @@ function addTag(text,x,y){
 	labelContainer.addChild(testText);
 }
 
-
+function addColonyTag(text,x,y){
+	var testText = new PIXI.Text(text,
+		{
+			fontFamily:'Arial',
+			fontSize:18,
+			align:'center',
+			fill:'#4B0082',
+			stroke:'#9370DB',
+			strokeThickness: 3
+		});
+	testText.x = worldToScreenX(x);
+	testText.y = worldToScreenY(y);
+	testText.anchor.set(0.5,0.5);
+	labelContainer.addChild(testText);
+}
 
 function gameLoop(){
 	requestAnimationFrame(gameLoop);
@@ -214,7 +237,6 @@ function setColony(x,y){
 function getColonyCoord(){
     db.collection("users").get()
     .then(function(querySnapshot) {
-      var colonies = [];
         querySnapshot.forEach(function(doc) {
           // doc.data() is never undefined for query doc snapshots
           if(doc.data().colony != null)
@@ -226,4 +248,6 @@ function getColonyCoord(){
         console.log("Error getting documents: ", error);
     });
 }
+
+
 initialize();

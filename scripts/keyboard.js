@@ -7,6 +7,7 @@ function initKeyboard(){
     shift = keyboard(16),
     q = keyboard(81),
     e = keyboard(69);
+    g = keyboard(71);
 
     w.press = () => {
     	camera.dy = -1;
@@ -62,6 +63,15 @@ function initKeyboard(){
 
     e.release = () => {
     	camera.dzoom = 0;
+    }
+
+    g.press = () => {
+        showGrid = !showGrid;
+        updateWorldView(true);
+    }
+
+    g.release = () => {
+
     }
 }
 

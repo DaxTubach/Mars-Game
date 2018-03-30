@@ -37,10 +37,10 @@ function createSprite(container, x, y, width, height, type){
 }
 
 //Here we create all rendered objects if the camera moved
-function updateWorldView(){
+function updateWorldView(forceUpdate){
 
 	//Check if player changed the camera
-	if(!updateCamera())
+	if(!updateCamera() && !forceUpdate)
 		return;
 
 	//Scale image according to zoom level
@@ -49,28 +49,28 @@ function updateWorldView(){
 	background.position.set(worldToScreenX(0),worldToScreenY(0));
 	background.pivot.set(.5,.5);
 
-	if(camera.zoom < camera.max_zoom /10){
+	if(camera.zoom < camera.max_zoom /10&&showGrid){
 		removeContainer(grid);
 		grid = createGrid();
-		stage.addChild(grid);
+		worldContainer.addChild(grid);
 	}
 	else if(grid != null){
 		removeContainer(grid);
 	}
 
 	if(camera.zoom < 1500){
-		stage.removeChild(background);
+		worldContainer.removeChild(background);
 		backgroundVisible = false;
 	}
 	else if(!backgroundVisible){
-		stage.addChildAt(background,0);
+		worldContainer.addChildAt(background,0);
 		backgroundVisible = true;
 	}
 
 	if(camera.zoom < 250){
 		removeContainer(spriteContainer);
 		spriteContainer = renderObjects();
-		stage.addChild(spriteContainer);
+		worldContainer.addChild(spriteContainer);
 	}
 	else if(spriteContainer != null){
 		removeContainer(spriteContainer);
@@ -87,7 +87,7 @@ function updateWorldView(){
 
 function removeContainer(container){
 	if(container!=null){
-		stage.removeChild(container);
+		worldContainer.removeChild(container);
 		container.destroy();
 		container = null;
 	}
@@ -180,6 +180,8 @@ function worldToScreenX(x){
 function updateCamera(){
 	if(camera.dx == 0 && camera.dy == 0 && camera.dzoom == 0)
 		return false;
+	if(freezeCamera)
+		return false;
 
 	/*For zoom to cursor*/
 	var startZoom = camera.zoom;
@@ -221,4 +223,9 @@ function updateCamera(){
 		camera.y = camera.maxY;
 
 	return true;
+}
+
+function updateHUD(){
+	labelContainer.removeChildren();
+	createLabels();
 }

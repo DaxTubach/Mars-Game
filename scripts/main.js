@@ -3,11 +3,14 @@ var stage;
 var renderer;
 var backgroundVisible = true;
 var spriteContainer;
+var labelContainer;
 var HUDcontainer;
 var worldContainer;
 var background;
 var grid;
 var showGrid = false;
+var highlightedCell;
+var freezeCamera = false;
 var camera = {
 	x:0,
 	y:0,
@@ -41,8 +44,14 @@ function initialize(){
 
 	/*Create stage*/
 	stage = new PIXI.Container();
+	stage.hitArea = new PIXI.Rectangle(0,0,1920,1080);
+
 	worldContainer = new PIXI.Container();
+	labelContainer = new PIXI.Container();
 	HUDcontainer = new PIXI.Container();
+
+	stage.addChild(worldContainer);
+	stage.addChild(labelContainer);
 
 	renderer.view.style.position = "absolute";
 	renderer.view.style.display = "block";
@@ -83,7 +92,7 @@ function setupWorld(){
 
 	//Add background
 	background = new PIXI.Sprite(PIXI.loader.resources["Mars"].texture);
-	stage.addChild(background);
+	worldContainer.addChild(background);
 
 	//Initial camera setup
 	var tempMaxWidth = 1702000000 / window.innerWidth;
@@ -103,20 +112,73 @@ function setupWorld(){
 	//background.anchor.set(0.5,0.5);
 	//background.position.set(background.width/2,background.height/2);
 
+	createLabels();
+
 	gameLoop();
+}
+
+function createLabels(){
+	addTag("Olympus Mons",2206884,3365895);
+	addTag("Valles Marineris",5004308,4647494);
+	addTag("Alba Mons",3318364,2319287);
+	addTag("Argyre Basin",6541268,6541268);
+	addTag("Tempe Terra",4971447,2227977);
+	addTag("Chryse Planitia",6884887,2481355);
+	addTag("Arabia Terra",8868223,2691047);
+	addTag("Noachis Terra",9470148,6909455);
+	addTag("Hellas Basin",11666604,6192019);
+	addTag("Isidis Basin",12704126,3642364);
+	//addTag("Hesperia Planum",2206884,3365895);
+	addTag("Elysium Mons",15507643,3046341);
+	addTag("Utopia Basin",13463582,2619682);
+}
+
+function addTag(text,x,y){
+	var testText = new PIXI.Text(text,
+		{
+			fontFamily:'Arial',
+			fontSize:20,
+			align:'center',
+			fill:'#D3D3D3',
+			stroke:'#151515',
+			strokeThickness: 3
+		});
+	testText.x = worldToScreenX(x);
+	testText.y = worldToScreenY(y);
+	testText.anchor.set(0.5,0.5);
+	labelContainer.addChild(testText);
 }
 
 
 
 function gameLoop(){
-	requestAnimationFrame(gameLoop);
-	updateWorldView();
-
 	var mPoint = renderer.plugins.interaction.mouse.global;
+
+	updateWorldView(false);
+	updateHUD();
+
+	let g = new PIXI.Graphics();
+	g.fillAlpha = 0.5;
+
+	var rX = Math.trunc(screenToWorldX(mPoint.x) / 5000)*5000;
+	var rY = Math.trunc(screenToWorldY(mPoint.y) / 5000)*5000;
+
+	console.log(rX,rY);
+
+	g.beginFill(0xFFD700,0.5);
+	g.lineStyle(2,0xe5c100);
+	g.drawRect(worldToScreenX(rX),worldToScreenY(rY),worldToScreenScale(5000),worldToScreenScale(5000));
+
+	g.endFill();
+	worldContainer.addChild(g);
 
 	console.log(screenToWorldX(mPoint.x) / 5000 + " " + screenToWorldY(mPoint.y) / 5000 + " " + screenToWorldX(mPoint.x) + " " + screenToWorldY(mPoint.y));
 
 	renderer.render(stage);
+
+	worldContainer.removeChild(g);
+
+	requestAnimationFrame(gameLoop);
 }
 
 initialize();

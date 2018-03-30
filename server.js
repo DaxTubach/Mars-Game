@@ -2,7 +2,7 @@ var express = require('express');
 var path = require('path');
 var app = express();
 
-app.set('port',8080);
+app.set('port',80);
 
 app.use(express.static(__dirname + '/public'));
 

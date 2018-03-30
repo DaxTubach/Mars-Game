@@ -34,7 +34,7 @@ function initApp() {
                     }
                     if(doc.data().conlony != null && window.location.pathname != '/start')
                     {
-                        //post('/start', {name: 'Tests'});
+                        post('/start', {name: 'Tests'});
                     }
 
                 } else {

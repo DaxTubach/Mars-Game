@@ -31,7 +31,7 @@ var camera = {
 const awsE = 'https://s3.us-east-2.amazonaws.com/hq.mars/Entities/';
 
 function initialize() {
-	//initApp();
+	initApp();
 
     if (!PIXI.utils.isWebGLSupported()) {
         type = 'canvas';
@@ -203,6 +203,7 @@ function setColony(x,y){
     var uid = user.uid;
     db.collection('users').doc(uid)
       .update({
+		  colonyMade : true,
           "colony.x" : x,
           "colony.y" : y
       });
@@ -210,4 +211,19 @@ function setColony(x,y){
     colonyMade = true;
 }
 
+function getColonyCoord(){
+    db.collection("users").get()
+    .then(function(querySnapshot) {
+      var colonies = [];
+        querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          if(doc.data().colony != null)
+            colonies.push(doc.data().colony);
+        });
+        console.log(colonies);;
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+}
 initialize();

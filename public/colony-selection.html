@@ -7,9 +7,111 @@
   <title>Colony Selection</title>
   <link href="css/colony-selection.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-firestore.js"></script>
+  <script type="text/javascript" src="auth.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+    // Styles 'Colony Type' div when selected
+    window.onload = function() {
+      initApp();
+
+      document.getElementById('continue').addEventListener('click', createColony, true);
+      document.getElementById('sign-out').addEventListener('click', signOut, true);
+
+        
+
+       // Selection for Colony types
+       $(".colony-type-container").click(function () {
+        removeSelectedStyle();
+        let x = jQuery(this).attr("id");
+       addSelectedStyle(x);
+      });
+
+      // Helper: removes "selected" style from all 'Colony Type' divs when a new Colony is selected
+      function removeSelectedStyle() {
+        $('.colony-type-container').removeClass("colony-type--selected");
+      }
+
+      // Helper: adds "selected" style to selected Colony div
+      function addSelectedStyle(id) {
+        let validID = `#${id}`;
+        $(validID).addClass('colony-type--selected');
+      }
+
+  }
+
+  function updateColonyLocation(xLoc,yLoc)
+  {
+        var user = firebase.auth().currentUser;
+        var uid = user.uid;
+        db.collection('users').doc(uid)
+          .update({
+              "colony.x" : xLoc,
+              "colony.y" : yLoc
+          })
+          .then(() => {
+              console.log('Document successfully written! With ID ', uid);
+          })
+          .catch((error) => {
+              console.error('Error writing document: ', error);
+          });
+  }
+
+  function createColony(){
+    const colonyName = document.getElementById('colony-name').value;
+    const username = document.getElementById('player-name').value;
+
+    console.log(colonyName);
+    console.log(username);
+
+        if(colonyName != '' && username != ''){
+          var user = firebase.auth().currentUser
+          var uid = user.uid;
+          db.collection('users').doc(uid)
+            .update({
+                name: username,
+                colony: {Name : colonyName, x : null, y : null},            
+            })
+            .then(() => {
+                console.log('Document successfully written! With ID ', uid);
+                window.location.href = '/colony-equipment.html'
+            })
+            .catch((error) => {
+                console.error('Error writing document: ', error);
+            });
+          }
+          else
+            alert("Please fill out forms");
+        }
+
+
+
+        /*
+    db.collection("users").get()
+    .then(function(querySnapshot) {
+      var colonies = [];
+        querySnapshot.forEach(function(doc) {
+          // doc.data() is never undefined for query doc snapshots
+          if(doc.data().colony != null)
+            colonies.push(doc.data().colony);
+        });
+        console.log(colonies);;
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+    
+
+*/
+  </script>
+
+
 </head>
 
 <body>
+  
+  <button class="sign-out-button" id ="sign-out" >Sign Out</button>
 
   <div class="header">
     <h1>Which colony will you lead?</h1>
@@ -26,7 +128,7 @@
   </div>
 
   <div class="main">
-    <div class="colony-type-container">
+    <div class="colony-type-container" id="mining-colony">
       <div class="colony-type-header">
         <h3>Mining</h3>
       </div>
@@ -38,7 +140,7 @@
       </div>
     </div>
 
-    <div class="colony-type-container">
+    <div class="colony-type-container" id="research-colony">
       <div class="colony-type-header">
         <h3>Research</h3>
       </div>
@@ -50,7 +152,7 @@
       </div>
     </div>
 
-    <div class="colony-type-container">
+    <div class="colony-type-container" id="agricultural-colony">
       <div class="colony-type-header">
         <h3>Agricultural</h3>
       </div>
@@ -62,7 +164,7 @@
       </div>
     </div>
 
-    <div class="colony-type-container">
+    <div class="colony-type-container" id="residential-colony">
       <div class="colony-type-header">
         <h3>Residential & Tourism</h3>
       </div>
@@ -74,7 +176,7 @@
       </div>
     </div>
 
-    <div class="colony-type-container">
+    <div class="colony-type-container" id="manufacturing-colony">
       <div class="colony-type-header">
         <h3>Manufacturing</h3>
       </div>
@@ -86,7 +188,7 @@
       </div>
     </div>
 
-    <div class="colony-type-container">
+    <div class="colony-type-container" id="custom-colony">
       <div class="colony-type-header">
         <h3>Custom</h3>
       </div>
@@ -100,8 +202,11 @@
   </div>
 
   <div class="footer">
-    <a href="colony-equipment.html" class="continue-button">Continue &rightarrow;</a>
+    <button class="continue-button" id = "continue" type="submit">Continue &rightarrow;</button>
   </div>
+
+
+
 </body>
 
 </html>

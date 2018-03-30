@@ -21,7 +21,7 @@ function initApp() {
             docRef.get().then((doc) => {
                 if (doc.exists) {
                     console.log('Document data:', doc.data());
-                    if (doc.data().conlony == null && window.location.pathname != '/colony-selection.html') {
+                    if (doc.data().name == undefined && window.location.pathname != '/colony-selection.html') {
                         window.location.href = '/colony-selection.html';
                     }
                     if (doc.data().conlony != null && window.location.pathname != '/colony-equipment.html')

@@ -1,7 +1,28 @@
-let type = 'WebGL';
-let stage;
-let renderer;
-let sprites = [];
+var type = "WebGL"
+var stage;
+var renderer;
+var backgroundVisible = true;
+var spriteContainer;
+var HUDcontainer;
+var worldContainer;
+var background;
+var grid;
+var showGrid = false;
+var camera = {
+	x:0,
+	y:0,
+	maxX:1702000000,
+	maxY:851000000,
+	zoom:1, //Determines how many meters are visible in 100 px
+	dx:0, //Change in X
+	dy:0, //Change in Y
+	dzoom:0, //Change in zoom
+	speedModifier:false, //Scroll faster if toggled
+	max_zoom: 100, //Dynamically set to be the size of Mars's surface in relation to the screen
+	min_zoom: 1
+};
+
+
 
 const awsE = 'https://s3.us-east-2.amazonaws.com/hq.mars/Entities/';
 
@@ -26,12 +47,17 @@ function initialize() {
     /* Create stage*/
     stage = new PIXI.Container();
 
-    renderer.view.style.position = 'absolute';
-    renderer.view.style.display = 'block';
-    renderer.autoResize = true;
-    renderer.resize(window.innerWidth, window.innerHeight);
+	/*Create stage*/
+	stage = new PIXI.Container();
+	worldContainer = new PIXI.Container();
+	HUDcontainer = new PIXI.Container();
 
-    renderer.backgroundColor = 0xFF8C00;
+	renderer.view.style.position = "absolute";
+	renderer.view.style.display = "block";
+	renderer.autoResize = true;
+	renderer.resize(window.innerWidth, window.innerHeight);
+
+	renderer.backgroundColor = 0xe77d11;
 
 	//document.addEventListener("mousewheel",mouseWheelHandler, false);
 
@@ -45,58 +71,60 @@ function initialize() {
 	});
 
     sound.play();*/
-
     initKeyboard();
     //setupWorld();
     loadImages();
 }
 
-function loadImages() {
-    PIXI.loader
-        .add(`${awsE  }astronaut.png`)
-        .add(`${awsE  }plant.png`)
-        .add(`${awsE  }rover.png`)
-        .add(`${awsE  }water-tank.png`)
-        .load(setupWorld);
+function loadImages(){
+	PIXI.loader.add("Mars","MarsTex.png")
+	.add("astro",awsE+"astronaut.png")
+	.add("plant",awsE+"plant.png")
+	.add("rover",awsE+"rover.png")
+	.add("water-tank",awsE+"water-tank.png")
+	.load(setupWorld);
 }
 
 function setupWorld(){
-	spriteContainer = populateWorld();
-	stage.addChild(spriteContainer);
+	//spriteContainer = populateWorld();
+	//stage.addChild(spriteContainer);
+
+	//Add background
+	background = new PIXI.Sprite(PIXI.loader.resources["Mars"].texture);
+	stage.addChild(background);
+
+	//Initial camera setup
+	var tempMaxWidth = 1702000000 / window.innerWidth;
+	var tempMaxHeight = 851000000 / window.innerHeight;
+	
+	camera.max_zoom = tempMaxHeight > tempMaxWidth ? tempMaxWidth : tempMaxHeight;
+	camera.zoom = camera.max_zoom;
+
+	//camera.maxX = camera.maxX - tempMaxWidth;
+	//camera.maxY = camera.maxY - tempMaxHeight;
+
+	console.log(tempMaxWidth);
+	console.log(tempMaxHeight);
+
+	background.height = 851000000 / camera.zoom;
+	background.width = 1702000000 / camera.zoom;
+	//background.anchor.set(0.5,0.5);
+	//background.position.set(background.width/2,background.height/2);
 
     gameLoop();
 }
 
+
+
 function gameLoop(){
 	requestAnimationFrame(gameLoop);
+	updateWorldView();
 
-	//PIXI.Matrix.translate(offsetVX,offsetVY);
-	spriteContainer.x -= offsetVX * speedModifier;
-	spriteContainer.y += offsetVY * speedModifier;
-	
-	if(zoom + zoomDelta > 2)
-		zoom = 2;
-	else if(zoom + zoomDelta < .05)
-		zoom = .05;
-	else
-		zoom += zoomDelta;
-	
+	var mPoint = renderer.plugins.interaction.mouse.global;
 
-	spriteContainer.scale.set(zoom);
-	//spriteContainer.x = spriteContainer.x - zoomDelta*10;
-	//spriteContainer.y = spriteContainer.y + zoomDelta*10;
+	console.log(screenToWorldX(mPoint.x) / 5000 + " " + screenToWorldY(mPoint.y) / 5000 + " " + screenToWorldX(mPoint.x) + " " + screenToWorldY(mPoint.y));
 
 	renderer.render(stage);
-
-	/*const x = renderer.plugins.interaction.mouse.global.x;
-	const y = renderer.plugins.interaction.mouse.global.y;
-
-    if (Math.abs(sprites[0].x - x) <= 2 && Math.abs(sprites[0].y - y) <= 2) return;
-
-    sprites[0].rotation = Math.atan2(y - sprites[0].y, x - sprites[0].x) + Math.PI;
-
-	sprites[0].x -= Math.cos(sprites[0].rotation);
-	sprites[0].y -= Math.sin(sprites[0].rotation);*/
 }
 
 initialize();

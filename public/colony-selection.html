@@ -37,6 +37,8 @@
 </head>
 
 <body>
+  
+  <button class="sign-out-button">Sign Out</button>
 
   <div class="header">
     <h1>Which colony will you lead?</h1>
@@ -53,7 +55,7 @@
   </div>
 
   <div class="main">
-    <div class="colony-type-container">
+    <div class="colony-type-container" id="mining-colony">
       <div class="colony-type-header">
         <h3>Mining</h3>
       </div>
@@ -65,7 +67,7 @@
       </div>
     </div>
 
-    <div class="colony-type-container">
+    <div class="colony-type-container" id="research-colony">
       <div class="colony-type-header">
         <h3>Research</h3>
       </div>
@@ -77,7 +79,7 @@
       </div>
     </div>
 
-    <div class="colony-type-container">
+    <div class="colony-type-container" id="agricultural-colony">
       <div class="colony-type-header">
         <h3>Agricultural</h3>
       </div>
@@ -89,7 +91,7 @@
       </div>
     </div>
 
-    <div class="colony-type-container">
+    <div class="colony-type-container" id="residential-colony">
       <div class="colony-type-header">
         <h3>Residential & Tourism</h3>
       </div>
@@ -101,7 +103,7 @@
       </div>
     </div>
 
-    <div class="colony-type-container">
+    <div class="colony-type-container" id="manufacturing-colony">
       <div class="colony-type-header">
         <h3>Manufacturing</h3>
       </div>
@@ -113,7 +115,7 @@
       </div>
     </div>
 
-    <div class="colony-type-container">
+    <div class="colony-type-container" id="custom-colony">
       <div class="colony-type-header">
         <h3>Custom</h3>
       </div>
@@ -129,6 +131,28 @@
   <div class="footer">
     <a href="colony-equipment.html" class="continue-button">Continue &rightarrow;</a>
   </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+    // Styles 'Colony Type' div when selected
+    $(".colony-type-container").click(function () {
+      removeSelectedStyle();
+      let x = jQuery(this).attr("id");
+      addSelectedStyle(x);
+    });
+
+    // Helper: removes "selected" style from all 'Colony Type' divs when a new Colony is selected
+    function removeSelectedStyle() {
+      $('.colony-type-container').removeClass("colony-type--selected");
+    }
+
+    // Helper: adds "selected" style to selected Colony div
+    function addSelectedStyle(id) {
+      let validID = `#${id}`;
+      $(validID).addClass('colony-type--selected');
+    }
+  </script>
+
 </body>
 
 </html>

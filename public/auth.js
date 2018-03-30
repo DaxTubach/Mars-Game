@@ -32,7 +32,7 @@ function initApp() {
                     {
                         //window.location.href = '/location-selection.html';
                     }
-                    if(doc.data().conlony != null && window.location.pathname != '/colony-equipment.html')
+                    if(doc.data().conlony != null && window.location.pathname != '/start')
                     {
                         //post('/start', {name: 'Tests'});
                     }
@@ -102,4 +102,9 @@ function post(path, params, method) {
 
     document.body.appendChild(form);
     form.submit();
+}
+function signOut() {
+    if (firebase.auth().currentUser) {
+        firebase.auth().signOut();
+    }
 }

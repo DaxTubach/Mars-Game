@@ -82,7 +82,7 @@ function updateWorldView(forceUpdate){
 
 	//background.anchor.set(); 
 	//console.log("100px represents "+(camera.zoom*camera.zoom)+" meters squared or "+(camera.zoom/1000*camera.zoom/1000)+" kilometers squared.");
-	console.log(camera.x + " " + camera.y);
+	//console.log(camera.x + " " + camera.y);
 }
 
 function removeContainer(container){

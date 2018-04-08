@@ -13,6 +13,7 @@ var showGrid = false;
 var highlightedCell;
 var freezeCamera = false;
 var colonyMade = false;
+var infoText;
 var camera = {
 	x:0,
 	y:0,
@@ -59,9 +60,12 @@ function initialize() {
 	stage.interactive = true;
 
 	stage.mousedown = function (moveData){
-		//console.log(moveData.data.global.x + " " + moveData.data.global.y);
+
+		var rX = Math.trunc(screenToWorldX(moveData.data.global.x) / 5000);
+		var rY = Math.trunc(screenToWorldY(moveData.data.global.y) / 5000);
+		console.log(moveData.data.global.x + " " + moveData.data.global.y+" "+rX+" "+rY);
 		if(!colonyMade){
-			setColony(moveData.data.global.x,moveData.data.global.y);
+			setColony(rX,rY);
 		}
 	};
 
@@ -71,33 +75,38 @@ function initialize() {
 
 	stage.addChild(worldContainer);
 	stage.addChild(labelContainer);
+	stage.addChild(HUDcontainer);
+	infoText = new PIXI.Text('');
+	infoText.x = 10;
+	infoText.y = 10;
+	HUDcontainer.addChild(infoText);
 
 	renderer.view.style.position = "absolute";
 	renderer.view.style.display = "block";
 	renderer.autoResize = true;
 	renderer.resize(window.innerWidth, window.innerHeight);
 
-	renderer.backgroundColor = 0xe77d11;
+	renderer.backgroundColor = 0xb74a0b;
 
 	//document.addEventListener("mousewheel",mouseWheelHandler, false);
 
 	renderer.render(stage);
 
-    /*
-    Var sound = new Howl({
-    	src:['music/Dust.mp3'],
+    
+    var sound = new Howl({
+    	src:['https://s3.us-east-2.amazonaws.com/hq.mars/Audio/Vortex+Mechanic+-+Plutonia.mp3'],
 		html5: true,
 		loop: true
 	});
 
-    sound.play();*/
+    sound.play();
     initKeyboard();
     //setupWorld();
     loadImages();
 }
 
 function loadImages(){
-	PIXI.loader.add("Mars","MarsTex.png")
+	PIXI.loader.add("Mars",awsE+"MarsTex.png")
 	.add("astro",awsE+"astronaut.png")
 	.add("plant",awsE+"plant.png")
 	.add("rover",awsE+"rover.png")
@@ -190,37 +199,6 @@ function addColonyTag(text,x,y){
 	labelContainer.addChild(testText);
 }
 
-function gameLoop(){
-	requestAnimationFrame(gameLoop);
-
-	var mPoint = renderer.plugins.interaction.mouse.global;
-
-	updateWorldView(false);
-	updateHUD();
-
-	let g = new PIXI.Graphics();
-	g.fillAlpha = 0.5;
-
-	var rX = Math.trunc(screenToWorldX(mPoint.x) / 5000)*5000;
-	var rY = Math.trunc(screenToWorldY(mPoint.y) / 5000)*5000;
-
-	//console.log(rX,rY);
-
-	g.beginFill(0xFFD700,0.5);
-	g.lineStyle(2,0xe5c100);
-	g.drawRect(worldToScreenX(rX),worldToScreenY(rY),worldToScreenScale(5000),worldToScreenScale(5000));
-
-	g.endFill();
-	worldContainer.addChild(g);
-
-	//console.log(screenToWorldX(mPoint.x) / 5000 + " " + screenToWorldY(mPoint.y) / 5000 + " " + screenToWorldX(mPoint.x) + " " + screenToWorldY(mPoint.y));
-
-	renderer.render(stage);
-
-	worldContainer.removeChild(g);
-	
-}
-
 function setColony(x,y){
 	var user = firebase.auth().currentUser;
     var uid = user.uid;
@@ -230,11 +208,13 @@ function setColony(x,y){
           "colony.x" : x,
           "colony.y" : y
       });
-
     colonyMade = true;
+    getColonyCoord();
 }
 
 function getColonyCoord(){
+	colonies = [];
+
     db.collection("users").get()
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
@@ -249,5 +229,14 @@ function getColonyCoord(){
     });
 }
 
+function gameLoop(){
+	requestAnimationFrame(gameLoop);
+
+	updateWorldView(false);
+
+	var g = preRender();
+	renderer.render(stage);
+	postRender(g);
+}
 
 initialize();

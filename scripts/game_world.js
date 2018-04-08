@@ -43,12 +43,6 @@ function updateWorldView(forceUpdate){
 	if(!updateCamera() && !forceUpdate)
 		return;
 
-	//Scale image according to zoom level
-	background.height = camera.maxY / camera.zoom;
-	background.width = camera.maxX / camera.zoom;
-	background.position.set(worldToScreenX(0),worldToScreenY(0));
-	background.pivot.set(.5,.5);
-
 	if(camera.zoom < camera.max_zoom /10&&showGrid){
 		removeContainer(grid);
 		grid = createGrid();
@@ -185,6 +179,8 @@ function updateCamera(){
 
 	/*For zoom to cursor*/
 	var startZoom = camera.zoom;
+	var startWidth = background.width;
+	var startHeight = background.height;
 
 	if(camera.dzoom == 1){
 		camera.zoom *= 1.05
@@ -199,6 +195,9 @@ function updateCamera(){
 	
 	/*Math for zoom to cursor*/
 	var zoomDifference = startZoom - camera.zoom;
+	//camera.x += -1 * background.height + startHeight;
+	//camera.y += -1 * background.width + startWidth;
+
 	//camera.x += zoomDifference*window.innerWidth / 100;
 	//camera.y += zoomDifference*window.innerHeight / 100;
 
@@ -212,6 +211,9 @@ function updateCamera(){
 		camera.y += camera.dy * camera.zoom / 10; //+ camera.dy<0?-1:1;
 	}
 
+	camera.maxX = window.innerWidth * camera.max_zoom / 100 - (window.innerWidth * camera.zoom / 100);
+	camera.maxY = window.innerHeight * camera.max_zoom / 100 - (window.innerHeight * camera.zoom / 100);
+
 	if(camera.x < 0)
 			camera.x = 0;
 	if(camera.x > camera.maxX)
@@ -222,7 +224,51 @@ function updateCamera(){
 	if(camera.y > camera.maxY)		
 		camera.y = camera.maxY;
 
+	updateHUD();
+	
+	//*********Fade image instead of sudden transition*************/
+	//Scale image according to zoom level
+	background.height = 851000000 / camera.zoom;
+	background.width = 1702000000 / camera.zoom;
+	background.alpha = camera.zoom < 25000 ? camera.zoom / 25000 : 1;
+	background.position.set(worldToScreenX(0),worldToScreenY(0));
+
 	return true;
+}
+
+function drawColonyUnit(){
+	let g = new PIXI.Graphics();
+	g.fillAlpha = 0.5;
+
+	var mPoint = renderer.plugins.interaction.mouse.global;
+
+	var rX = Math.trunc(screenToWorldX(mPoint.x) / 5000)*5000;
+	var rY = Math.trunc(screenToWorldY(mPoint.y) / 5000)*5000;
+
+	//console.log(rX,rY);
+
+	g.beginFill(0xFFD700,0.5);
+	g.lineStyle(2,0xe5c100);
+	g.drawRect(worldToScreenX(rX),worldToScreenY(rY),worldToScreenScale(5000),worldToScreenScale(5000));
+
+	g.endFill();
+	return g;
+}
+
+function preRender(){
+	infoText.text = "Camera zoom: "+camera.zoom+"\nx: "+camera.x+"\ny: "+camera.y+"\nScreenWidth: "+window.innerWidth * camera.zoom / 100+"\nMaxX: "+camera.maxX;
+
+	if(!colonyMade){
+		var g = drawColonyUnit();
+		worldContainer.addChild(g);
+		return g;
+	}
+
+	return null;
+}
+
+function postRender(g){
+	worldContainer.removeChild(g);
 }
 
 function updateHUD(){

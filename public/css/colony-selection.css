@@ -71,6 +71,7 @@ a {
   padding: 0 15px;
   height: 100%;
   min-width: 150px;
+  max-width: 300px;
   cursor: pointer;
   transition: all 0.5s ease;
 }

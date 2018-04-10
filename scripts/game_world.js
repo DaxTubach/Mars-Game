@@ -1,4 +1,4 @@
-function populateWorld(){
+/*function populateWorld(){
 	var container = new PIXI.Container();
 
 	createSprite(container,200,100,0.75,0.75,"astronaut.png");
@@ -20,12 +20,12 @@ function populateWorld(){
 
 	for(j=0;j<5000,j++){
 		myGraph.lineStyle(10,0xffffff).moveTo(j*100,0).lineTo(j*100,5000);		
-	}*/
+	}
 
 	container.pivot.set(container.width/2,container.height/2);
 
 	return container;
-}
+}*/
 
 function createSprite(container, x, y, width, height, type){
 	var sprite = new PIXI.Sprite(PIXI.loader.resources[type].texture);
@@ -179,36 +179,50 @@ function updateCamera(){
 
 	/*For zoom to cursor*/
 	var startZoom = camera.zoom;
-	var startWidth = background.width;
-	var startHeight = background.height;
+	var startX = camera.x;
+	var startY = camera.y;
+
+	//console.log(startX+" "+startY);
 
 	if(camera.dzoom == 1){
 		camera.zoom *= 1.05
-		if(camera.zoom > camera.max_zoom)
-			camera.zoom = camera.max_zoom;
 	}
-	if(camera.dzoom == -1){
+	else if(camera.dzoom == -1){
 		camera.zoom /= 1.05
-		if(camera.zoom < camera.min_zoom)
-			camera.zoom = camera.min_zoom;
 	}
-	
+	else{
+		camera.zoom += camera.dzoom * camera.zoom / 500;
+		camera.dzoom /= 2;
+	}
+
+	if(camera.zoom > camera.max_zoom)
+			camera.zoom = camera.max_zoom;
+	if(camera.zoom < camera.min_zoom)
+			camera.zoom = camera.min_zoom;
+
+	if(Math.abs(camera.dzoom) < 1)
+		camera.dzoom = 0;
+
 	/*Math for zoom to cursor*/
 	var zoomDifference = startZoom - camera.zoom;
-	//camera.x += -1 * background.height + startHeight;
-	//camera.y += -1 * background.width + startWidth;
+	var mPoint = renderer.plugins.interaction.mouse.global;
+	var xPercent = mPoint.x / window.innerWidth;
+	var yPercent = mPoint.y / window.innerHeight;
 
-	//camera.x += zoomDifference*window.innerWidth / 100;
-	//camera.y += zoomDifference*window.innerHeight / 100;
+	//camera.x += zoomDifference / camera.max_zoom * 1702000000 / 200; //200 because unit conversion and half zoom
+	//camera.y += zoomDifference / camera.max_zoom * 851000000 / 200;
+
+	camera.x += zoomDifference / camera.max_zoom * 1702000000 / 100 * xPercent;
+	camera.y += zoomDifference / camera.max_zoom * 851000000 / 100 * yPercent;
 
 	//console.log(window.innerWidth,window.innerHeight);
 
 	if(camera.dx != 0){
-		camera.x += camera.dx * camera.zoom / 10; //+ camera.dx<0?-1:1;
+		camera.x += camera.dx * camera.zoom / 10 * (camera.speedModifier?10:1);
 	}
 
 	if(camera.dy != 0){
-		camera.y += camera.dy * camera.zoom / 10; //+ camera.dy<0?-1:1;
+		camera.y += camera.dy * camera.zoom / 10 * (camera.speedModifier?10:1);
 	}
 
 	camera.maxX = window.innerWidth * camera.max_zoom / 100 - (window.innerWidth * camera.zoom / 100);
@@ -223,7 +237,7 @@ function updateCamera(){
 			camera.y = 0;
 	if(camera.y > camera.maxY)		
 		camera.y = camera.maxY;
-
+ 
 	updateHUD();
 	
 	//*********Fade image instead of sudden transition*************/
@@ -272,6 +286,9 @@ function postRender(g){
 }
 
 function updateHUD(){
-	labelContainer.removeChildren();
-	createLabels();
+	for(var i = 0; i < textTags.length; i++){
+		var textTag = textTags[i];
+		textTag.sprite.x = worldToScreenX(textTag.x);
+		textTag.sprite.y = worldToScreenY(textTag.y);
+	}
 }

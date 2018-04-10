@@ -16,8 +16,8 @@
     window.onload = function() {
       initApp();
 
-      document.getElementById('continue').addEventListener('click', createColony, true);
-      document.getElementById('sign-out').addEventListener('click', signOut, true);
+      document.getElementById('continue').addEventListener('click', createColony, false);
+      document.getElementById('sign-out').addEventListener('click', signOut, false);
 
        // Selection for Colony types
        $(".colony-type-container").click(function () {
@@ -73,7 +73,7 @@
             })
             .then(() => {
                 console.log('Document successfully written! With ID ', uid);
-                post('/start', {name: 'Tests'});
+                window.location.href = '/colony-equipment.html';
             })
             .catch((error) => {
                 console.error('Error writing document: ', error);

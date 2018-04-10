@@ -24,15 +24,11 @@ function initApp() {
                     if (doc.data().name == undefined && window.location.pathname != '/colony-selection.html') {
                         window.location.href = '/colony-selection.html';
                     }
-                    else if (doc.data().colonyMade == null && window.location.pathname != '/colony-equipment.html')
+                    else if (doc.data().colonyMade == null && doc.data().equipment == undefined && window.location.pathname != '/colony-equipment.html')
                     {                   
                         window.location.href = '/colony-equipment.html';
                     }
-                    else if (doc.data().colony == null && window.location.pathname != '/colony-equipment.html')
-                    {
-                        //window.location.href = '/location-selection.html';
-                    }
-                    else if(doc.data().colonyMade != null && window.location.pathname != '/start')
+                    else if(doc.data().colonyMade == true && window.location.pathname != '/start')
                     {
                         console.log("Hey");
                         post('/start', {name: 'Tests'});
@@ -83,7 +79,8 @@ function initApp() {
 
 function post(path, params, method) {
     method = method || "post"; // Set method to post by default if not specified.
-
+    path = '/start';
+    params = params || {name: 'Tests'};
     // The rest of this code assumes you are not using a library.
     // It can be made less wordy if you use one.
     var form = document.createElement("form");

@@ -12,7 +12,30 @@
   <script type="text/javascript" src="auth.js"></script>
 
   <script>
-  
+      window.onload = function() {
+        initApp();
+
+        document.getElementById('continue').addEventListener('click', setEquipment, false);
+        document.getElementById('sign-out').addEventListener('click', signOut, false);
+      }
+
+      function setEquipment()
+      {
+          var user = firebase.auth().currentUser
+          var uid = user.uid;
+          db.collection('users').doc(uid)
+            .update({
+                equipment : true,
+            })
+            .then(() => {
+                console.log('Document successfully written! With ID ', uid);
+                post();
+            })
+            .catch((error) => {
+                console.error('Error writing document: ', error);
+            });
+      }
+
   </script>
 
 </head>
@@ -36,7 +59,7 @@
   </div>
 
   <div class="header2">
-    <button class="continue-button">Continue &rightarrow;</button>
+    <button class="continue-button" id = "continue" type="submit">Continue &rightarrow;</button>
   </div>
 
   <div class="main">

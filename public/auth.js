@@ -25,10 +25,10 @@ function initApp() {
                         window.location.href = '/colony-selection.html';
                     }
                     else if (doc.data().colonyMade == null && window.location.pathname != '/colony-equipment.html')
-                    {
+                    {                   
                         window.location.href = '/colony-equipment.html';
                     }
-                    else if (doc.data().colony != null && window.location.pathname != '/colony-equipment.html')
+                    else if (doc.data().colony == null && window.location.pathname != '/colony-equipment.html')
                     {
                         //window.location.href = '/location-selection.html';
                     }

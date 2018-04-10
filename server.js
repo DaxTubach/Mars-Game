@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const portNum = 80;
+const portNum = 8080;
 
 app.set('port', portNum);
 

@@ -115,7 +115,6 @@ function registerUser(user) {
             uid,
             email,
             colony: null
-
         })
         .then(() => {
             console.log('Document successfully written! With ID ', uid);

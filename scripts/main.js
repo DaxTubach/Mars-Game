@@ -2,17 +2,15 @@ var type = "WebGL"
 var stage;
 var renderer;
 var backgroundVisible = true;
-var spriteContainer;
-var labelContainer;
-var HUDcontainer;
-var worldContainer;
+var spriteContainer,labelContainer, HUDcontainer, worldContainer, parallaxCloudContainer;
+var textTags = [];
 var background;
 var grid;
 var colonies = [];
 var showGrid = false;
 var highlightedCell;
 var freezeCamera = false;
-var colonyMade = false;
+var colonyMade = true;
 var infoText;
 var camera = {
 	x:0,
@@ -59,6 +57,7 @@ function initialize() {
 	stage.hitArea = new PIXI.Rectangle(0,0,1920,1080);
 	stage.interactive = true;
 
+	document.addEventListener("wheel",mouseWheelHandler,false);
 	stage.mousedown = function (moveData){
 
 		var rX = Math.trunc(screenToWorldX(moveData.data.global.x) / 5000);
@@ -70,10 +69,12 @@ function initialize() {
 	};
 
 	worldContainer = new PIXI.Container();
+	parallaxCloudContainer = new PIXI.Container();
 	labelContainer = new PIXI.Container();
 	HUDcontainer = new PIXI.Container();
 
 	stage.addChild(worldContainer);
+	stage.addChild(parallaxCloudContainer);
 	stage.addChild(labelContainer);
 	stage.addChild(HUDcontainer);
 	infoText = new PIXI.Text('');
@@ -111,6 +112,7 @@ function loadImages(){
 	.add("plant",awsE+"plant.png")
 	.add("rover",awsE+"rover.png")
 	.add("water-tank",awsE+"water-tank.png")
+	.add("cloud",awsE+"MartianCloud.png")
 	.load(setupWorld);
 }
 
@@ -121,6 +123,11 @@ function setupWorld(){
 	//Add background
 	background = new PIXI.Sprite(PIXI.loader.resources["Mars"].texture);
 	worldContainer.addChild(background);
+
+	/*var cloud = new PIXI.Sprite(PIXI.loader.resources["cloud"].texture);
+	cloud.x = 100;
+	cloud.y = 100;
+	parallaxCloudContainer.addChild(cloud);*/
 
 	//Initial camera setup
 	var tempMaxWidth = 1702000000 / window.innerWidth;
@@ -162,7 +169,7 @@ function createLabels(){
 
 	for(i in colonies){
 		if(colonies[i].x!=null&&colonies[i].y!=null){
-			addColonyTag(colonies[i].Name,colonies[i].x*5000,colonies[i].y*5000);
+			addColonyTag(colonies[i].Name,colonies[i].x*5000+2500,colonies[i].y*5000+2500);
 		}
 	}
 }
@@ -181,6 +188,12 @@ function addLocationTag(text,x,y){
 	testText.y = worldToScreenY(y);
 	testText.anchor.set(0.5,0.5);
 	labelContainer.addChild(testText);
+	var textObject = {
+		sprite: testText,
+		x: x,
+		y: y
+	};
+	textTags.push(textObject);
 }
 
 function addColonyTag(text,x,y){
@@ -197,6 +210,12 @@ function addColonyTag(text,x,y){
 	testText.y = worldToScreenY(y);
 	testText.anchor.set(0.5,0.5);
 	labelContainer.addChild(testText);
+	var textObject = {
+		sprite: testText,
+		x: x,
+		y: y
+	};
+	textTags.push(textObject);
 }
 
 function setColony(x,y){
@@ -223,10 +242,15 @@ function getColonyCoord(){
             colonies.push(doc.data().colony);
         });
         console.log(colonies);;
+    	updateHUD();
     })
     .catch(function(error) {
         console.log("Error getting documents: ", error);
     });
+}
+
+function mouseWheelHandler(e){
+    camera.dzoom = Math.sign(e.deltaY) * 50;
 }
 
 function gameLoop(){

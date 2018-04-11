@@ -15,6 +15,7 @@ function toggleSignIn() {
             alert('Please enter a valid password.');
             return;
         }
+        
         // Sign in with email and pass---------------------
         firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION);
         firebase.auth().signInWithEmailAndPassword(email, password)

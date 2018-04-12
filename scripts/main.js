@@ -26,12 +26,15 @@ var camera = {
 	min_zoom: 1
 };
 
+getUser();
+
 
 
 const awsE = 'https://s3.us-east-2.amazonaws.com/hq.mars/Entities/';
 
 function initialize() {
 	initApp();
+
 
     if (!PIXI.utils.isWebGLSupported()) {
         type = 'canvas';
@@ -103,7 +106,8 @@ function initialize() {
     sound.play();
     initKeyboard();
     //setupWorld();
-    loadImages();
+	loadImages();
+
 }
 
 function loadImages(){
@@ -115,7 +119,17 @@ function loadImages(){
 	.add("cloud",awsE+"MartianCloud.png")
 	.load(setupWorld);
 }
-
+function getUser()
+{
+	firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+			console.log("HA");
+		}
+		else{
+			console.log("boo");
+		}
+	});
+}
 function setupWorld(){
 	//spriteContainer = populateWorld();
 	//stage.addChild(spriteContainer);

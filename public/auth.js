@@ -24,11 +24,11 @@ function initApp() {
                     if (doc.data().name == undefined && window.location.pathname != '/colony-selection.html') {
                         window.location.href = '/colony-selection.html';
                     }
-                    else if (doc.data().colonyMade != true && doc.data().equipment != true && doc.data().name != undefined && window.location.pathname != '/colony-equipment.html')
+                    else if (doc.data().colonyMade == undefined && doc.data().equipment != true && doc.data().name != undefined && window.location.pathname != '/colony-equipment.html')
                     {                   
                         window.location.href = '/colony-equipment.html';
                     }
-                    else if(doc.data().colonyMade == true && window.location.pathname != '/start')
+                    else if(doc.data().equipment == true && window.location.pathname != '/start')
                     {
                         console.log("Hey");
                         post('/start', {name: 'Tests'});

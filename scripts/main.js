@@ -59,6 +59,7 @@ function initialize() {
     //user = getUserData();
     getColonyCoord();
 
+
     /* Create renderer*/
     renderer = PIXI.autoDetectRenderer(256, 256, {
         antialias: true,
@@ -272,7 +273,6 @@ function getUserData(){
 
 function getColonyCoord(){
 	colonies = [];
-
     db.collection("users").get()
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
@@ -291,6 +291,48 @@ function getColonyCoord(){
     .catch(function(error) {
         console.log("Error getting documents: ", error);
     });
+}
+
+// 1 = equipment, 2 = landmark, 3 - structures
+// testing: getEntityInfo(2, "olympus_mons")
+// prints data to console but dont know how to return as string form, 
+// currently returning as [object, object]
+function getEntityInfo(collection_type, entity_name){
+	var skipFlag = 0;
+
+	var collection_name;
+	if (collection_type == 1){
+		collection_name = "equipment_info";
+	} else if (collection_type == 2) {
+		collection_name = "landmark_info";
+ 	} else if (collection_type == 3) {
+		collection_name = "structures_info";
+ 	} else {
+ 		var skipFlag = 1; 
+ 	}
+
+
+ 	if (skipFlag== 0) {
+	    db.collection(collection_name).get()
+	    .then(function(querySnapshot) {
+	        querySnapshot.forEach(function(doc) {
+	          // doc.data() is never undefined for query doc snapshots
+	         	if(doc.id ==  entity_name){
+	         		if(doc.data().info_text != null){
+	         			alert("found!");
+	          			console.log(doc.id, " => ", doc.data().info_text);
+
+	         		}
+	         	}
+
+	        });
+	        console.log(colonies);;
+	    	updateHUD();
+	    })
+	    .catch(function(error) {
+	        console.log("Error getting documents: ", error);
+	    });
+	}
 }
 
 function createInteractions(){
@@ -342,6 +384,7 @@ function createInteractions(){
 	signout.anchor.set(0.5);
 	HUDcontainer.addChild(signout);
 }
+
 
 function mouseWheelHandler(e){
     camera.dzoom = Math.sign(e.deltaY) * 50;

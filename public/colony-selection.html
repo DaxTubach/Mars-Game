@@ -13,17 +13,17 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script>
     // Styles 'Colony Type' div when selected
-    window.onload = function() {
+    window.onload = function () {
       initApp();
 
       document.getElementById('continue').addEventListener('click', createColony, false);
       document.getElementById('sign-out').addEventListener('click', signOut, false);
 
-       // Selection for Colony types
-       $(".colony-type-container").click(function () {
+      // Selection for Colony types
+      $('.colony-type-container').click(function () {
         removeSelectedStyle();
         let x = jQuery(this).attr("id");
-       addSelectedStyle(x);
+        addSelectedStyle(x);
       });
 
       // Helper: removes "selected" style from all 'Colony Type' divs when a new Colony is selected
@@ -37,59 +37,58 @@
         $(validID).addClass('colony-type--selected');
       }
 
-  }
+    }
 
-  function updateColonyLocation(xLoc,yLoc)
-  {
-        var user = firebase.auth().currentUser;
+    function updateColonyLocation(xLoc, yLoc) {
+      var user = firebase.auth().currentUser;
+      var uid = user.uid;
+      db.collection('users').doc(uid)
+        .update({
+          "colony.x": xLoc,
+          "colony.y": yLoc
+        })
+        .then(() => {
+          console.log('Document successfully written! With ID ', uid);
+        })
+        .catch((error) => {
+          console.error('Error writing document: ', error);
+        });
+    }
+
+    function createColony() {
+      const colonyName = document.getElementById('colony-name').value;
+      const username = document.getElementById('player-name').value;
+
+      console.log(colonyName);
+      console.log(username);
+
+      if (colonyName != '' && username != '') {
+        var user = firebase.auth().currentUser
         var uid = user.uid;
         db.collection('users').doc(uid)
           .update({
-              "colony.x" : xLoc,
-              "colony.y" : yLoc
+            name: username,
+            colony: { Name: colonyName, x: null, y: null },
           })
           .then(() => {
-              console.log('Document successfully written! With ID ', uid);
+            console.log('Document successfully written! With ID ', uid);
+            window.location.href = '/colony-equipment.html';
           })
           .catch((error) => {
-              console.error('Error writing document: ', error);
+            console.error('Error writing document: ', error);
           });
-  }
-
-  function createColony(){
-    const colonyName = document.getElementById('colony-name').value;
-    const username = document.getElementById('player-name').value;
-
-    console.log(colonyName);
-    console.log(username);
-
-        if(colonyName != '' && username != ''){
-          var user = firebase.auth().currentUser
-          var uid = user.uid;
-          db.collection('users').doc(uid)
-            .update({
-                name: username,
-                colony: {Name : colonyName, x : null, y : null},            
-            })
-            .then(() => {
-                console.log('Document successfully written! With ID ', uid);
-                window.location.href = '/colony-equipment.html';
-            })
-            .catch((error) => {
-                console.error('Error writing document: ', error);
-            });
-          }
-          else
-            alert("Please fill out forms");
-        }
+      }
+      else
+        alert("Please fill out forms");
+    }
   </script>
 
 
 </head>
 
 <body>
-  
-  <button class="sign-out-button" id ="sign-out" >Sign Out</button>
+
+  <button class="sign-out-button" id="sign-out">Sign Out</button>
 
   <div class="header">
     <h1>Which colony will you lead?</h1>
@@ -162,7 +161,7 @@
         <img class="colony-type-icon" src="images/wrench-icon.png" />
       </div>
       <div class="colony-type-description">
-       Focus your colony on producing equipment and materials for yourself and fellow colonizers!
+        Focus your colony on producing equipment and materials for yourself and fellow colonizers!
       </div>
     </div>
 
@@ -180,7 +179,7 @@
   </div>
 
   <div class="footer">
-    <button class="continue-button" id = "continue" type="submit">Continue &rightarrow;</button>
+    <button class="continue-button" id="continue" type="submit">Continue &rightarrow;</button>
   </div>
 
 

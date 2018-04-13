@@ -8,7 +8,7 @@
     "express": "^4.16.2",
     "firebase": "^4.9.1",
     "firebase-admin": "^5.11.0",
-    "seedrandom": "^2.4.3"
+    "firechat": "^3.0.1"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^16.1.0",

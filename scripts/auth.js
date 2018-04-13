@@ -1,3 +1,8 @@
+// initial universal firechat variables.
+var chatRef; 
+var chat; 
+var chatUI;
+
 // Sign In Button Press: ------------------------------
 function toggleSignIn() {
     if (firebase.auth().currentUser) {
@@ -153,6 +158,49 @@ function sendPasswordReset() {
         });
 }
 
+
+
+
+
+
+
+// Firechat 
+  function initChat(user) {
+    // Get a Firebase Database ref
+
+    $(document).ready(function() {
+      var userAuth = firebase.auth().currentUser; 
+      alert(userAuth.email);
+
+      chatRef = firebase.database().ref("chat");
+      chat = new Firechat(chatRef); 
+      chatUI = new FirechatUI(chatRef, document.getElementById("firechat-container"));
+    });
+
+  }
+
+function setChat(user) {
+
+  // universal chat 
+  chatRoomID = "-L7oWyTLjpT6O8gMtoe-";
+  chatUI._chat.enterRoom(chatRoomID); 
+
+  chatUI._user = user;
+
+  chatUI._chat.setUser(user.uid, user.email, function (user) {
+    chatUI._chat.enterRoom(chatRoomID);
+  }); 
+
+    // setChatUserToReadOnlyMode(true, user, chatUI, chatRef);
+}
+
+
+
+
+
+
+
+
 // InitApp handles setting up UI event listeners and registering Firebase auth listeners:
 // Firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or out, and that is where we update the UI.
 
@@ -164,6 +212,14 @@ function initApp() {
     // Listening for auth state changes.
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
+
+            // firechat 
+            initChat(user);
+            document.getElementById('user-name').textContent = user.email;
+            $(document).ready(function() {
+              setChat(user);
+            });
+
             // User is signed in.
             const docRef = db.collection('users').doc(user.uid);
             docRef.get().then((doc) => {

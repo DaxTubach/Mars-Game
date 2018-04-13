@@ -45,6 +45,7 @@ function initialize() {
 
     getColonyCoord();
 
+
     /* Create renderer*/
     renderer = PIXI.autoDetectRenderer(256, 256, {
         antialias: true,
@@ -247,7 +248,6 @@ function setColony(x,y){
 
 function getColonyCoord(){
 	colonies = [];
-
     db.collection("users").get()
     .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
@@ -255,13 +255,63 @@ function getColonyCoord(){
           if(doc.data().colony != null)
             colonies.push(doc.data().colony);
         });
-        console.log(colonies);;
-    	updateHUD();
+        console.log(colonies);
+        for(i in colonies){
+			if(colonies[i].x!=null&&colonies[i].y!=null){
+				addColonyTag(colonies[i].Name,colonies[i].x*5000+2500,colonies[i].y*5000+2500);
+				updateHUD();
+			}
+		}
     })
     .catch(function(error) {
         console.log("Error getting documents: ", error);
     });
 }
+
+// 1 = equipment, 2 = landmark, 3 - structures
+// testing: getEntityInfo(2, "olympus_mons")
+// prints data to console but dont know how to return as string form, 
+// currently returning as [object, object]
+function getEntityInfo(collection_type, entity_name){
+	var skipFlag = 0;
+
+	var collection_name;
+	if (collection_type == 1){
+		collection_name = "equipment_info";
+	} else if (collection_type == 2) {
+		collection_name = "landmark_info";
+ 	} else if (collection_type == 3) {
+		collection_name = "structures_info";
+ 	} else {
+ 		var skipFlag = 1; 
+ 	}
+
+
+ 	if (skipFlag== 0) {
+	    db.collection(collection_name).get()
+	    .then(function(querySnapshot) {
+	        querySnapshot.forEach(function(doc) {
+	          // doc.data() is never undefined for query doc snapshots
+	         	if(doc.id ==  entity_name){
+	         		if(doc.data().info_text != null){
+	         			alert("found!");
+	          			console.log(doc.id, " => ", doc.data().info_text);
+
+	         		}
+	         	}
+
+	        });
+	        console.log(colonies);;
+	    	updateHUD();
+	    })
+	    .catch(function(error) {
+	        console.log("Error getting documents: ", error);
+	    });
+	}
+}
+
+
+
 
 function mouseWheelHandler(e){
     camera.dzoom = Math.sign(e.deltaY) * 50;

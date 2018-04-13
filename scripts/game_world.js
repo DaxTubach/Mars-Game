@@ -2,6 +2,7 @@ var grid;
 var lastView = {x:0,y:0,zoom:0,screen_width:0,screen_height:0};
 const ENTITY_ZOOM_LEVEL = 750;
 const CULL_BUFFER = 100;
+const CLOUD_ZOOM = 5000;
 //const COLONY_ZOOM_LEVEL;
 
 
@@ -17,8 +18,12 @@ function createSprite(container, x, y, width, height, type){
 function updateWorldView(forceUpdate){
 
 	//Check if player changed the camera
-	if(!updateCamera() && !forceUpdate)
+	if(!updateCamera() && !forceUpdate){
+		updateClouds();
 		return;
+	}
+
+	updateClouds();
 
 	if(camera.zoom < ENTITY_ZOOM_LEVEL){
 		renderObjects();
@@ -64,6 +69,7 @@ function updateWorldView(forceUpdate){
 	background.alpha = camera.zoom < 25000 ? camera.zoom / 25000 : 1;
 	background.position.set(worldToScreenX(0),worldToScreenY(0));
 
+	infoText.text = "Camera zoom: "+camera.zoom+"\nx: "+camera.x+"\ny: "+camera.y+"\nScreenWidth: "+window.innerWidth * camera.zoom / 100+"\nMaxX: "+camera.maxX;
 	lastView = {zoom: camera.zoom, x: camera.x, y: camera.y, screen_width: camera.screen_width, screen_height: camera.screen_height};
 }
 
@@ -163,13 +169,15 @@ function worldToScreenX(x){
 }
 
 function updateCamera(){
-	if(camera.dx == 0 && camera.dy == 0 && camera.dzoom == 0)
+	if(camera.dx == 0 && camera.dy == 0 && camera.dzoom == 0){
 		return false;
+	}
 	if(freezeCamera)
 		return false;
 
 	/*For zoom to cursor*/
 	var startZoom = camera.zoom;
+
 
 	//console.log(startX+" "+startY);
 
@@ -253,8 +261,6 @@ function drawColonyUnit(){
 }
 
 function preRender(){
-	infoText.text = "Camera zoom: "+camera.zoom+"\nx: "+camera.x+"\ny: "+camera.y+"\nScreenWidth: "+window.innerWidth * camera.zoom / 100+"\nMaxX: "+camera.maxX;
-
 	/*if(!colonyMade){
 		var g = drawColonyUnit();
 		worldContainer.addChild(g);
@@ -328,6 +334,32 @@ function updateAndCullWorldObject(object, zoomCutoff){
 			}
 		
 	return false;
+}
+
+function updateClouds(){
+
+	if(camera.zoom < CLOUD_ZOOM)
+		parallaxCloudContainer.alpha = 0;
+	else
+		parallaxCloudContainer.alpha = 0.3;
+
+	for(var i = 0; i < clouds.length; i++){
+		var cloud = clouds[i];
+		var zoomDifference = lastView.zoom - camera.zoom;
+		cloud.x += 250 + (lastView.x - camera.x)/cloud.zoomFactor;// - (zoomDifference / camera.max_zoom * 1702000000 / 100 * .5);
+		cloud.y += 100 + (lastView.y - camera.y)/cloud.zoomFactor;// - (zoomDifference / camera.max_zoom * 851000000 / 100 * .5);
+;
+
+		if(cloud.x >= 17020000)
+			cloud.x = -cloud.w;
+		if(cloud.y >= 8510000)
+			cloud.y = -cloud.h;
+
+		cloud.sprite.x = worldToScreenX(cloud.x);
+		cloud.sprite.y = worldToScreenY(cloud.y);
+		cloud.sprite.width = worldToScreenScale(cloud.w);
+		cloud.sprite.height = worldToScreenScale(cloud.h); 
+	}
 }
 
 function updateHUD(){

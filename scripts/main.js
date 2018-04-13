@@ -3,7 +3,7 @@ var stage;
 var renderer;
 var backgroundVisible = true;
 var spriteContainer, labelContainer, HUDcontainer, entityContainer, microContainer, parallaxCloudContainer;
-var textTags = [], microfeatures = [];
+var textTags = [], microfeatures = [], clouds = [];
 var background;
 var colonies = [];
 var showGrid = false;
@@ -32,7 +32,6 @@ const awsE = 'https://s3.us-east-2.amazonaws.com/hq.mars/Entities/';
 
 function initialize() {
 	initApp();
-
 
     if (!PIXI.utils.isWebGLSupported()) {
         type = 'canvas';
@@ -128,11 +127,6 @@ function setupWorld(){
 	infoText.y = 10;
 	HUDcontainer.addChild(infoText);
 
-	/*var cloud = new PIXI.Sprite(PIXI.loader.resources["cloud"].texture);
-	cloud.x = 100;
-	cloud.y = 100;
-	parallaxCloudContainer.addChild(cloud);*/
-
 	//Initial camera setup
 	var tempMaxWidth = 1702000000 / window.innerWidth;
 	var tempMaxHeight = 851000000 / window.innerHeight;
@@ -144,6 +138,7 @@ function setupWorld(){
 	createLabels();
 
 	createInteractions();
+	generateClouds();
 
 	gameLoop();
 }
@@ -302,14 +297,29 @@ function mouseWheelHandler(e){
     camera.dzoom = Math.sign(e.deltaY) * 50;
 }
 
+function generateClouds(){
+	
+	for(var i = 0;i<1000;i++){
+		var cloud = new PIXI.Sprite(PIXI.loader.resources["cloud"].texture);
+		var x = Math.floor(Math.random() * 17020000);
+		var y = Math.floor(Math.random() * 8510000);
+		var w = Math.floor(Math.random() * 500000)+10000;
+		var h = w*1.25;
+		var zoomFactor = Math.floor(Math.random() * 10) + 2;
+		cloud.x = worldToScreenX(x);
+		cloud.y = worldToScreenY(y);
+		cloud.rotation = Math.floor(Math.random() * 180) * .0174533; //Degrees to radians
+		parallaxCloudContainer.addChild(cloud);
+		clouds.push({sprite:cloud,x:x,y:y,w:w,h:h,zoomFactor:zoomFactor});
+	}
+}
+
 function gameLoop(){
 	requestAnimationFrame(gameLoop);
 
 	updateWorldView(false);
 
-	//var g = preRender();
 	renderer.render(stage);
-	//postRender(g);
 }
 
 initialize();

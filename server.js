@@ -38,21 +38,3 @@ app.post('/start',(req,res) => {
 const server = app.listen(app.get('port'),() => {
     console.log(`Server operational ${server.address().port}`);
 });
-
-/*
-App.post('/start',(req,res) => {
-
-    const idToken = req.headers.authorization.split('Bearer ')[1];
-
-    admin.auth().verifyIdToken(idToken)
-        .then((decodedToken) => {
-            const uid = decodedToken.uid;
-            res.status(200).send('Looks good!')
-            res.sendFile(path.join(`${__dirname}/game.html`));
-        })
-        .catch((error) => {
-        // Handle error
-            res.status(200).send('Looks bad!')
-        });
-});
-*/

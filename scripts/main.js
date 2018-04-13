@@ -6,7 +6,7 @@ var spriteContainer, labelContainer, HUDcontainer, entityContainer, microContain
 var textTags = [], microfeatures = [], clouds = [];
 var background;
 var colonies = [];
-var user= [];
+var userData = [];
 var showGrid = false;
 var highlightedCell;
 var user;
@@ -43,7 +43,7 @@ function initialize() {
     /* This is PIXI JS Version*/
     PIXI.utils.sayHello(type);
 
-	getUser();
+	
 	
 	microContainer = new PIXI.Container();
 	entityContainer = new PIXI.Container();
@@ -54,7 +54,7 @@ function initialize() {
 	HUDcontainer.interactive = true;
 
 
-    //user = getUserData();
+    getUser();
     getColonyCoord();
 
 
@@ -95,8 +95,8 @@ function initialize() {
     initKeyboard();
 	loadImages();
 
-
-
+	// Kinda works, wont have data right away.
+	console.log("CCC", userData);
 }
 
 function loadImages(){
@@ -111,27 +111,7 @@ function loadImages(){
 	.load(setupWorld);
 }
 
-async function getUser()
-{
-	user = [];
-	 firebase.auth().onAuthStateChanged(async (user) => {
-		   const docRef = db.collection('users').doc(user.uid);
-		   try{
-				var data = await docRef.get();
-				data.then((doc) => {
-						console.log('Document data 1:', doc.data());
-						user.push(doc.data());
-					});
-			}
-			catch(err){
-				console.log('Error getting documents', err);
-			}
 
-			console.log("HUh", data.data());
-			var data = data.data();
-			return data;
-	});
-}
 
 
 function getEntity()
@@ -265,6 +245,33 @@ function getUserData(){
 	console.log(firebase.auth().currentUser+"Dax is awesome");
 }
 
+function getUser()
+{
+	userData = [];
+
+	firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+			const docRef = db.collection('users').doc(user.uid);
+            docRef.get().then((doc) => {
+                if (doc.exists) {
+					//Do Stuff here
+					colonyMade = doc.data().colonyMade;
+					// Can push it to the global variable but it won't be available right away.
+					userData.push(doc.data());
+                } else {
+                    // Doc.data() will be undefined in this case
+                    console.log('No such document!');
+                }
+            }).catch((error) => {
+                console.log('Error getting document:', error);
+            });
+		}
+		else{
+			console.log("Not logged in... somehow");
+		}
+	});
+}
+
 function getColonyCoord(){
 	colonies = [];
     db.collection("users").get()
@@ -274,7 +281,8 @@ function getColonyCoord(){
           if(doc.data().colony != null)
             colonies.push(doc.data().colony);
         });
-        console.log(colonies);
+		console.log(colonies);
+		
         for(i in colonies){
 			if(colonies[i].x!=null&&colonies[i].y!=null){
 				addColonyTag(colonies[i].Name,colonies[i].x*5000+2500,colonies[i].y*5000+2500);

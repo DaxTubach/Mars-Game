@@ -33,6 +33,7 @@ const awsE = 'https://s3.us-east-2.amazonaws.com/hq.mars/Entities/';
 function initialize() {
 	initApp();
 
+
     if (!PIXI.utils.isWebGLSupported()) {
         type = 'canvas';
     }
@@ -49,7 +50,7 @@ function initialize() {
 	HUDcontainer.interactive = true;
 
 
-    user = getUserData();
+    //user = getUserData();
     getColonyCoord();
 
     /* Create renderer*/
@@ -87,7 +88,7 @@ function initialize() {
 
     sound.play();
     initKeyboard();
-    loadImages();
+	loadImages();
 }
 
 function loadImages(){
@@ -101,7 +102,17 @@ function loadImages(){
 	.add("mountain",awsE+"mountain.png")
 	.load(setupWorld);
 }
-
+function getUser()
+{
+	firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+			console.log("HA");
+		}
+		else{
+			console.log("boo");
+		}
+	});
+}
 function setupWorld(){
 
 	//Add background
@@ -296,9 +307,9 @@ function gameLoop(){
 
 	updateWorldView(false);
 
-	var g = preRender();
+	//var g = preRender();
 	renderer.render(stage);
-	postRender(g);
+	//postRender(g);
 }
 
 initialize();

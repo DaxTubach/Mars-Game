@@ -81,7 +81,7 @@ a {
   font-size: 15pt;
 }
 
-.equipment-funds-remaining {
+#equipment-funds-remaining-value {
   background: white;
   border-radius: 5px;
   padding: 5px 10px;

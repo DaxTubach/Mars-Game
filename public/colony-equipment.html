@@ -10,31 +10,31 @@
   <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-firestore.js"></script>
   <script type="text/javascript" src="auth.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <script>
-      window.onload = function() {
-        initApp();
+    window.onload = function () {
+      initApp();
 
-        document.getElementById('continue').addEventListener('click', setEquipment, false);
-        document.getElementById('sign-out').addEventListener('click', signOut, false);
-      }
+      document.getElementById('continue').addEventListener('click', setEquipment, false);
+      document.getElementById('sign-out').addEventListener('click', signOut, false);
+    }
 
-      function setEquipment()
-      {
-          var user = firebase.auth().currentUser
-          var uid = user.uid;
-          db.collection('users').doc(uid)
-            .update({
-                equipment : true,
-            })
-            .then(() => {
-                console.log('Document successfully written! With ID ', uid);
-                post();
-            })
-            .catch((error) => {
-                console.error('Error writing document: ', error);
-            });
-      }
+    function setEquipment() {
+      var user = firebase.auth().currentUser
+      var uid = user.uid;
+      db.collection('users').doc(uid)
+        .update({
+          equipment: true,
+        })
+        .then(() => {
+          console.log('Document successfully written! With ID ', uid);
+          post();
+        })
+        .catch((error) => {
+          console.error('Error writing document: ', error);
+        });
+    }
 
   </script>
 
@@ -42,24 +42,25 @@
 
 <body>
 
-  <button class="sign-out-button" id ="sign-out">Sign Out</button>
 
   <div class="header">
+    <button class="sign-out-button" id="sign-out">Sign Out</button>
+
     <div>
       <a href="colony-selection.html" class="back-button">&leftarrow;</a>
       <h1>Select Your Equipment</h1>
     </div>
     <div class="equipment-funds-remaining-container">
       <div>
-        <span>Funds Remaining:
-          <span class="equipment-funds-remaining">$ ######</span>
+        <span>Funds Remaining: $
+          <span id="equipment-funds-remaining">100</span>
         </span>
       </div>
     </div>
   </div>
 
   <div class="header2">
-    <button class="continue-button" id = "continue" type="submit">Continue &rightarrow;</button>
+    <button class="continue-button" id="continue" type="submit">Continue &rightarrow;</button>
   </div>
 
   <div class="main">
@@ -68,45 +69,45 @@
       <form class="equipment-checklist" action="" method="">
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>Radiation Shielding</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>Landing Inflatables</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>Retrograde Rockets</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Spacecraft Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Spacecraft Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Spacecraft Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
       </form>
     </div>
@@ -115,45 +116,45 @@
       <form class="equipment-checklist" action="" method="">
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Construction Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Construction Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Construction Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Construction Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Construction Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Construction Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
       </form>
     </div>
@@ -162,49 +163,80 @@
       <form class="equipment-checklist" action="" method="">
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Other Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Other Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Other Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Other Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Other Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
         <div class="equipment-checkbox-container">
           <span>
-            <input type="checkbox">
+            <input type="checkbox" class="checkbox" value="10">
             <label>*Other Component*</label>
           </span>
-          <span class="equipment-price">$ ######</span>
+          <span class="equipment-price">$ 10</span>
         </div>
       </form>
     </div>
   </div>
+
+  <script>
+    // Convert 'funds remaining' to integer
+    let fundsRemainingStr;
+    fundsRemainingStr = document.getElementById('equipment-funds-remaining').innerHTML;
+    let fundsRemaining = convertStrToInt(fundsRemainingStr);
+
+    // Get value of checked equipment cost
+    $('.checkbox').click(function () {
+      let equipmentCostStr;
+      equipmentCostStr = $(this).attr('value');
+      let equipmentCost = convertStrToInt(equipmentCostStr);
+
+      if ($(this).is(':checked')) {
+        fundsRemaining = fundsRemaining - equipmentCost;
+        $('#equipment-funds-remaining').empty();
+        $('#equipment-funds-remaining').append('<span id="equipment-funds-remaining-value">' + fundsRemaining + '</span>');
+      }
+      else {
+        fundsRemaining = fundsRemaining + equipmentCost;
+        $('#equipment-funds-remaining').empty();
+        $('#equipment-funds-remaining').append('<span id="equipment-funds-remaining-value">' + fundsRemaining + '</span>');
+      }
+    });
+
+
+    function convertStrToInt(inputStr) {
+      return parseInt(inputStr, 10);
+    }
+
+  </script>
 
 </body>
 

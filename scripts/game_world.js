@@ -1,38 +1,15 @@
-/*function populateWorld(){
-	var container = new PIXI.Container();
+var grid;
+var lastView = {x:0,y:0,zoom:0,screen_width:0,screen_height:0};
+const ENTITY_ZOOM_LEVEL = 750;
+const CULL_BUFFER = 100;
+//const COLONY_ZOOM_LEVEL;
 
-	createSprite(container,200,100,0.75,0.75,"astronaut.png");
-	createSprite(container,50,75,1,1,"plant.png");
-	createSprite(container,100,125,1,1,"plant.png");
-	createSprite(container,100,300,0.75,0.75,"astronaut.png");
-	createSprite(container,300,300,0.75,0.75,"astronaut.png");
-	createSprite(container,250,400,5,5,"rover.png");
-	createSprite(container,500,500,3,3,"water-tank.png");
-
-	/*let myGraph = new PIXI.Graphics();
-	container.addChild(myGraph);
-
-	myGraph.position.set(0,0);
-
-	for(i=0;i<5000;i++){
-		myGraph.lineStyle(10,0xffffff).moveTo(0,i*100).lineTo(5000,i*100);		
-	}
-
-	for(j=0;j<5000,j++){
-		myGraph.lineStyle(10,0xffffff).moveTo(j*100,0).lineTo(j*100,5000);		
-	}
-
-	container.pivot.set(container.width/2,container.height/2);
-
-	return container;
-}*/
 
 function createSprite(container, x, y, width, height, type){
 	var sprite = new PIXI.Sprite(PIXI.loader.resources[type].texture);
 	sprite.position.set(worldToScreenX(x),worldToScreenY(y));
 	sprite.width = worldToScreenScale(width);
 	sprite.height = worldToScreenScale(height);
-	//sprite.anchor.set(0.5,0.5);
 	container.addChild(sprite);
 }
 
@@ -43,6 +20,14 @@ function updateWorldView(forceUpdate){
 	if(!updateCamera() && !forceUpdate)
 		return;
 
+	if(camera.zoom < ENTITY_ZOOM_LEVEL){
+		renderObjects();
+	}
+
+	else{
+	}
+
+	/*
 	if(camera.zoom < camera.max_zoom /10&&showGrid){
 		removeContainer(grid);
 		grid = createGrid();
@@ -68,15 +53,18 @@ function updateWorldView(forceUpdate){
 	}
 	else if(spriteContainer != null){
 		removeContainer(spriteContainer);
-	}
-	//var xAnchor = renderer.plugins.interaction.mouse.global.x;
-	//var yAnchor = renderer.plugins.interaction.mouse.global.y;
+	}*/
 
-	//console.log(xAnchor+" "+yAnchor);
+	//console.log(camera.x+" "+lastView.x+"\n"+camera.y+" "+lastView.y+"\n"+camera.screen_width+" "+lastView.screen_width+"\n"+camera.screen_height+" "+lastView.screen_height);
+	updateHUD();
+	//*********Fade image instead of sudden transition*************/
+	//Scale image according to zoom level
+	background.height = 851000000 / camera.zoom;
+	background.width = 1702000000 / camera.zoom;
+	background.alpha = camera.zoom < 25000 ? camera.zoom / 25000 : 1;
+	background.position.set(worldToScreenX(0),worldToScreenY(0));
 
-	//background.anchor.set(); 
-	//console.log("100px represents "+(camera.zoom*camera.zoom)+" meters squared or "+(camera.zoom/1000*camera.zoom/1000)+" kilometers squared.");
-	//console.log(camera.x + " " + camera.y);
+	lastView = {zoom: camera.zoom, x: camera.x, y: camera.y, screen_width: camera.screen_width, screen_height: camera.screen_height};
 }
 
 function removeContainer(container){
@@ -87,7 +75,7 @@ function removeContainer(container){
 	}
 }
 
-function renderObjects(){
+/*function renderObjects(){
 	var container = new PIXI.Container();
 
 	createSprite(container,2,1,0.75,0.75,"astro");
@@ -99,7 +87,7 @@ function renderObjects(){
 	createSprite(container,5,5,3,3,"water-tank");
 
 	return container;
-}
+}*/
 
 function createGrid(){
 	var container = new PIXI.Container();
@@ -111,6 +99,7 @@ function createGrid(){
 
 	myGraph.position.set(0,0);
 
+	//Colony unit sized grid
 	for(i=0;i<1702;i++){
 		myGraph.lineStyle(1,0xffffff)
 		.moveTo(worldToScreenX(0),worldToScreenY(i*5000))
@@ -123,6 +112,8 @@ function createGrid(){
 		.lineTo(worldToScreenX(j*5000),worldToScreenY(1702*5000));		
 	}
 
+	/*
+	//Meter sized grid
 	if(camera.zoom < 100){
 		for(i=0;i<5000;i++){
 			myGraph.lineStyle(1,0x000000)
@@ -135,7 +126,7 @@ function createGrid(){
 			.moveTo(worldToScreenX(j),worldToScreenY(0))
 			.lineTo(worldToScreenX(j),worldToScreenY(5000));		
 		}
-	}
+	}*/
 
 	myGraph.lineStyle(10,0x000000).moveTo(0,0).lineTo(100000/camera.zoom,0);
 	myGraph.lineStyle(10,0xff0000).moveTo(0,0).lineTo(100/camera.zoom,0);
@@ -179,8 +170,6 @@ function updateCamera(){
 
 	/*For zoom to cursor*/
 	var startZoom = camera.zoom;
-	var startX = camera.x;
-	var startY = camera.y;
 
 	//console.log(startX+" "+startY);
 
@@ -237,15 +226,9 @@ function updateCamera(){
 			camera.y = 0;
 	if(camera.y > camera.maxY)		
 		camera.y = camera.maxY;
- 
-	updateHUD();
-	
-	//*********Fade image instead of sudden transition*************/
-	//Scale image according to zoom level
-	background.height = 851000000 / camera.zoom;
-	background.width = 1702000000 / camera.zoom;
-	background.alpha = camera.zoom < 25000 ? camera.zoom / 25000 : 1;
-	background.position.set(worldToScreenX(0),worldToScreenY(0));
+
+	camera.screen_width = window.innerWidth * camera.zoom / 100;
+	camera.screen_height = window.innerHeight * camera.zoom / 100;
 
 	return true;
 }
@@ -272,17 +255,79 @@ function drawColonyUnit(){
 function preRender(){
 	infoText.text = "Camera zoom: "+camera.zoom+"\nx: "+camera.x+"\ny: "+camera.y+"\nScreenWidth: "+window.innerWidth * camera.zoom / 100+"\nMaxX: "+camera.maxX;
 
-	if(!colonyMade){
+	/*if(!colonyMade){
 		var g = drawColonyUnit();
 		worldContainer.addChild(g);
 		return g;
-	}
+	}*/
 
 	return null;
 }
 
 function postRender(g){
-	worldContainer.removeChild(g);
+	//worldContainer.removeChild(g);
+}
+
+function generateFeature(x,y){
+	if(lastView.zoom < ENTITY_ZOOM_LEVEL){
+		if(x > lastView.x - CULL_BUFFER && x < lastView.x + lastView.screen_width + CULL_BUFFER
+			&& y > lastView.y - CULL_BUFFER && y < lastView.y + lastView.screen_height + CULL_BUFFER){
+			return false;
+		}
+	}
+
+	var rng = new Math.seedrandom(x+" "+y);
+	var result = Math.floor(rng()*10000); 
+	var sprite,w,h;
+
+	if(result<9750)
+		return false;
+
+	else if(result<9990){
+		sprite = new PIXI.Sprite(PIXI.loader.resources["rock-small"].texture);
+		w = 10;
+		h = 10;
+	}
+	else{
+		sprite = new PIXI.Sprite(PIXI.loader.resources["mountain"].texture);
+		w = 45;
+		h = 45;
+	}
+
+	sprite.position.set(worldToScreenX(x),worldToScreenY(y));
+	sprite.width = worldToScreenScale(w);
+	sprite.height = worldToScreenScale(h);
+	microContainer.addChild(sprite);
+	microfeatures.push({x:x,y:y,w:w,h:h,sprite:sprite});
+	return true;
+}
+
+function renderObjects(){
+	//Microfeatures
+	var d = 0;
+	for(var i=camera.x - CULL_BUFFER;i<=camera.x+Math.floor(camera.screen_width)+CULL_BUFFER;i+=50){
+		for(var j=camera.y - CULL_BUFFER;j<=camera.y+Math.floor(camera.screen_height)+CULL_BUFFER;j+=50){
+			if(generateFeature(i,j))
+				d++;
+		}
+	}
+
+	console.log(d);
+}
+
+//Returns true if rendered, false if removed
+function updateAndCullWorldObject(object, zoomCutoff){
+	if(object.x > camera.x - CULL_BUFFER && object.x < window.innerWidth * camera.zoom/100+camera.x + CULL_BUFFER)
+		if(object.y > camera.y - CULL_BUFFER && object.y < window.innerHeight * camera.zoom/100+camera.y + CULL_BUFFER)
+			if(camera.zoom < zoomCutoff){
+				object.sprite.x = worldToScreenX(object.x);
+				object.sprite.y = worldToScreenY(object.y);
+				object.sprite.width = worldToScreenScale(object.w);
+				object.sprite.height = worldToScreenScale(object.h);
+				return true;
+			}
+		
+	return false;
 }
 
 function updateHUD(){
@@ -290,5 +335,13 @@ function updateHUD(){
 		var textTag = textTags[i];
 		textTag.sprite.x = worldToScreenX(textTag.x);
 		textTag.sprite.y = worldToScreenY(textTag.y);
+	}
+
+	for(var i = 0; i < microfeatures.length; i++){
+		var feature = microfeatures[i];
+		if(!updateAndCullWorldObject(feature,ENTITY_ZOOM_LEVEL)){
+			microContainer.removeChild(feature.sprite);
+			microfeatures.splice(i,1);
+		}
 	}
 }

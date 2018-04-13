@@ -2,13 +2,13 @@ var type = "WebGL"
 var stage;
 var renderer;
 var backgroundVisible = true;
-var spriteContainer,labelContainer, HUDcontainer, worldContainer, parallaxCloudContainer;
-var textTags = [];
+var spriteContainer, labelContainer, HUDcontainer, entityContainer, microContainer, parallaxCloudContainer;
+var textTags = [], microfeatures = [];
 var background;
-var grid;
 var colonies = [];
 var showGrid = false;
 var highlightedCell;
+var user;
 var freezeCamera = false;
 var colonyMade = true;
 var infoText;
@@ -23,12 +23,10 @@ var camera = {
 	dzoom:0, //Change in zoom
 	speedModifier:false, //Scroll faster if toggled
 	max_zoom: 100, //Dynamically set to be the size of Mars's surface in relation to the screen
-	min_zoom: 1
+	min_zoom: 1,
+	screen_width: 0, //Visible screen width in world units
+	screen_height: 0
 };
-
-getUser();
-
-
 
 const awsE = 'https://s3.us-east-2.amazonaws.com/hq.mars/Entities/';
 
@@ -43,6 +41,16 @@ function initialize() {
     /* This is PIXI JS Version*/
     PIXI.utils.sayHello(type);
 
+	microContainer = new PIXI.Container();
+	entityContainer = new PIXI.Container();
+	parallaxCloudContainer = new PIXI.Container();
+	labelContainer = new PIXI.Container();
+	HUDcontainer = new PIXI.Container();
+
+	HUDcontainer.interactive = true;
+
+
+    //user = getUserData();
     getColonyCoord();
 
     /* Create renderer*/
@@ -57,33 +65,8 @@ function initialize() {
 
 	/*Create stage*/
 	stage = new PIXI.Container();
-	stage.hitArea = new PIXI.Rectangle(0,0,1920,1080);
+	stage.hitArea = new PIXI.Rectangle(0,0,window.innerWidth,window.innerHeight);
 	stage.interactive = true;
-
-	document.addEventListener("wheel",mouseWheelHandler,false);
-	stage.mousedown = function (moveData){
-
-		var rX = Math.trunc(screenToWorldX(moveData.data.global.x) / 5000);
-		var rY = Math.trunc(screenToWorldY(moveData.data.global.y) / 5000);
-		console.log(moveData.data.global.x + " " + moveData.data.global.y+" "+rX+" "+rY);
-		if(!colonyMade){
-			setColony(rX,rY);
-		}
-	};
-
-	worldContainer = new PIXI.Container();
-	parallaxCloudContainer = new PIXI.Container();
-	labelContainer = new PIXI.Container();
-	HUDcontainer = new PIXI.Container();
-
-	stage.addChild(worldContainer);
-	stage.addChild(parallaxCloudContainer);
-	stage.addChild(labelContainer);
-	stage.addChild(HUDcontainer);
-	infoText = new PIXI.Text('');
-	infoText.x = 10;
-	infoText.y = 10;
-	HUDcontainer.addChild(infoText);
 
 	renderer.view.style.position = "absolute";
 	renderer.view.style.display = "block";
@@ -105,9 +88,7 @@ function initialize() {
 
     sound.play();
     initKeyboard();
-    //setupWorld();
 	loadImages();
-
 }
 
 function loadImages(){
@@ -117,6 +98,8 @@ function loadImages(){
 	.add("rover",awsE+"rover.png")
 	.add("water-tank",awsE+"water-tank.png")
 	.add("cloud",awsE+"MartianCloud.png")
+	.add("rock-small",awsE+"rock-small.png")
+	.add("mountain",awsE+"mountain.png")
 	.load(setupWorld);
 }
 function getUser()
@@ -131,12 +114,19 @@ function getUser()
 	});
 }
 function setupWorld(){
-	//spriteContainer = populateWorld();
-	//stage.addChild(spriteContainer);
 
 	//Add background
 	background = new PIXI.Sprite(PIXI.loader.resources["Mars"].texture);
-	worldContainer.addChild(background);
+	stage.addChild(background);
+	stage.addChild(microContainer);
+	stage.addChild(entityContainer);
+	stage.addChild(parallaxCloudContainer);
+	stage.addChild(labelContainer);
+	stage.addChild(HUDcontainer);
+	infoText = new PIXI.Text('');
+	infoText.x = 10;
+	infoText.y = 10;
+	HUDcontainer.addChild(infoText);
 
 	/*var cloud = new PIXI.Sprite(PIXI.loader.resources["cloud"].texture);
 	cloud.x = 100;
@@ -149,19 +139,11 @@ function setupWorld(){
 	
 	camera.max_zoom = tempMaxHeight > tempMaxWidth ? tempMaxWidth : tempMaxHeight;
 	camera.zoom = camera.max_zoom;
-
-	//camera.maxX = camera.maxX - tempMaxWidth;
-	//camera.maxY = camera.maxY - tempMaxHeight;
-
-	//console.log(tempMaxWidth);
-	//console.log(tempMaxHeight);
-
 	background.height = 851000000 / camera.zoom;
 	background.width = 1702000000 / camera.zoom;
-	//background.anchor.set(0.5,0.5);
-	//background.position.set(background.width/2,background.height/2);
-
 	createLabels();
+
+	createInteractions();
 
 	gameLoop();
 }
@@ -180,12 +162,6 @@ function createLabels(){
 	//addTag("Hesperia Planum",2206884,3365895);
 	addLocationTag("Elysium Mons",15507643,3046341);
 	addLocationTag("Utopia Basin",13463582,2619682);
-
-	for(i in colonies){
-		if(colonies[i].x!=null&&colonies[i].y!=null){
-			addColonyTag(colonies[i].Name,colonies[i].x*5000+2500,colonies[i].y*5000+2500);
-		}
-	}
 }
 
 function addLocationTag(text,x,y){
@@ -245,6 +221,10 @@ function setColony(x,y){
     getColonyCoord();
 }
 
+function getUserData(){
+	console.log(firebase.auth().currentUser+"Dax is awesome");
+}
+
 function getColonyCoord(){
 	colonies = [];
 
@@ -255,12 +235,67 @@ function getColonyCoord(){
           if(doc.data().colony != null)
             colonies.push(doc.data().colony);
         });
-        console.log(colonies);;
-    	updateHUD();
+        console.log(colonies);
+        for(i in colonies){
+			if(colonies[i].x!=null&&colonies[i].y!=null){
+				addColonyTag(colonies[i].Name,colonies[i].x*5000+2500,colonies[i].y*5000+2500);
+				updateHUD();
+			}
+		}
     })
     .catch(function(error) {
         console.log("Error getting documents: ", error);
     });
+}
+
+function createInteractions(){
+	document.addEventListener("wheel",mouseWheelHandler,false);
+	stage.mousedown = function (moveData){
+
+		var rX = Math.trunc(screenToWorldX(moveData.data.global.x) / 5000);
+		var rY = Math.trunc(screenToWorldY(moveData.data.global.y) / 5000);
+		//console.log(moveData.data.global.x + " " + moveData.data.global.y+" "+rX+" "+rY);
+		if(!colonyMade){
+			setColony(rX,rY);
+		}
+	};
+
+	/*Recenter*/
+	var button = new PIXI.Sprite(PIXI.loader.resources["plant"].texture);
+	button.buttonMode = true;
+	button.interactive = true;
+	button.mousedown = function(){
+		camera.zoom = 100;
+		camera.x = 2500 - window.innerWidth * camera.zoom / 100;
+		camera.y = 2500 - window.innerHeight * camera.zoom / 100;
+		camera.screen_width = window.innerWidth * camera.zoom / 100;
+		camera.screen_height = window.innerHeight * camera.zoom / 100;
+		camera.maxX = window.innerWidth * camera.max_zoom / 100 - (window.innerWidth * camera.zoom / 100);
+		camera.maxY = window.innerHeight * camera.max_zoom / 100 - (window.innerHeight * camera.zoom / 100);
+		updateWorldView(true);
+	}
+
+	button.x = window.innerWidth * .9;
+	button.y = window.innerHeight * .05;
+	button.width = 50;
+	button.height = 50;
+	button.anchor.set(0.5);
+	HUDcontainer.addChild(button);
+
+	/*Signout*/
+	var signout = new PIXI.Sprite(PIXI.loader.resources["plant"].texture);
+	signout.buttonMode = true;
+	signout.interactive = true;
+	signout.mousedown = function(){
+		signOut();
+	}
+
+	signout.x = window.innerWidth * .95;
+	signout.y = window.innerHeight * .05;
+	signout.width = 50;
+	signout.height = 50;
+	signout.anchor.set(0.5);
+	HUDcontainer.addChild(signout);
 }
 
 function mouseWheelHandler(e){
@@ -272,9 +307,9 @@ function gameLoop(){
 
 	updateWorldView(false);
 
-	var g = preRender();
+	//var g = preRender();
 	renderer.render(stage);
-	postRender(g);
+	//postRender(g);
 }
 
 initialize();

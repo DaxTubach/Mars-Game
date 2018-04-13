@@ -248,7 +248,6 @@ function getColonyCoord(){
     });
 }
 
-<<<<<<< HEAD
 // 1 = equipment, 2 = landmark, 3 - structures
 // testing: getEntityInfo(2, "olympus_mons")
 // prints data to console but dont know how to return as string form, 
@@ -291,9 +290,6 @@ function getEntityInfo(collection_type, entity_name){
 	}
 }
 
-
-
-=======
 function createInteractions(){
 	document.addEventListener("wheel",mouseWheelHandler,false);
 	stage.mousedown = function (moveData){
@@ -343,7 +339,7 @@ function createInteractions(){
 	signout.anchor.set(0.5);
 	HUDcontainer.addChild(signout);
 }
->>>>>>> 1bab5e673cff6e67352cc55bfe9264dda57a5c32
+
 
 function mouseWheelHandler(e){
     camera.dzoom = Math.sign(e.deltaY) * 50;

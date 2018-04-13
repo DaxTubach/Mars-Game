@@ -213,16 +213,23 @@
     fundsRemainingStr = document.getElementById('equipment-funds-remaining').innerHTML;
     let fundsRemaining = convertStrToInt(fundsRemainingStr);
 
-    // Get value of checked equipment cost
+    // Actions for when a checkbox is checked and unchecked
     $('.checkbox').click(function () {
       let equipmentCostStr;
       equipmentCostStr = $(this).attr('value');
       let equipmentCost = convertStrToInt(equipmentCostStr);
 
-      if ($(this).is(':checked')) {
-        fundsRemaining = fundsRemaining - equipmentCost;
-        $('#equipment-funds-remaining').empty();
-        $('#equipment-funds-remaining').append('<span id="equipment-funds-remaining-value">' + fundsRemaining + '</span>');
+      if (itemIsChecked(this)) {
+        newfundsRemaining = fundsRemaining - equipmentCost;
+        if (newfundsRemaining < 0) {
+          alert('You do not have enough funds for this item.');
+          $(this).prop('checked', false);
+        }
+        else {
+          fundsRemaining = newfundsRemaining;
+          $('#equipment-funds-remaining').empty();
+          $('#equipment-funds-remaining').append('<span id="equipment-funds-remaining-value">' + fundsRemaining + '</span>');
+        }
       }
       else {
         fundsRemaining = fundsRemaining + equipmentCost;
@@ -231,6 +238,10 @@
       }
     });
 
+    function itemIsChecked(x) {
+      if ($(x).is(':checked')) return true;
+      else return false;
+    }
 
     function convertStrToInt(inputStr) {
       return parseInt(inputStr, 10);

@@ -33,6 +33,10 @@ function initApp() {
                         console.log("Hey");
                         post('/start', {name: 'Tests'});
                     }
+                    else if (doc.data().colonyMade == true && window.location.pathname != '/start')
+                    {
+                        post();
+                    }
 
                 } else {
                     // Doc.data() will be undefined in this case

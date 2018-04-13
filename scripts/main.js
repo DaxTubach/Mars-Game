@@ -7,6 +7,7 @@ var textTags = [];
 var background;
 var grid;
 var colonies = [];
+var user= [];
 var showGrid = false;
 var highlightedCell;
 var freezeCamera = false;
@@ -26,8 +27,6 @@ var camera = {
 	min_zoom: 1
 };
 
-getUser();
-
 
 
 const awsE = 'https://s3.us-east-2.amazonaws.com/hq.mars/Entities/';
@@ -36,6 +35,7 @@ function initialize() {
 	initApp();
 
 
+	
     if (!PIXI.utils.isWebGLSupported()) {
         type = 'canvas';
     }
@@ -43,8 +43,9 @@ function initialize() {
     /* This is PIXI JS Version*/
     PIXI.utils.sayHello(type);
 
-    getColonyCoord();
-
+	getColonyCoord();
+	getUser();
+	
     /* Create renderer*/
     renderer = PIXI.autoDetectRenderer(256, 256, {
         antialias: true,
@@ -108,6 +109,8 @@ function initialize() {
     //setupWorld();
 	loadImages();
 
+
+
 }
 
 function loadImages(){
@@ -119,17 +122,53 @@ function loadImages(){
 	.add("cloud",awsE+"MartianCloud.png")
 	.load(setupWorld);
 }
-function getUser()
+
+async function getUser()
+{
+	user = [];
+	 firebase.auth().onAuthStateChanged(async (user) => {
+		   const docRef = db.collection('users').doc(user.uid);
+		   try{
+				var data = await docRef.get();
+				data.then((doc) => {
+						console.log('Document data 1:', doc.data());
+						user.push(doc.data());
+					});
+			}
+			catch(err){
+				console.log('Error getting documents', err);
+			}
+
+			console.log("HUh", data.data());
+			var data = data.data();
+			return data;
+	});
+}
+
+
+function getEntity()
 {
 	firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-			console.log("HA");
+			const docRef = db.collection('users').doc(user.uid);
+            docRef.get().then((doc) => {
+                if (doc.exists) {
+                    console.log('Document data:', doc.data());
+
+                } else {
+                    // Doc.data() will be undefined in this case
+                    console.log('No such document!');
+                }
+            }).catch((error) => {
+                console.log('Error getting document:', error);
+            });
 		}
 		else{
 			console.log("boo");
 		}
 	});
 }
+
 function setupWorld(){
 	//spriteContainer = populateWorld();
 	//stage.addChild(spriteContainer);

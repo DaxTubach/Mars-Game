@@ -14,16 +14,9 @@
   <script type="text/javascript" src="auth.js"></script>
   <script type="text/javascript" src="signin.js"></script>
 
-  <!-- Import and configure the Firebase SDK -->
-  <!-- These scripts are made available when the app is served or deployed on Firebase Hosting -->
-  <!-- If you do not serve/host your project using Firebase Hosting see https://firebase.google.com/docs/web/setup -->
-  <script>
-
-
-  </script>
-
   <script type="text/javascript">
       initApp();
+
       function enterClick(boxID, buttonID)
       {
         var input = document.getElementById(boxID);
@@ -42,10 +35,8 @@
        document.getElementById('sign-up').addEventListener('click', handleSignUp, true);
        enterClick("pwd", "native-sign-in");
        enterClick("reg-pwd", "sign-up");
-
   
       };
-
 
 </script>
 </head>
@@ -87,15 +78,11 @@
     <div class="register__input-container">
       <input class="register__input" type="email"  id="reg-email" placeholder="Email\Username" name="email" required />
     </div>
-    <!---<div class="register__input-container">
-      <input class="register__input" type="email" id="reg-confirm-email" placeholder="Confirm Email" name="confirm-email" required />
-    </div> -->
+
     <div class="register__input-container">
       <input class="register__input" type="password" id="reg-pwd" placeholder="Password" name="pwd" required />
     </div>
-    <!--<div class="register__input-container">
-      <input class="register__input" type="password" id="reg-confirm-pwd" placeholder="Confirm Password" name="confirm-pwd" required />
-    </div>-->
+
     <div class="register__confirm-button-container">
       <button class="register__confirm-button"  id="sign-up" type="submit">&check;</button>
     </div>
@@ -103,11 +90,6 @@
 
   <div class="stars"></div>
   <div class="twinkling"></div>
-
-
-  <!-- Testing/Development only -->
-  <!-- Container where we'll display the user details -->
-
 
 </body>
 <form  method="post" id="game" action="/start"

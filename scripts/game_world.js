@@ -242,8 +242,11 @@ function updateCamera(){
 }
 
 function drawColonyUnit(){
-	let g = new PIXI.Graphics();
-	g.fillAlpha = 0.5;
+
+	g = new PIXI.Graphics();
+
+	if(!colonyMade)
+		g.fillAlpha = 0.5;
 
 	var mPoint = renderer.plugins.interaction.mouse.global;
 
@@ -257,21 +260,17 @@ function drawColonyUnit(){
 	g.drawRect(worldToScreenX(rX),worldToScreenY(rY),worldToScreenScale(5000),worldToScreenScale(5000));
 
 	g.endFill();
-	return g;
 }
 
 function preRender(){
-	/*if(!colonyMade){
-		var g = drawColonyUnit();
-		worldContainer.addChild(g);
-		return g;
-	}*/
-
-	return null;
+	if(!colonyMade){
+		drawColonyUnit();
+		HUDcontainer.addChild(g);
+	}
 }
 
-function postRender(g){
-	//worldContainer.removeChild(g);
+function postRender(){
+	HUDcontainer.removeChild(g);
 }
 
 function generateFeature(x,y){

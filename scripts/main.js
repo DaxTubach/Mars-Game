@@ -6,13 +6,14 @@ var spriteContainer, labelContainer, HUDcontainer, entityContainer, microContain
 var textTags = [], microfeatures = [], clouds = [];
 var background;
 var colonies = [];
-var userData = [];
+var userData;
 var showGrid = false;
 var highlightedCell;
 var user;
 var freezeCamera = false;
 var colonyMade = true;
 var infoText;
+var g; //Pixi graphics drawing
 var camera = {
 	x:0,
 	y:0,
@@ -94,9 +95,6 @@ function initialize() {
     sound.play();
     initKeyboard();
 	loadImages();
-
-	// Kinda works, wont have data right away.
-	console.log("CCC", userData);
 }
 
 function loadImages(){
@@ -238,11 +236,8 @@ function setColony(x,y){
           "colony.y" : y
       });
     colonyMade = true;
+    getUser();
     getColonyCoord();
-}
-
-function getUserData(){
-	console.log(firebase.auth().currentUser+"Dax is awesome");
 }
 
 function getUser()
@@ -257,7 +252,9 @@ function getUser()
 					//Do Stuff here
 					colonyMade = doc.data().colonyMade;
 					// Can push it to the global variable but it won't be available right away.
-					userData.push(doc.data());
+					userData = doc.data();
+					// Kinda works, wont have data right away.
+					console.log("CCC", userData);
                 } else {
                     // Doc.data() will be undefined in this case
                     console.log('No such document!');
@@ -355,8 +352,8 @@ function createInteractions(){
 	button.interactive = true;
 	button.mousedown = function(){
 		camera.zoom = 100;
-		camera.x = 2500 - window.innerWidth * camera.zoom / 100;
-		camera.y = 2500 - window.innerHeight * camera.zoom / 100;
+		camera.x = userData.colony.x*5000+2500 + window.innerWidth * camera.zoom / 100;
+		camera.y = userData.colony.y*5000+2500 + window.innerHeight * camera.zoom / 100;
 		camera.screen_width = window.innerWidth * camera.zoom / 100;
 		camera.screen_height = window.innerHeight * camera.zoom / 100;
 		camera.maxX = window.innerWidth * camera.max_zoom / 100 - (window.innerWidth * camera.zoom / 100);
@@ -385,6 +382,7 @@ function createInteractions(){
 	signout.height = 50;
 	signout.anchor.set(0.5);
 	HUDcontainer.addChild(signout);
+	g = new PIXI.Graphics();
 }
 
 
@@ -414,7 +412,9 @@ function gameLoop(){
 
 	updateWorldView(false);
 
+	preRender();
 	renderer.render(stage);
+	postRender();
 }
 
 initialize();

@@ -15,38 +15,37 @@
   <script type="text/javascript" src="signin.js"></script>
 
   <script type="text/javascript">
-      initApp();
+    initApp();
 
-      function enterClick(boxID, buttonID)
-      {
-        var input = document.getElementById(boxID);
-         input.addEventListener("keyup", function(event) {
-          event.preventDefault();
-          if (event.keyCode === 13) {
-            document.getElementById(buttonID).click();
-          }
-        });
-      }
+    function enterClick(boxID, buttonID) {
+      var input = document.getElementById(boxID);
+      input.addEventListener("keyup", function (event) {
+        event.preventDefault();
+        if (event.keyCode === 13) {
+          document.getElementById(buttonID).click();
+        }
+      });
+    }
 
 
-      window.onload = function() {
-       
-       document.getElementById('native-sign-in').addEventListener('click', toggleSignIn, true);
-       document.getElementById('sign-up').addEventListener('click', handleSignUp, true);
-       enterClick("pwd", "native-sign-in");
-       enterClick("reg-pwd", "sign-up");
-  
-      };
+    window.onload = function () {
 
-</script>
+      document.getElementById('native-sign-in').addEventListener('click', toggleSignIn, true);
+      document.getElementById('sign-up').addEventListener('click', handleSignUp, true);
+      enterClick("pwd", "native-sign-in");
+      enterClick("reg-pwd", "sign-up");
+
+    };
+
+  </script>
 </head>
 
 <body>
   <div class="register-button-container">
-    <span onclick="openRegister()">Register</span>
+    <span onclick="openRegister()">REGISTER</span>
     <script>
       function openRegister() {
-        document.getElementsByClassName("register")[0].style.width = "20vw";
+        document.getElementsByClassName("register")[0].style.width = "400px";
       }
 
       function closeRegister() {
@@ -61,7 +60,7 @@
 
     <container class="sign-in">
       <div class="sign-in__input-container">
-        <input class="sign-in__input" type="text" id="email" placeholder="Email/Username" name="email" required />
+        <input class="sign-in__input" type="text" id="email" placeholder="Email / Username" name="email" required />
       </div>
       <div class="sign-in__input-container">
         <input class="sign-in__input" id="pwd" type="password" placeholder="Password" name="pwd" required />
@@ -70,13 +69,15 @@
         <button class="sign-in__button" id="native-sign-in" type="submit">LAUNCH</button>
       </div>
     </container>
-
   </div>
+
+
+  <img src="images/mars-top.png" class="mars-top">
 
   <container class="register">
     <a class="register__close-button" href="javascript:void(0)" onclick="closeRegister()">&times;</a>
     <div class="register__input-container">
-      <input class="register__input" type="email"  id="reg-email" placeholder="Email\Username" name="email" required />
+      <input class="register__input" type="email" id="reg-email" placeholder="Email / Username" name="email" required />
     </div>
 
     <div class="register__input-container">
@@ -84,7 +85,7 @@
     </div>
 
     <div class="register__confirm-button-container">
-      <button class="register__confirm-button"  id="sign-up" type="submit">&check;</button>
+      <button class="register__confirm-button" id="sign-up" type="submit">&check;</button>
     </div>
   </container>
 
@@ -92,6 +93,6 @@
   <div class="twinkling"></div>
 
 </body>
-<form  method="post" id="game" action="/start"
-</form>
+<form method="post" id="game" action="/start" </form>
+
 </html>

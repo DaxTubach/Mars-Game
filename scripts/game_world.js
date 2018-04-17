@@ -262,9 +262,35 @@ function drawColonyUnit(){
 	g.endFill();
 }
 
+function drawEntityUnit(){
+
+	g = new PIXI.Graphics();
+
+	if(!colonyMade)
+		g.fillAlpha = 0.5;
+
+	var mPoint = renderer.plugins.interaction.mouse.global;
+
+	var rX = Math.trunc(screenToWorldX(mPoint.x));
+	var rY = Math.trunc(screenToWorldY(mPoint.y));
+
+	//console.log(rX,rY);
+
+	g.beginFill(0xFFD700,0.5);
+	g.lineStyle(2,0xe5c100);
+	g.drawRect(worldToScreenX(rX),worldToScreenY(rY),worldToScreenScale(5),worldToScreenScale(5));
+
+	g.endFill();
+}
+
 function preRender(){
 	if(!colonyMade){
 		drawColonyUnit();
+		HUDcontainer.addChild(g);
+	}
+	if(settingEntity)
+	{
+		drawEntityUnit();
 		HUDcontainer.addChild(g);
 	}
 }
@@ -366,6 +392,14 @@ function updateHUD(){
 		var textTag = textTags[i];
 		textTag.sprite.x = worldToScreenX(textTag.x);
 		textTag.sprite.y = worldToScreenY(textTag.y);
+	}
+	
+	for(var i = 0; i < entitylist.length; i++){
+		var entity = entitylist[i];
+		entity.sprite.x = worldToScreenX(entity.x);
+		entity.sprite.y = worldToScreenY(entity.y);
+		entity.sprite.width = worldToScreenScale(entity.w);
+		entity.sprite.height = worldToScreenScale(entity.h);
 	}
 
 	for(var i = 0; i < microfeatures.length; i++){

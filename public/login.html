@@ -28,185 +28,185 @@
 
   <script type="text/javascript">
 
-      // Sign In Button Press: ------------------------------
-      function toggleSignIn() {
-        if (firebase.auth().currentUser) {
+    // Sign In Button Press: ------------------------------
+    function toggleSignIn() {
+      if (firebase.auth().currentUser) {
 
-          firebase.auth().signOut();
+        firebase.auth().signOut();
 
-        } else {
-          var email = document.getElementById('email').value;
-          var password = document.getElementById('pwd').value;
-          if (email.length < 4) {
-            alert('Please enter a valid email address.');
-            return;
-          }
-          if (password.length < 4) {
-            alert('Please enter a valid password.');
-            return;
-          }
-          // Sign in with email and pass---------------------
-          firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-
-            if (errorCode === 'auth/wrong-password') {
-              alert('Wrong password.');
-            } else {
-              alert(errorMessage);
-            }
-            console.log(error);
-            document.getElementById('native-sign-in').disabled = false;
-
-          });
-
+      } else {
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('pwd').value;
+        if (email.length < 4) {
+          alert('Please enter a valid email address.');
+          return;
         }
-        document.getElementById('native-sign-in').disabled = true;
-      //  document.getElementById('google-signin').disabled = true;
+        if (password.length < 4) {
+          alert('Please enter a valid password.');
+          return;
+        }
+        // Sign in with email and pass---------------------
+        firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+
+          if (errorCode === 'auth/wrong-password') {
+            alert('Wrong password.');
+          } else {
+            alert(errorMessage);
+          }
+          console.log(error);
+          document.getElementById('native-sign-in').disabled = false;
+
+        });
+
       }
+      document.getElementById('native-sign-in').disabled = true;
+      //  document.getElementById('google-signin').disabled = true;
+    }
 
     // Google Sign In  Button Press: ------------------------------
     function toggleGoogleSignIn() {
       if (firebase.auth().currentUser) {
         firebase.auth().signOut();
       } else {
-          var provider = new firebase.auth.GoogleAuthProvider();
-          provider.addScope('https://www.googleapis.com/auth/plus.login');
+        var provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('https://www.googleapis.com/auth/plus.login');
 
-          // disallows automatic gmail sign in
-          provider.setCustomParameters({
+        // disallows automatic gmail sign in
+        provider.setCustomParameters({
           prompt: 'select_account'
         });
 
         // Handle Errors Here
-          firebase.auth().signInWithPopup(provider).catch(function(error) {
-              var errorCode = error.code;
-              var errorMessage = error.message;
+        firebase.auth().signInWithPopup(provider).catch(function (error) {
+          var errorCode = error.code;
+          var errorMessage = error.message;
 
-              alert(errorMessage);
-              console.log(error.code)
-              console.log(error.message)
-          });
+          alert(errorMessage);
+          console.log(error.code)
+          console.log(error.message)
+        });
       }
     }
 
 
-      // Sign Up Button Press -------------------------------------
-      function handleSignUp() {
-        var email = document.getElementById('reg-email').value;
-        var password = document.getElementById('reg-pwd').value;
+    // Sign Up Button Press -------------------------------------
+    function handleSignUp() {
+      var email = document.getElementById('reg-email').value;
+      var password = document.getElementById('reg-pwd').value;
 
-          //confirm pwd and user
-        if (email.length < 4) {
+      //confirm pwd and user
+      if (email.length < 4) {
+        //RAF, style alert msg
+        alert('Please enter an email address.');
+        return;
+      }
+      if (password.length < 4) {
+        //RAF, style alert msg
+        alert('Please enter a password.');
+        return;
+      }
+      // Sign in with email and password --------------------------
+      firebase.auth().createUserWithEmailAndPassword(email, password).catch(function (error) {
+
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+
+        if (errorCode == 'auth/weak-password') {
           //RAF, style alert msg
-          alert('Please enter an email address.');
-          return;
+          alert('The password is too weak.');
+
+
         }
-        if (password.length < 4) {
+        else if (errorCode == 'auth/invalid-email') {
           //RAF, style alert msg
-          alert('Please enter a password.');
-          return;
+          alert("Invalid email format.");
         }
-        // Sign in with email and password --------------------------
-        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        else {
+          alert(errorMessage);
+        }
+        console.log(error);
 
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
+      });
+    }
 
-          if (errorCode == 'auth/weak-password') {
-            //RAF, style alert msg
-            alert('The password is too weak.');
+    // Send Email Verification ----------------------------
+    function sendEmailVerification() {
+      firebase.auth().currentUser.sendEmailVerification().then(function () {
+        alert('An Email Verification has been sent!');
+      });
+    }
 
+    // Send Password Reset Email --------------------------
+    function sendPasswordReset() {
+      var email = document.getElementById('email').value;
 
-          }
-          else if (errorCode == 'auth/invalid-email'){
-            //RAF, style alert msg
-           alert("Invalid email format.");
-          }
-          else {
-           alert(errorMessage);
-          }
-          console.log(error);
+      firebase.auth().sendPasswordResetEmail(email).then(function () {
+        alert('A Password Reset Email has been sent!');
+      }).catch(function (error) {
 
-          });
-      }
+        // Error Handeling ----------------------
+        var errorCode = error.code;
+        var errorMessage = error.message;
 
-      // Send Email Verification ----------------------------
-      function sendEmailVerification() {
-        firebase.auth().currentUser.sendEmailVerification().then(function() {
-          alert('An Email Verification has been sent!');
-        });
-      }
+        if (errorCode == 'auth/invalid-email') {
+          alert(errorMessage);
 
-      // Send Password Reset Email --------------------------
-      function sendPasswordReset() {
-        var email = document.getElementById('email').value;
+        } else if (errorCode == 'auth/user-not-found') {
+          alert(errorMessage);
+        }
+        console.log(error);
+      });
+    }
 
-        firebase.auth().sendPasswordResetEmail(email).then(function() {
-          alert('A Password Reset Email has been sent!');
-        }).catch(function(error) {
+    //initApp handles setting up UI event listeners and registering Firebase auth listeners:
+    //firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or out, and that is where we update the UI.
 
-          // Error Handeling ----------------------
-          var errorCode = error.code;
-          var errorMessage = error.message;
+    function initApp() {
+      // Listening for auth state changes.
+      firebase.auth().onAuthStateChanged(function (user) {
 
-          if (errorCode == 'auth/invalid-email') {
-            alert(errorMessage);
+        if (user) {
+          // User is signed in.
+          var displayName = user.displayName;
+          var email = user.email;
+          var emailVerified = user.emailVerified;
 
-          } else if (errorCode == 'auth/user-not-found') {
-            alert(errorMessage);
-          }
-          console.log(error);
-        });
-      }
+          document.getElementById('native-sign-in-status').textContent = 'Signed in';
+          document.getElementById('native-sign-in').textContent = 'Sign out';
+          document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
+          //document.getElementById('google-signin').disabled = true;
 
-      //initApp handles setting up UI event listeners and registering Firebase auth listeners:
-      //firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or out, and that is where we update the UI.
+        } else {
+          // User is signed out.
+          // document.getElementById('google-signin').disabled = false;
+          document.getElementById('native-sign-in-status').textContent = 'Signed out';
+          document.getElementById('native-sign-in').textContent = 'Sign in';
+          document.getElementById('quickstart-account-details').textContent = 'null';
+        }
 
-      function initApp() {
-        // Listening for auth state changes.
-        firebase.auth().onAuthStateChanged(function(user) {
+        document.getElementById('native-sign-in').disabled = false;
+      });
 
-          if (user) {
-            // User is signed in.
-            var displayName = user.displayName;
-            var email = user.email;
-            var emailVerified = user.emailVerified;
+      document.getElementById('native-sign-in').addEventListener('click', toggleSignIn, false);
+      document.getElementById('sign-up').addEventListener('click', handleSignUp, false);
 
-            document.getElementById('native-sign-in-status').textContent = 'Signed in';
-            document.getElementById('native-sign-in').textContent = 'Sign out';
-            document.getElementById('quickstart-account-details').textContent = JSON.stringify(user, null, '  ');
-  		      //document.getElementById('google-signin').disabled = true;
-
-          } else {
-            // User is signed out.
-  		     // document.getElementById('google-signin').disabled = false;
-            document.getElementById('native-sign-in-status').textContent = 'Signed out';
-            document.getElementById('native-sign-in').textContent = 'Sign in';
-            document.getElementById('quickstart-account-details').textContent = 'null';
-          }
-
-          document.getElementById('native-sign-in').disabled = false;
-        });
-
-        document.getElementById('native-sign-in').addEventListener('click', toggleSignIn, false);
-        document.getElementById('sign-up').addEventListener('click', handleSignUp, false);
-
-        //RAF, use these ID names when creating verify email and password reset buttons, I think omission of google sign in for now
-        /*
-        document.getElementById('verify-email').addEventListener('click', sendEmailVerification, false);
-        document.getElementById('password-reset').addEventListener('click', sendPasswordReset, false);
-        document.getElementById('google-signin').addEventListener('click', toggleGoogleSignIn, false);
-        */
-      }
+      //RAF, use these ID names when creating verify email and password reset buttons, I think omission of google sign in for now
+      /*
+      document.getElementById('verify-email').addEventListener('click', sendEmailVerification, false);
+      document.getElementById('password-reset').addEventListener('click', sendPasswordReset, false);
+      document.getElementById('google-signin').addEventListener('click', toggleGoogleSignIn, false);
+      */
+    }
 
 
-    window.onload = function() {
-    initApp();
-  };
-</script>
+    window.onload = function () {
+      initApp();
+    };
+  </script>
 </head>
 
 
@@ -248,7 +248,7 @@
   <container class="register">
     <a class="register__close-button" href="javascript:void(0)" onclick="closeRegister()">&times;</a>
     <div class="register__input-container">
-      <input class="register__input" type="email"  id="reg-email" placeholder="Email\Username" name="email" required />
+      <input class="register__input" type="email" id="reg-email" placeholder="Email\Username" name="email" required />
     </div>
     <!---<div class="register__input-container">
       <input class="register__input" type="email" id="reg-confirm-email" placeholder="Confirm Email" name="confirm-email" required />
@@ -260,7 +260,7 @@
       <input class="register__input" type="password" id="reg-confirm-pwd" placeholder="Confirm Password" name="confirm-pwd" required />
     </div>-->
     <div class="register__confirm-button-container">
-      <button class="register__confirm-button"  id="sign-up" type="submit">&check;</button>
+      <button class="register__confirm-button" id="sign-up" type="submit">&check;</button>
     </div>
   </container>
 
@@ -270,13 +270,15 @@
 
   <!-- Testing/Development only -->
   <!-- Container where we'll display the user details -->
-<div class="quickstart-user-details-container">
-  Firebase sign-in status: <span id="native-sign-in-status">Unknown</span>
-  <div>Firebase auth <code>currentUser</code> object value:</div>
-  <pre><code id="quickstart-account-details">null</code></pre>>
-</div>
+  <div class="quickstart-user-details-container">
+    Firebase sign-in status:
+    <span id="native-sign-in-status">Unknown</span>
+    <div>Firebase auth
+      <code>currentUser</code> object value:</div>
+    <pre><code id="quickstart-account-details">null</code></pre>>
+  </div>
 
-<form method="post" action="/start">
+  <form method="post" action="/start">
     <button class="register__button" type="submit" value="TEST">TEST</button>
   </form>
 

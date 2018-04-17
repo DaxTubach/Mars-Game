@@ -23,40 +23,41 @@ a {
 .main {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  justify-content: center;
+  justify-content: flex-start;
   margin: auto;
+  height: 100vh;
   width: 30vw;
   min-width: 300px;
+  z-index: 5;
 }
 
 .register-button-container {
+  padding: 3px 0;
   color: #fff;
   font-size: 100%;
   margin: 20px 0 0 20px;
   position: absolute;
   transition: all 0.5s ease;
-  width: 100px;
+  letter-spacing: 1px;
   z-index: 3;
+  cursor: pointer;
 }
 .register-button-container:hover {
-  cursor: pointer;
-  letter-spacing: 1px;
+  border-bottom: 5px solid #ff5555;
 }
 
 .logo {
-  margin: 30px auto;
+  margin: 20% auto 50px auto;
   width: 15vw;
   min-width: 150px;
   z-index: 3;
 }
 
 .sign-in {
-  border: solid #fff 2px;
+  border: solid rgba(255, 255, 255, 0.5) 2px;
   border-radius: 10px;
-  opacity: 0.7;
   padding: 10px 15px;
-  z-index: 3;
+  z-index: 5;
 }
 
 input[type='text'],
@@ -65,39 +66,56 @@ input[type='email'] {
   color: #fff;
 }
 
+input[type='text'],
+input[type='email'] {
+  font-size: 17pt;
+}
+
+input[type='password'] {
+  letter-spacing: 5px;
+  font-size: 20pt;
+}
+
 .sign-in__input-container {
-  border: solid #fff 2px;
+  border: solid rgba(255, 255, 255, 0.5) 2px;
   border-radius: 7px;
   margin: 20px 10px;
 }
 
 .sign-in__input {
   padding: 15px 10px;
+  width: 100%;
+  font-size: 12pt;
+  height: 20px;
 }
 
 ::-webkit-input-placeholder {
   /* Chrome/Opera/Safari */
   color: #fff;
-  font-size: 120%;
+  font-size: 15pt;
   opacity: 0.5;
+  letter-spacing: 1px;
 }
 ::-moz-placeholder {
   /* Firefox 19+ */
   color: #fff;
-  font-size: 120%;
+  font-size: 15pt;
   opacity: 0.5;
+  letter-spacing: 1px;
 }
 :-ms-input-placeholder {
   /* IE 10+ */
   color: #fff;
-  font-size: 120%;
+  font-size: 15pt;
   opacity: 0.5;
+  letter-spacing: 1px;
 }
 :-moz-placeholder {
   /* Firefox 18- */
   color: #fff;
-  font-size: 120%;
+  font-size: 15pt;
   opacity: 0.5;
+  letter-spacing: 1px;
 }
 
 .sign-in__button-container {
@@ -128,20 +146,20 @@ input[type='email'] {
   display: flex;
   flex-direction: column;
   height: 100%;
-  justify-content: space-around;
+  justify-content: flex-start;
   margin: -100vh 0 0 0;
   overflow-x: hidden;
   position: absolute;
   transition: all 0.5s ease;
   width: 0;
-  z-index: 3;
+  z-index: 7;
 }
 
 .register__close-button {
+  margin: 50px 0 20px 0;
   font-size: 32px;
   font-weight: 500;
-  color: rgba(0, 0, 0, 1);
-  transition: all 0.5s ease;
+  color: rgba(0, 0, 0, 0.5);
 }
 .register__close-button:hover {
   color: #ff5555;
@@ -149,32 +167,43 @@ input[type='email'] {
 }
 
 .register__input-container {
+  margin: 10px 0;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 7px;
-  width: 80%;
+  width: 85%;
 }
 
 .register__input {
+  height: 20px;
   padding: 15px 10px;
+  width: 90%;
 }
 
 .register__confirm-button-container {
 }
 
 .register__confirm-button {
+  margin: 20px 0 0 0;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 50%;
   color: rgba(255, 255, 255, 0.5);
   font-size: 150%;
   font-weight: bold;
   height: 50px;
-  transition: all 0.5s ease;
+  transition: all 0.2s ease;
   width: 50px;
 }
 .register__confirm-button:hover {
   color: #fff;
   background: #5fd38d;
   cursor: pointer;
+}
+
+.mars-top {
+  position: absolute;
+  bottom: 0;
+  z-index: 3;
+  width: 100%;
 }
 
 /* Stars Background */

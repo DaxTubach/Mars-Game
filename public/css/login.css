@@ -23,9 +23,9 @@ a {
 .main {
   display: flex;
   flex-direction: column;
-  height: 70vh;
-  justify-content: center;
+  justify-content: flex-start;
   margin: auto;
+  height: 100vh;
   width: 30vw;
   min-width: 300px;
   z-index: 5;
@@ -46,7 +46,7 @@ a {
 }
 
 .logo {
-  margin: 30px auto;
+  margin: 20% auto 30px auto;
   width: 15vw;
   min-width: 150px;
   z-index: 3;

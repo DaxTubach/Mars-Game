@@ -10,7 +10,8 @@ var spriteContainer,
   parallaxCloudContainer;
 var textTags = [],
   microfeatures = [],
-  clouds = [];
+  clouds = [],
+  entitylist = []; 
 var background;
 var colonies = [];
 var userData;
@@ -127,23 +128,21 @@ function setEntity(id, x, y) {
           var entities = [];
       else
           entities = userData.colony.entities; 
+      var entityData = {"id" : id, "x" : x, "y" : y};
 
-      entities.push({"id" : id, "x" : x, "y" : y})
+      entities.push(entityData);
 
       const docRef = db.collection('users').doc(user.uid);
       docRef.update({
           'colony.entities' : entities,
       });
-      userData.colony.entities.push({"id" : id, "x" : x, "y" : y});
+
       console.log("Entity set at x : " + x + " y : " +y);
     } else {
       console.log('boo');
     }
   });
 }
-
-
-
 
 
 function setupWorld() {
@@ -179,9 +178,9 @@ function setupWorld() {
 function loadEntities()
 {
   if(camera.zoom < 500){
-    var k = 2;
+    var w = 30;
+    var h = 30;
     var entities = userData.colony.entities;
-    console.log(entities[19]);
     for (var i = 2; i < entities.length; i++) {
         console.log("Loading");
         console.log(entities[i]);
@@ -190,8 +189,17 @@ function loadEntities()
         entity.y = worldToScreenY(entities[i].y);
         entity.width = worldToScreenScale(30);
         entity.height = worldToScreenScale(30);
+        entity.anchor.set(0.5, 0.5);
         entityContainer.addChild(entity);
-        g = new PIXI.Graphics();
+
+        var entityObject = {
+          sprite: entity,
+          x: entities[i].x,
+          y: entities[i].y,
+          w: w,
+          h: h,
+        };
+        entitylist.push(entityObject);
     }
   }
 }

@@ -31,6 +31,10 @@ app.get('/scripts/pixi.min.js',(req,res) => {
     res.sendFile(path.join(`${__dirname}/scripts/pixi.min.js`));
 });
 
+app.get('/scripts/info.js',(req,res) => {
+    res.sendFile(path.join(`${__dirname}/scripts/info.js`));
+});
+
 app.post('/start',(req,res) => {
     res.sendFile(path.join(`${__dirname}/game.html`));
 });

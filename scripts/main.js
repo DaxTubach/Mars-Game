@@ -100,6 +100,8 @@ function initialize() {
 
 function loadImages() {
   PIXI.loader
+    .add('return-home', 'images/return-home-icon.png')
+    .add('logout', 'images/logout-icon.png')
     .add('Mars', awsE + 'MarsTex.png')
     .add('astro', awsE + 'astronaut.png')
     .add('plant', awsE + 'plant.png')
@@ -345,7 +347,7 @@ function createInteractions() {
   };
 
   /*Recenter*/
-  var button = new PIXI.Sprite(PIXI.loader.resources['rover'].texture);
+  var button = new PIXI.Sprite(PIXI.loader.resources['return-home'].texture);
   button.buttonMode = true;
   button.interactive = true;
   button.mousedown = function() {
@@ -368,7 +370,7 @@ function createInteractions() {
   HUDcontainer.addChild(button);
 
   /*Signout*/
-  var signout = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
+  var signout = new PIXI.Sprite(PIXI.loader.resources['logout'].texture);
   signout.buttonMode = true;
   signout.interactive = true;
   signout.mousedown = function() {

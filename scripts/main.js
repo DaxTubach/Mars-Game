@@ -136,7 +136,7 @@ function setEntity(id, x, y) {
       docRef.update({
           'colony.entities' : entities,
       });
-
+      loadEntities();
       console.log("Entity set at x : " + x + " y : " +y);
     } else {
       console.log('boo');
@@ -431,22 +431,70 @@ function createInteractions() {
   g = new PIXI.Graphics();
 
 
-    /*Create*/
-    var create = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
-    create.buttonMode = true;
-    create.interactive = true;
-    create.mouseup = function(moveData) {
-      console.log("Setting entity at next click location");
-      settingEntity = true;
-    };
-  
-    create.x = window.innerWidth * 0.85;
-    create.y = window.innerHeight * 0.05;
-    create.width = 50;
-    create.height = 50;
-    create.anchor.set(0.5);
-    HUDcontainer.addChild(create);
-    g = new PIXI.Graphics();
+  /*Create Enitity*/
+  var create = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
+  create.buttonMode = true;
+  create.interactive = true;
+  create.mouseup = function(moveData) {
+    console.log("Setting entity at next click location");
+    settingEntity = true;
+  };
+
+  create.x = window.innerWidth * 0.85;
+  create.y = window.innerHeight * 0.05;
+  create.width = 50;
+  create.height = 50;
+  create.anchor.set(0.5);
+  HUDcontainer.addChild(create);
+  g = new PIXI.Graphics();
+
+  /*Colonists*/
+  var colonists = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
+  colonists.buttonMode = true;
+  colonists.interactive = true;
+  colonists.mouseup = function(moveData) {
+
+  };
+
+  colonists.x = window.innerWidth * 0.03;
+  colonists.y = window.innerHeight * 0.05;
+  colonists.width = 50;
+  colonists.height = 50;
+  colonists.anchor.set(0.5);
+  HUDcontainer.addChild(colonists);
+  g = new PIXI.Graphics();
+
+  /*Equipment*/
+  var equipment = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
+  equipment.buttonMode = true;
+  equipment.interactive = true;
+  equipment.mouseup = function(moveData) {
+      
+  };
+
+  equipment.x = window.innerWidth * 0.03;
+  equipment.y = window.innerHeight * 0.15;
+  equipment.width = 50;
+  equipment.height = 50;
+  equipment.anchor.set(0.5);
+  HUDcontainer.addChild(equipment);
+  g = new PIXI.Graphics();
+
+  /*Structures*/
+  var structures = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
+  structures.buttonMode = true;
+  structures.interactive = true;
+  structures.mouseup = function(moveData) {
+
+  };
+
+  structures.x = window.innerWidth * 0.03;
+  structures.y = window.innerHeight * 0.25;
+  structures.width = 50;
+  structures.height = 50;
+  structures.anchor.set(0.5);
+  HUDcontainer.addChild(structures);
+  g = new PIXI.Graphics();
 }
 
 function mouseWheelHandler(e) {

@@ -352,8 +352,8 @@ function createInteractions(){
 	button.interactive = true;
 	button.mousedown = function(){
 		camera.zoom = 100;
-		camera.x = userData.colony.x*5000+2500 + window.innerWidth * camera.zoom / 100;
-		camera.y = userData.colony.y*5000+2500 + window.innerHeight * camera.zoom / 100;
+		camera.x = userData.colony.x*5000+2500;// + window.innerWidth * camera.zoom / 100;
+		camera.y = userData.colony.y*5000+2500;// + window.innerHeight * camera.zoom / 100;
 		camera.screen_width = window.innerWidth * camera.zoom / 100;
 		camera.screen_height = window.innerHeight * camera.zoom / 100;
 		camera.maxX = window.innerWidth * camera.max_zoom / 100 - (window.innerWidth * camera.zoom / 100);
@@ -383,8 +383,13 @@ function createInteractions(){
 	signout.anchor.set(0.5);
 	HUDcontainer.addChild(signout);
 	g = new PIXI.Graphics();
+
+	createSideMenu();
 }
 
+function createSideMenu(){
+	var colonistExpand
+}
 
 function mouseWheelHandler(e){
     camera.dzoom = Math.sign(e.deltaY) * 50;

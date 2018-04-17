@@ -19,6 +19,7 @@ var highlightedCell;
 var user;
 var freezeCamera = false;
 var colonyMade = true;
+var settingEntity = false;
 var infoText;
 var g; //Pixi graphics drawing
 var camera = {
@@ -96,6 +97,8 @@ function initialize() {
   sound.play();
   initKeyboard();
   loadImages();
+
+  //setEntity("id", 10, 10);
 }
 
 function loadImages() {
@@ -113,28 +116,35 @@ function loadImages() {
     .load(setupWorld);
 }
 
-function getEntity() {
+function setEntity(id, x, y) {
+
+  settingEntity = false;
+
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
+
+      if(userData.colony.entities == undefined)
+          var entities = [];
+      else
+          entities = userData.colony.entities; 
+
+      entities.push({"id" : id, "x" : x, "y" : y})
+
       const docRef = db.collection('users').doc(user.uid);
-      docRef
-        .get()
-        .then(doc => {
-          if (doc.exists) {
-            console.log('Document data:', doc.data());
-          } else {
-            // Doc.data() will be undefined in this case
-            console.log('No such document!');
-          }
-        })
-        .catch(error => {
-          console.log('Error getting document:', error);
-        });
+      docRef.update({
+          'colony.entities' : entities,
+      });
+      userData.colony.entities.push({"id" : id, "x" : x, "y" : y});
+      console.log("Entity set at x : " + x + " y : " +y);
     } else {
       console.log('boo');
     }
   });
 }
+
+
+
+
 
 function setupWorld() {
   //Add background
@@ -164,6 +174,26 @@ function setupWorld() {
   generateClouds();
 
   gameLoop();
+}
+
+function loadEntities()
+{
+  if(camera.zoom < 500){
+    var k = 2;
+    var entities = userData.colony.entities;
+    console.log(entities[19]);
+    for (var i = 2; i < entities.length; i++) {
+        console.log("Loading");
+        console.log(entities[i]);
+        var entity = new PIXI.Sprite(PIXI.loader.resources[entities[i].id].texture);
+        entity.x = worldToScreenX(entities[i].x);
+        entity.y = worldToScreenY(entities[i].y);
+        entity.width = worldToScreenScale(30);
+        entity.height = worldToScreenScale(30);
+        entityContainer.addChild(entity);
+        g = new PIXI.Graphics();
+    }
+  }
 }
 
 function createLabels() {
@@ -241,7 +271,6 @@ function setColony(x, y) {
 }
 
 function getUser() {
-  userData = [];
 
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -340,9 +369,16 @@ function createInteractions() {
   stage.mousedown = function(moveData) {
     var rX = Math.trunc(screenToWorldX(moveData.data.global.x) / 5000);
     var rY = Math.trunc(screenToWorldY(moveData.data.global.y) / 5000);
+    var x = Math.trunc(screenToWorldX(moveData.data.global.x));
+    var y = Math.trunc(screenToWorldY(moveData.data.global.y));
     //console.log(moveData.data.global.x + " " + moveData.data.global.y+" "+rX+" "+rY);
     if (!colonyMade) {
       setColony(rX, rY);
+    }
+
+    if(settingEntity)
+    {
+      setEntity("plant", x, y);
     }
   };
 
@@ -360,6 +396,7 @@ function createInteractions() {
     camera.maxY =
       window.innerHeight * camera.max_zoom / 100 - window.innerHeight * camera.zoom / 100;
     updateWorldView(true);
+    loadEntities();
   };
 
   button.x = window.innerWidth * 0.9;
@@ -382,8 +419,26 @@ function createInteractions() {
   signout.width = 50;
   signout.height = 50;
   signout.anchor.set(0.5);
-  HUDcontainer.addChild(signout);
+  HUDcontainer.addChild(signout)
   g = new PIXI.Graphics();
+
+
+    /*Create*/
+    var create = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
+    create.buttonMode = true;
+    create.interactive = true;
+    create.mouseup = function(moveData) {
+      console.log("Setting entity at next click location");
+      settingEntity = true;
+    };
+  
+    create.x = window.innerWidth * 0.85;
+    create.y = window.innerHeight * 0.05;
+    create.width = 50;
+    create.height = 50;
+    create.anchor.set(0.5);
+    HUDcontainer.addChild(create);
+    g = new PIXI.Graphics();
 }
 
 function mouseWheelHandler(e) {

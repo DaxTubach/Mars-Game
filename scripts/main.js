@@ -11,7 +11,7 @@ var spriteContainer,
 var textTags = [],
   microfeatures = [],
   clouds = [],
-  entitylist = []; 
+  entitylist = [];
 var background;
 var colonies = [];
 var userData;
@@ -82,8 +82,7 @@ function initialize() {
   renderer.autoResize = true;
   renderer.resize(window.innerWidth, window.innerHeight);
 
-  /* renderer.backgroundColor = 0xb74a0b; */
-  renderer.backgroundColor = 0xcf644a; // I changed ya color Damian
+  renderer.backgroundColor = 0xcf644a;
 
   //document.addEventListener("mousewheel",mouseWheelHandler, false);
 
@@ -118,32 +117,27 @@ function loadImages() {
 }
 
 function setEntity(id, x, y) {
-
   settingEntity = false;
 
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
-
-      if(userData.colony.entities == undefined)
-          var entities = [];
-      else
-          entities = userData.colony.entities; 
-      var entityData = {"id" : id, "x" : x, "y" : y};
+      if (userData.colony.entities == undefined) var entities = [];
+      else entities = userData.colony.entities;
+      var entityData = { id: id, x: x, y: y };
 
       entities.push(entityData);
 
       const docRef = db.collection('users').doc(user.uid);
       docRef.update({
-          'colony.entities' : entities,
+        'colony.entities': entities,
       });
       loadEntities();
-      console.log("Entity set at x : " + x + " y : " +y);
+      console.log('Entity set at x : ' + x + ' y : ' + y);
     } else {
       console.log('boo');
     }
   });
 }
-
 
 function setupWorld() {
   //Add background
@@ -175,31 +169,30 @@ function setupWorld() {
   gameLoop();
 }
 
-function loadEntities()
-{
-  if(camera.zoom < 500){
+function loadEntities() {
+  if (camera.zoom < 500) {
     var w = 30;
     var h = 30;
     var entities = userData.colony.entities;
     for (var i = 2; i < entities.length; i++) {
-        console.log("Loading");
-        console.log(entities[i]);
-        var entity = new PIXI.Sprite(PIXI.loader.resources[entities[i].id].texture);
-        entity.x = worldToScreenX(entities[i].x);
-        entity.y = worldToScreenY(entities[i].y);
-        entity.width = worldToScreenScale(30);
-        entity.height = worldToScreenScale(30);
-        entity.anchor.set(0.5, 0.5);
-        entityContainer.addChild(entity);
+      console.log('Loading');
+      console.log(entities[i]);
+      var entity = new PIXI.Sprite(PIXI.loader.resources[entities[i].id].texture);
+      entity.x = worldToScreenX(entities[i].x);
+      entity.y = worldToScreenY(entities[i].y);
+      entity.width = worldToScreenScale(30);
+      entity.height = worldToScreenScale(30);
+      entity.anchor.set(0.5, 0.5);
+      entityContainer.addChild(entity);
 
-        var entityObject = {
-          sprite: entity,
-          x: entities[i].x,
-          y: entities[i].y,
-          w: w,
-          h: h,
-        };
-        entitylist.push(entityObject);
+      var entityObject = {
+        sprite: entity,
+        x: entities[i].x,
+        y: entities[i].y,
+        w: w,
+        h: h,
+      };
+      entitylist.push(entityObject);
     }
   }
 }
@@ -279,7 +272,6 @@ function setColony(x, y) {
 }
 
 function getUser() {
-
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       const docRef = db.collection('users').doc(user.uid);
@@ -384,9 +376,8 @@ function createInteractions() {
       setColony(rX, rY);
     }
 
-    if(settingEntity)
-    {
-      setEntity("plant", x, y);
+    if (settingEntity) {
+      setEntity('plant', x, y);
     }
   };
 
@@ -427,16 +418,15 @@ function createInteractions() {
   signout.width = 50;
   signout.height = 50;
   signout.anchor.set(0.5);
-  HUDcontainer.addChild(signout)
+  HUDcontainer.addChild(signout);
   g = new PIXI.Graphics();
-
 
   /*Create Enitity*/
   var create = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
   create.buttonMode = true;
   create.interactive = true;
   create.mouseup = function(moveData) {
-    console.log("Setting entity at next click location");
+    console.log('Setting entity at next click location');
     settingEntity = true;
   };
 
@@ -452,9 +442,7 @@ function createInteractions() {
   var colonists = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
   colonists.buttonMode = true;
   colonists.interactive = true;
-  colonists.mouseup = function(moveData) {
-
-  };
+  colonists.mouseup = function(moveData) {};
 
   colonists.x = window.innerWidth * 0.03;
   colonists.y = window.innerHeight * 0.05;
@@ -468,9 +456,7 @@ function createInteractions() {
   var equipment = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
   equipment.buttonMode = true;
   equipment.interactive = true;
-  equipment.mouseup = function(moveData) {
-      
-  };
+  equipment.mouseup = function(moveData) {};
 
   equipment.x = window.innerWidth * 0.03;
   equipment.y = window.innerHeight * 0.15;
@@ -484,9 +470,7 @@ function createInteractions() {
   var structures = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
   structures.buttonMode = true;
   structures.interactive = true;
-  structures.mouseup = function(moveData) {
-
-  };
+  structures.mouseup = function(moveData) {};
 
   structures.x = window.innerWidth * 0.03;
   structures.y = window.innerHeight * 0.25;

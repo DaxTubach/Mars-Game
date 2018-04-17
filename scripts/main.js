@@ -1,3 +1,4 @@
+
 var type = 'WebGL';
 var stage;
 var renderer;
@@ -174,25 +175,40 @@ function loadEntities() {
     var w = 30;
     var h = 30;
     var entities = userData.colony.entities;
+    
     for (var i = 2; i < entities.length; i++) {
-      console.log('Loading');
-      console.log(entities[i]);
-      var entity = new PIXI.Sprite(PIXI.loader.resources[entities[i].id].texture);
-      entity.x = worldToScreenX(entities[i].x);
-      entity.y = worldToScreenY(entities[i].y);
-      entity.width = worldToScreenScale(30);
-      entity.height = worldToScreenScale(30);
-      entity.anchor.set(0.5, 0.5);
-      entityContainer.addChild(entity);
+        console.log("Loading");
+        console.log(entities[i]);
+        var entity = new PIXI.Sprite(PIXI.loader.resources[entities[i].id].texture);
+        entity.x = worldToScreenX(entities[i].x);
+        entity.y = worldToScreenY(entities[i].y);
+        entity.width = worldToScreenScale(30);
+        entity.height = worldToScreenScale(30);
+        entity.buttonMode = true;
+        entity.interactive = true;
+        entity.anchor.set(0.5, 0.5);
+        entityContainer.addChild(entity);
 
-      var entityObject = {
-        sprite: entity,
-        x: entities[i].x,
-        y: entities[i].y,
-        w: w,
-        h: h,
-      };
-      entitylist.push(entityObject);
+        entity.mouseover = function(mouseData){
+          this.alpha = 0.5;
+        }
+
+        entity.mouseout = function(entity){
+          this.alpha = 1;
+        }
+
+        entity.mousedown = function(entity){
+            
+        }
+        
+        var entityObject = {
+          sprite: entity,
+          x: entities[i].x,
+          y: entities[i].y,
+          w: w,
+          h: h,
+        };
+        entitylist.push(entityObject);
     }
   }
 }
@@ -500,7 +516,23 @@ function generateClouds() {
     clouds.push({ sprite: cloud, x: x, y: y, w: w, h: h, zoomFactor: zoomFactor });
   }
 }
+function dilemas() {
+  var structures = userData.colony.entities;
 
+  // Dust storm
+
+  // Radiation Posioning
+
+  // Psyche Break
+
+  // Equipment degraded (Need safe storage)
+
+  // Random Structure Breakdown
+
+  // Nuclear generator Failure
+
+  // Found Mineral Deposit (Extra Money!)
+}
 function gameLoop() {
   requestAnimationFrame(gameLoop);
 

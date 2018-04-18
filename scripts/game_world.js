@@ -1,13 +1,15 @@
 var grid;
 var lastView = {x:0,y:0,zoom:0,screen_width:0,screen_height:0};
-const ENTITY_LARGE_ZOOM = 100000;
-const ENTITY_MEDIUM_ZOOM =10000;
-const ENTITY_SMALL_ZOOM = 150;
+var FIRST_GEN = []; //Used for initial feature generation
+var CULL_BUFFER = [4,1500,15000];
+
+const ENTITY_LARGE_ZOOM = 50000;
+const ENTITY_MEDIUM_ZOOM =500;
+const ENTITY_SMALL_ZOOM = 101;
 const ENTITY_ZOOM = [150,5000,15000];
 const ENTITY_SMALL = 0;
 const ENTITY_MEDIUM = 1;
 const ENTITY_LARGE = 2;
-const CULL_BUFFER = 100;
 const CLOUD_ZOOM = 5000;
 const ENTITY_ZOOM_LEVEL = 25000;
 
@@ -31,7 +33,7 @@ function updateWorldView(forceUpdate){
 	}
 
 	updateClouds();
-	//renderObjects();
+	createMicrofeatures();
 	updateHUD();
 
 	//Scale image according to zoom level
@@ -44,7 +46,6 @@ function updateWorldView(forceUpdate){
 
 	background.position.set(worldToScreenX(0),worldToScreenY(0));
 
-	/*
 	  infoText.text =
 	    'Camera zoom: ' +
 	    camera.zoom +
@@ -55,7 +56,7 @@ function updateWorldView(forceUpdate){
 	    '\nScreenWidth: ' +
 	    window.innerWidth * camera.zoom / 100 +
 	    '\nMaxX: ' +
-	    camera.maxX;*/
+	    camera.maxX;
 	  lastView = {
 	    zoom: camera.zoom,
 	    x: camera.x,
@@ -256,6 +257,7 @@ function drawEntityUnit() {
 }
 
 function preRender() {
+
   if (!colonyMade&&dialog==null) {
     drawColonyUnit();
     HUDcontainer.addChild(g);
@@ -280,7 +282,7 @@ function generateSmall(x,y){
 		return false;
 	else{
 		sprite = new PIXI.Sprite(PIXI.loader.resources["rock-small"].texture);
-		w = Math.floor(rng()*10)+1;
+		w = Math.floor(rng()*4)+1;
 		h = w;
 	}
 
@@ -297,11 +299,11 @@ function generateMedium(x,y){
 	var result = Math.floor(rng()*10000); 
 	var sprite,w,h;
 
-	if(result<99998)
+	if(result<99000)
 		return false;
 	else{
 		sprite = new PIXI.Sprite(PIXI.loader.resources["mountain"].texture);
-		w = Math.floor(rng()*1000)+500;
+		w = Math.floor(rng()*500)+250;
 		h = w;
 	}
 
@@ -315,14 +317,14 @@ function generateMedium(x,y){
 
 function generateLarge(x,y){
 	var rng = new Math.seedrandom(x+" "+y);
-	var result = Math.floor(rng()*100000)+5000; 
+	var result = Math.floor(rng()*100000); 
 	var sprite,w,h;
 
-	if(result<99998)
+	if(result<99000)
 		return false;
 	else{
 		sprite = new PIXI.Sprite(PIXI.loader.resources["mountain"].texture);
-		w = Math.floor(rng()*10000);
+		w = Math.floor(rng()*10000)+500;
 		h = w;
 	}
 
@@ -336,12 +338,11 @@ function generateLarge(x,y){
 
 function generateFeature(x,y,size){
 	//Make sure we don't generate in views we have already generated in
-	if(lastView.zoom < size){
-		if(x > lastView.x && x < lastView.x + lastView.screen_width
-			&& y > lastView.y && y < lastView.y + lastView.screen_height){
+	if(FIRST_GEN[size] == false)
+		if(x >= lastView.x && x <= lastView.x + lastView.screen_width
+			&& y >= lastView.y && y <= lastView.y + lastView.screen_height){
 			return false;
 		}
-	}
 
 	if(size==ENTITY_SMALL)
 		generateSmall(x,y);
@@ -355,29 +356,45 @@ function generateFeature(x,y,size){
 	return true;
 }
 
-function renderObjects(){
+function createMicrofeatures(){
 	var d = 0;
 
+	if(microfeatures[ENTITY_LARGE].length == 0)
+		FIRST_GEN[ENTITY_LARGE] = true;
+	else
+		FIRST_GEN[ENTITY_LARGE] = false;
+
+
 	if(camera.zoom < ENTITY_LARGE_ZOOM)
-		for(var i=camera.x;i<=camera.x+Math.floor(camera.screen_width);i+=25000){
-			for(var j=camera.y;j<=camera.y+Math.floor(camera.screen_height);j+=25000){
+		for(var i=camera.x;i<camera.x+Math.floor(camera.screen_width);i+=25000){
+			for(var j=camera.y;j<camera.y+Math.floor(camera.screen_height);j+=25000){
 				if(generateFeature(i,j,ENTITY_LARGE))
 					d++;
 			}
 		}
 
+	if(microfeatures[ENTITY_MEDIUM].length == 0)
+		FIRST_GEN[ENTITY_MEDIUM] = true;
+	else
+		FIRST_GEN[ENTITY_MEDIUM] = false;
+
 	if(camera.zoom < ENTITY_MEDIUM_ZOOM)
-		for(var i=camera.x;i<=camera.x+Math.floor(camera.screen_width);i+=5000){
-			for(var j=camera.y;j<=camera.y+Math.floor(camera.screen_height);j+=5000){
+		for(var i=camera.x;i<camera.x+Math.floor(camera.screen_width);i+=500){
+			for(var j=camera.y;j<camera.y+Math.floor(camera.screen_height);j+=500){
 				if(generateFeature(i,j,ENTITY_MEDIUM))
 					d++;
 			}
 		}
 
+	if(microfeatures[ENTITY_SMALL].length == 0)
+		FIRST_GEN[ENTITY_SMALL] = true;
+	else
+		FIRST_GEN[ENTITY_SMALL] = false;
+
 	if(camera.zoom < ENTITY_SMALL_ZOOM)
-		for(var i=camera.x;i<=camera.x+Math.floor(camera.screen_width);i+=10){
-			for(var j=camera.y;j<=camera.y+Math.floor(camera.screen_height);j+=10){
-				if(generateFeature(i,j,ENTITY_MEDIUM))
+		for(var i=camera.x;i<camera.x+Math.floor(camera.screen_width);i+=4){
+			for(var j=camera.y;j<camera.y+Math.floor(camera.screen_height);j+=4){
+				if(generateFeature(i,j,ENTITY_SMALL))
 					d++;
 			}
 		}
@@ -386,9 +403,9 @@ function renderObjects(){
 }
 
 //Returns true if rendered, false if removed
-function updateAndCullWorldObject(object, zoomCutoff){
-	if(object.x > camera.x && object.x < window.innerWidth * camera.zoom/100+camera.x)
-		if(object.y > camera.y && object.y < window.innerHeight * camera.zoom/100+camera.y)
+function updateAndCullWorldObject(object, zoomCutoff,size){
+	if(object.x > camera.x-CULL_BUFFER[size] && object.x <= camera.screen_width + camera.x)
+		if(object.y > camera.y-CULL_BUFFER[size] && object.y <= camera.screen_height + camera.y)
 			if(camera.zoom < zoomCutoff){
 				object.sprite.x = worldToScreenX(object.x);
 				object.sprite.y = worldToScreenY(object.y);
@@ -455,7 +472,7 @@ function updateHUD(){
 	
 	for(var i = 0; i < microfeatures[ENTITY_SMALL].length; i++){
 		var feature = microfeatures[ENTITY_SMALL][i];
-		if(!updateAndCullWorldObject(feature,ENTITY_SMALL_ZOOM)){
+		if(!updateAndCullWorldObject(feature,ENTITY_SMALL_ZOOM,ENTITY_SMALL)){
 			microContainer.removeChild(feature.sprite);
 			microfeatures[ENTITY_SMALL].splice(i,1);
 		}
@@ -463,7 +480,7 @@ function updateHUD(){
 
 	for(var i = 0; i < microfeatures[ENTITY_MEDIUM].length; i++){
 		var feature = microfeatures[ENTITY_MEDIUM][i];
-		if(!updateAndCullWorldObject(feature,ENTITY_MEDIUM_ZOOM)){
+		if(!updateAndCullWorldObject(feature,ENTITY_MEDIUM_ZOOM,ENTITY_MEDIUM)){
 			microContainer.removeChild(feature.sprite);
 			microfeatures[ENTITY_MEDIUM].splice(i,1);
 		}
@@ -471,7 +488,7 @@ function updateHUD(){
 
 	for(var i = 0; i < microfeatures[ENTITY_LARGE].length; i++){
 		var feature = microfeatures[ENTITY_LARGE][i];
-		if(!updateAndCullWorldObject(feature,ENTITY_LARGE_ZOOM)){
+		if(!updateAndCullWorldObject(feature,ENTITY_LARGE_ZOOM,ENTITY_LARGE)){
 			microContainer.removeChild(feature.sprite);
 			microfeatures[ENTITY_LARGE].splice(i,1);
 		}

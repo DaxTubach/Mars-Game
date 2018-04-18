@@ -55,14 +55,14 @@ function updateWorldView(forceUpdate){
 	    '\nScreenWidth: ' +
 	    window.innerWidth * camera.zoom / 100 +
 	    '\nMaxX: ' +
-	    camera.maxX;
+	    camera.maxX;*/
 	  lastView = {
 	    zoom: camera.zoom,
 	    x: camera.x,
 	    y: camera.y,
 	    screen_width: camera.screen_width,
 	    screen_height: camera.screen_height,
-	  };*/
+	  };
 }
 
 function removeContainer(container) {

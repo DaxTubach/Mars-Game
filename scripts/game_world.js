@@ -66,7 +66,7 @@ function updateWorldView(forceUpdate){
 	//Scale image according to zoom level
 	background.height = 851000000 / camera.zoom;
 	background.width = 1702000000 / camera.zoom;
-	background.alpha = camera.zoom < 25000 ? camera.zoom / 25000 : 1;
+	background.alpha = camera.zoom < 25000 ? (camera.zoom / 50000)*2 : 1;
 	background.position.set(worldToScreenX(0),worldToScreenY(0));
 
 	infoText.text = "Camera zoom: "+camera.zoom+"\nx: "+camera.x+"\ny: "+camera.y+"\nScreenWidth: "+window.innerWidth * camera.zoom / 100+"\nMaxX: "+camera.maxX;

@@ -303,15 +303,44 @@ function addColonyTag(text, x, y) {
   textTags.push(textObject);
 }
 
-function createColonyDialog(x,y,rX,rY){
+/*General purpose dialogs*/
+function createDialog(x,y,w,h,text){
+	updateHUD();
+	var gDialog = new PIXI.Graphics();
+	gDialog.fillAlpha = 0.5;
+
+	gDialog.beginFill(0x164289,0.5);
+	gDialog.lineStyle(2,0x000000);
+
+	var drawnX = (x>innerWidth/2)?x-100:x;
+	var drawnY = (x>innerHeight/2)?y-100:y;
+
+	//Automatically adjust to make sure full dialog is visible
+	gDialog.drawRect(,
+		(originalX>innerWidth/2)?originalX-100:originalX,
+		100,
+		100);
+
+	gDialog.endFill();
+
+	var text = new PIXI.Text("",{});
+
+	dialog = {g:gDialog}; 
+	HUDcontainer.addChild(gDialog);
+}
+
+function createColonyDialog(x,y,rX,rY,originalX,originalY){
 	var percentX = x / maxX;
 	var percentY = y / maxY;
 
 	percentX = Math.floor(percentX * img.width);
 	percentY = Math.floor(percentY * img.height);
 
-	console.log(heightMap.data[percentX*4 + percentY * img.width * 4]);
+	//Formula for converting x y into greyscale value
+	var topographicHeight = heightMap.data[percentX*4 + percentY * img.width * 4];
+	//console.log(heightMap.data[percentX*4 + percentY * img.width * 4]);
 
+	
 	//var height = heightMap.data[percentY * img.height + percentX];
 }
 
@@ -434,7 +463,7 @@ function createInteractions() {
     var y = Math.trunc(screenToWorldY(moveData.data.global.y));
     //console.log(moveData.data.global.x + " " + moveData.data.global.y+" "+rX+" "+rY);
     if (colonyMade) {
-      createColonyDialog(x,y,rX,rY);
+      createColonyDialog(x,y,rX,rY,moveData.data.global.x,moveData.data.global.y);
     }
 
     if (settingEntity) {

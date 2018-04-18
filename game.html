@@ -54,6 +54,33 @@
 
   <div class="hud-menu"></div>
 
+  <div class="resources-hud">
+    <div id="air-resource" class="resource-container">
+      <div id="air-resource-value" class="resource-value-container"></div>
+      <div id="air-resource-icon" class="resource-icon-container">
+        <img src="images/oxygen-icon.png" class="hud-menu-icon">
+      </div>
+    </div>
+    <div id="water-resource" class="resource-container">
+      <div id="water-resource-value" class="resource-value-container"></div>
+      <div id="water-resource-icon" class="resource-icon-container">
+        <img src="images/water-icon-white.png" class="hud-menu-icon">
+      </div>
+    </div>
+    <div id="food-resource" class="resource-container">
+      <div id="food-resource-value" class="resource-value-container"></div>
+      <div id="food-resource-icon" class="resource-icon-container">
+        <img src="images/food-icon.png" class="hud-menu-icon">
+      </div>
+    </div>
+    <div id="power-resource" class="resource-container">
+      <div id="power-resource-value" class="resource-value-container"></div>
+      <div id="power-resource-icon" class="resource-icon-container">
+        <img src="images/power-icon.png" class="hud-menu-icon">
+      </div>
+    </div>
+  </div>
+
   <div class="dilemma-popup"></div>
 
   <!-- HUD UI Functions -->
@@ -197,6 +224,133 @@
           '<p>' + structuresArray[i].name + '</p>' +
           '</div>'
         );
+      }
+    }
+  </script>
+
+  <!-- Resources HUD Functions -->
+  <script>
+    let startingResourceValue = 100;
+    let currentAirResourceValue = startingResourceValue;
+    let currentWaterResourceValue = startingResourceValue;
+    let currentFoodResourceValue = startingResourceValue;
+    let currentPowerResourceValue = startingResourceValue;
+
+    $('.resource-value-container').append(
+      '<span>' + startingResourceValue + '</span>'
+    );
+
+    window.setInterval(function () {
+      $('.resource-value-container').each(function () {
+        let resourceId = $(this).attr('id');
+        reduceResource(resourceId);
+      });
+    }, 10000);
+
+    function reduceResource(id) {
+      if (id == 'air-resource-value') {
+        let newAirResourceValue = currentAirResourceValue - 3;
+        currentAirResourceValue = newAirResourceValue;
+
+        if (newAirResourceValue > 0) {
+          resizeResourceBar(newAirResourceValue, id);
+          reduceResourceNumber(newAirResourceValue, id);
+        }
+
+        if (newAirResourceValue < 21) {
+          alertResource(id);
+        }
+      }
+
+      if (id == 'water-resource-value') {
+        let newWaterResourceValue = currentWaterResourceValue - 2;
+        currentWaterResourceValue = newWaterResourceValue;
+
+        if (newWaterResourceValue > 0) {
+          resizeResourceBar(newWaterResourceValue, id);
+          reduceResourceNumber(newWaterResourceValue, id);
+        }
+
+        if (newWaterResourceValue < 21) {
+          alertResource(id);
+        }
+      }
+
+      if (id == 'food-resource-value') {
+        let newFoodResourceValue = currentFoodResourceValue - 1;
+        currentFoodResourceValue = newFoodResourceValue;
+
+        if (newFoodResourceValue > 0) {
+          resizeResourceBar(newFoodResourceValue, id);
+          reduceResourceNumber(newFoodResourceValue, id);
+        }
+
+        if (newFoodResourceValue < 21) {
+          alertResource(id);
+        }
+      }
+
+      if (id == 'power-resource-value') {
+        let newPowerResourceValue = currentPowerResourceValue - 3;
+        currentPowerResourceValue = newPowerResourceValue;
+
+        if (newPowerResourceValue > 0) {
+          resizeResourceBar(newPowerResourceValue, id);
+          reduceResourceNumber(newPowerResourceValue, id);
+        }
+
+        if (newPowerResourceValue < 31) {
+          alertResource(id);
+        }
+      }
+    }
+
+    function alertResource(id) {
+      if (id == 'air-resource-value') {
+        $('#air-resource-icon').css('background', 'rgba(255, 85, 85, 1)');
+        $('#air-resource-icon').css('border', 'solid white 2px');
+        $('#' + id).css('background', 'rgba(255, 85, 85, 1)');
+        $('#' + id).css('border', 'solid white 2px');
+        $('#' + id).css('border-right', '0');
+      }
+
+      if (id == 'water-resource-value') {
+        $('#water-resource-icon').css('background', 'rgba(255, 85, 85, 1)');
+        $('#water-resource-icon').css('border', 'solid white 2px');
+        $('#' + id).css('background', 'rgba(255, 85, 85, 1)');
+        $('#' + id).css('border', 'solid white 2px');
+        $('#' + id).css('border-right', '0');
+      }
+
+      if (id == 'food-resource-value') {
+        $('#food-resource-icon').css('background', 'rgba(255, 85, 85, 1)');
+        $('#food-resource-icon').css('border', 'solid white 2px');
+        $('#' + id).css('background', 'rgba(255, 85, 85, 1)');
+        $('#' + id).css('border', 'solid white 2px');
+        $('#' + id).css('border-right', '0');
+      }
+
+      if (id == 'power-resource-value') {
+        $('#power-resource-icon').css('background', 'rgba(255, 85, 85, 1)');
+        $('#power-resource-icon').css('border', 'solid white 2px');
+        $('#' + id).css('background', 'rgba(255, 85, 85, 1)');
+        $('#' + id).css('border', 'solid white 2px');
+        $('#' + id).css('border-right', '0');
+      }
+    }
+
+    function resizeResourceBar(val, id) {
+      $('#' + id).css('width', val);
+    }
+
+    function reduceResourceNumber(val, id) {
+      emptyResourceValue(id);
+      $('#' + id).append(
+        '<span>' + val + '</span>'
+      );
+
+      function emptyResourceValue(id) {
+        $('#' + id).empty();
       }
     }
   </script>

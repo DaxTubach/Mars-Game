@@ -23,7 +23,11 @@ var freezeCamera = false;
 var colonyMade = true;
 var settingEntity = false;
 var infoText;
+var img;
 var g; //Pixi graphics drawing
+var dialog; //JSON for dialog drawing
+var heightMap; //Grayscale image
+var maxX = 17020000, maxY = 8510000;
 var camera = {
   x: 0,
   y: 0,
@@ -42,7 +46,28 @@ var camera = {
 
 const awsE = 'https://s3.us-east-2.amazonaws.com/hq.mars/Entities/';
 
+function resize(){
+	  stage.hitArea = new PIXI.Rectangle(0, 0, window.innerWidth, window.innerHeight);
+	  renderer.resize(window.innerWidth, window.innerHeight);
+}
+
 function initialize() {
+	var url = 'https://s3.us-east-2.amazonaws.com/hq.mars/Terrain/heightmap.jpg';
+	img = new Image();
+	img.src = url + '?' + new Date().getTime();
+	img.setAttribute('crossOrigin', '');
+	img.onload = function(){	
+	  var canvas = document.createElement('canvas');
+	  var context = canvas.getContext('2d');
+	  canvas.width = img.naturalWidth;
+	  canvas.height = img.naturalHeight;
+	  context.drawImage(img,0,0);
+	  heightMap = context.getImageData(0,0,img.naturalWidth,img.naturalHeight);
+	}
+
+  //img = new Image;
+  //img.src = "https://s3.us-east-2.amazonaws.com/hq.mars/Terrain/heightmap.jpg";
+
   initApp();
 
   if (!PIXI.utils.isWebGLSupported()) {
@@ -72,6 +97,7 @@ function initialize() {
 
   /* Add canvas to HTML doc*/
   document.body.appendChild(renderer.view);
+  //window.addEventListener("resize", resize);
 
   /*Create stage*/
   stage = new PIXI.Container();
@@ -97,6 +123,7 @@ function initialize() {
 
   sound.play();
   initKeyboard();
+
   loadImages();
 
   //setEntity("id", 10, 10);
@@ -164,14 +191,19 @@ function setupWorld() {
   background.width = 1702000000 / camera.zoom;
   createLabels();
 
+  var small=[], medium=[], large=[];
+  microfeatures.push(small);
+  microfeatures.push(medium);
+  microfeatures.push(large);
+  //console.log(microfeatures);
+
   createInteractions();
   generateClouds();
-
   gameLoop();
 }
 
-function loadEntities() {
-  if (camera.zoom < 500) {
+function loadEntities(){
+  if(camera.zoom < 500){
     var w = 30;
     var h = 30;
     var entities = userData.colony.entities;
@@ -269,6 +301,18 @@ function addColonyTag(text, x, y) {
     y: y,
   };
   textTags.push(textObject);
+}
+
+function createColonyDialog(x,y,rX,rY){
+	var percentX = x / maxX;
+	var percentY = y / maxY;
+
+	percentX = Math.floor(percentX * img.width);
+	percentY = Math.floor(percentY * img.height);
+
+	console.log(heightMap.data[percentX*4 + percentY * img.width * 4]);
+
+	//var height = heightMap.data[percentY * img.height + percentX];
 }
 
 function setColony(x, y) {
@@ -380,6 +424,7 @@ function getEntityInfo(collection_type, entity_name) {
   }
 }
 
+
 function createInteractions() {
   document.addEventListener('wheel', mouseWheelHandler, false);
   stage.mousedown = function(moveData) {
@@ -388,8 +433,8 @@ function createInteractions() {
     var x = Math.trunc(screenToWorldX(moveData.data.global.x));
     var y = Math.trunc(screenToWorldY(moveData.data.global.y));
     //console.log(moveData.data.global.x + " " + moveData.data.global.y+" "+rX+" "+rY);
-    if (!colonyMade) {
-      setColony(rX, rY);
+    if (colonyMade) {
+      createColonyDialog(x,y,rX,rY);
     }
 
     if (settingEntity) {
@@ -454,7 +499,7 @@ function createInteractions() {
   HUDcontainer.addChild(create);
   g = new PIXI.Graphics();
 
-  /*Colonists*/
+  /*Colonists
   var colonists = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
   colonists.buttonMode = true;
   colonists.interactive = true;
@@ -468,7 +513,7 @@ function createInteractions() {
   HUDcontainer.addChild(colonists);
   g = new PIXI.Graphics();
 
-  /*Equipment*/
+  /*Equipment
   var equipment = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
   equipment.buttonMode = true;
   equipment.interactive = true;
@@ -482,7 +527,7 @@ function createInteractions() {
   HUDcontainer.addChild(equipment);
   g = new PIXI.Graphics();
 
-  /*Structures*/
+  /*Structures
   var structures = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
   structures.buttonMode = true;
   structures.interactive = true;
@@ -494,7 +539,7 @@ function createInteractions() {
   structures.height = 50;
   structures.anchor.set(0.5);
   HUDcontainer.addChild(structures);
-  g = new PIXI.Graphics();
+  g = new PIXI.Graphics();*/
 }
 
 function mouseWheelHandler(e) {

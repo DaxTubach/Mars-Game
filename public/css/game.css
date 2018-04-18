@@ -27,6 +27,10 @@
   opacity: 1;
 }
 
+.hud-menu-icon {
+  height: 30px;
+}
+
 #people {
   top: 200px;
   left: 20px;
@@ -44,12 +48,24 @@
 
 .hud-menu {
   display: none;
+  flex-wrap: wrap;
+  justify-content: space-around;
   position: absolute;
   top: 200px;
   left: 70px;
-  width: 500px;
-  height: 500px;
+  min-height: 180px;
+  max-width: 300px;
   background: rgba(0, 0, 0, 0.5);
   color: white;
+  font-size: 10pt;
   z-index: 99;
+}
+
+.hud-menu-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px;
+  width: 80px;
+  word-wrap: break-word;
 }

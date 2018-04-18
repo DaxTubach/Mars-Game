@@ -58,21 +58,87 @@
 
   <!-- HUD Functions -->
   <script>
-    let people = ["Volvo Saab", "Tokyo Juan", "Stratos"];
-    let equipment = ["Solar Panels"];
-    let structures = ["Headquarters", "Greenhouse", "Med Bay", "Solar Panel Array", "Generator"];
+    // Equipment Objects
+    let SolarPanel = {
+      name: 'Solar Panel',
+      icon: 'images/solar-panel-icon.png'
+    }
+
+    // Structure Objects
+    let Headquarters = {
+      name: 'Headquarters',
+      icon: 'images/HQ-icon.png'
+    }
+
+    let Greenhouse = {
+      name: 'Greenhouse',
+      icon: 'images/greenhouse-icon.png'
+    }
+
+    let MedBay = {
+      name: 'Med Bay',
+      icon: 'images/med-bay-icon.png'
+    }
+
+    let SolarPanelArray = {
+      name: 'Solar Panel Array',
+      icon: 'images/solar-panel-array-icon.png'
+    }
+
+    let PowerGenerator = {
+      name: 'Generator',
+      icon: 'images/generator-icon.png'
+    }
+
+    let FoodStorage = {
+      name: 'Food Storage',
+      icon: 'images/food-storage-icon.png'
+    }
+
+    let ScienceLab = {
+      name: 'Science Lab',
+      icon: 'images/science-lab-icon'
+    }
+
+    // Arrays
+    let people = [
+      "Volvo Saab",
+      "Tokyo Juan",
+      "Stratos Blue"
+    ];
+
+    let equipmentArray = [
+      SolarPanel
+    ];
+
+    let structuresArray = [
+      Headquarters,
+      Greenhouse,
+      MedBay,
+      SolarPanelArray,
+      PowerGenerator,
+      FoodStorage,
+      ScienceLab
+    ];
 
 
     $('.hud-container').hover(
       function () {
         displayHudMenu();
         emptyHudMenu();
+
         let hoveredSection = getHoveredSection(this);
 
         if (hoveredSection == 'people') {
-          for (let i = 0; i < people.length; i++) {
-            $('.hud-menu').append('<p>' + people[i] + '</p>');
-          }
+          populateMenuWithPeople();
+        }
+
+        if (hoveredSection == 'equipment') {
+          populateMenuWithEquipment();
+        }
+
+        if (hoveredSection == 'structures') {
+          populateMenuWithStructures();
         }
       },
       function () {
@@ -82,7 +148,7 @@
 
     $('.hud-menu').hover(
       function () {
-        $('.hud-menu').css('display', 'block');
+        $('.hud-menu').css('display', 'flex');
       },
       function () {
         $('.hud-menu').css('display', 'none');
@@ -94,11 +160,44 @@
     };
 
     function displayHudMenu() {
-      $('.hud-menu').css('display', 'block');
+      $('.hud-menu').css('display', 'flex');
     }
 
     function emptyHudMenu(section) {
       $('.hud-menu').empty();
+    }
+
+    function populateMenuWithPeople() {
+      for (let i = 0; i < people.length; i++) {
+        $('.hud-menu').append(
+          '<div class="hud-menu-container">' +
+          '<img src="images/people-icon.png" class="hud-menu-icon"/>' +
+          '<p>' + people[i] + '</p>' +
+          '</div>'
+        );
+      }
+    }
+
+    function populateMenuWithEquipment() {
+      for (let i = 0; i < equipmentArray.length; i++) {
+        $('.hud-menu').append(
+          '<div class="hud-menu-container">' +
+          '<img src="' + equipmentArray[i].icon + 'class="hud-menu-icon"/>' +
+          '<p>' + equipmentArray[i].name + '</p>' +
+          '</div>'
+        );
+      }
+    }
+
+    function populateMenuWithStructures() {
+      for (let i = 0; i < structuresArray.length; i++) {
+        $('.hud-menu').append(
+          '<div class="hud-menu-container">' +
+          '<img src="' + structuresArray[i].icon + 'class="hud-menu-icon"/>' +
+          '<p>' + structuresArray[i].name + '</p>' +
+          '</div>'
+        );
+      }
     }
 
   </script>

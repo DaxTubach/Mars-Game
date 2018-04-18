@@ -11,11 +11,14 @@
 .hud-container {
   position: absolute;
   padding: 10px;
+  border-radius: 10px;
   background: rgba(0, 0, 0, 0.3);
   color: white;
   z-index: 99;
 }
 .hud-container:hover {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
   background: rgba(0, 0, 0, 0.5);
 }
 
@@ -51,10 +54,11 @@
   flex-wrap: wrap;
   justify-content: space-around;
   position: absolute;
-  top: 200px;
+  top: 180px;
   left: 70px;
-  min-height: 180px;
+  min-height: 220px;
   max-width: 300px;
+  border-radius: 10px;
   background: rgba(0, 0, 0, 0.5);
   color: white;
   font-size: 10pt;
@@ -68,4 +72,19 @@
   margin: 20px;
   width: 80px;
   word-wrap: break-word;
+  cursor: pointer;
+}
+
+.dilemma-popup {
+  display: none;
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  height: 300px;
+  width: 500px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
+  color: white;
+  z-index: 99;
 }

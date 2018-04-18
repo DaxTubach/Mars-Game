@@ -52,11 +52,15 @@
     <img class="hud-icon" src="images/structure-icon.png">
   </div>
 
-  <div class="hud-menu">
-    MENU
+  <div class="hud-menu"></div>
+
+  <div class="dilemma-popup">
+    DILEMMA
+    <br>
+    <br>Click me to hide
   </div>
 
-  <!-- HUD Functions -->
+  <!-- HUD UI Functions -->
   <script>
     // Equipment Objects
     let SolarPanel = {
@@ -199,7 +203,21 @@
         );
       }
     }
+  </script>
 
+  <!-- Dilemma UI Functions -->
+  <script>
+    setTimeout(function () {
+      displayDilemmaPopup();
+    }, 5000);
+
+    $('.dilemma-popup').click(function () {
+      $('.dilemma-popup').css('display', 'none');
+    });
+
+    function displayDilemmaPopup() {
+      $('.dilemma-popup').css('display', 'block');
+    }
   </script>
 </body>
 

@@ -68,4 +68,11 @@
   margin: 20px;
   width: 80px;
   word-wrap: break-word;
+  border-bottom: 2px solid transparent; /* <- here */
+  transition: border-bottom 0.4s;
+  text-decoration: none; /* I added this for clarity of effect */
+}
+
+.hud-menu-container:hover{
+  border-bottom: 2px solid whitesmoke;
 }

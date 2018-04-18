@@ -22,6 +22,7 @@ var user;
 var freezeCamera = false;
 var colonyMade = true;
 var settingEntity = false;
+var entitiesFlag = false;
 var infoText;
 var img;
 var g; //Pixi graphics drawing
@@ -244,6 +245,7 @@ function loadEntity(e) {
 }
 
 function loadEntities() {
+	entitiesFlag = true;
   if (camera.zoom < 500) {
     var w = 30;
     var h = 30;
@@ -501,8 +503,9 @@ function createInteractions() {
     camera.maxX = window.innerWidth * camera.max_zoom / 100 - window.innerWidth * camera.zoom / 100;
     camera.maxY =
       window.innerHeight * camera.max_zoom / 100 - window.innerHeight * camera.zoom / 100;
-    updateWorldView(true);
-    loadEntities();
+	updateWorldView(true);
+	if(!entitiesFlag)
+    	loadEntities();
   };
 
   button.x = window.innerWidth * 0.9;
@@ -605,6 +608,46 @@ function generateClouds() {
     parallaxCloudContainer.addChild(cloud);
     clouds.push({ sprite: cloud, x: x, y: y, w: w, h: h, zoomFactor: zoomFactor });
   }
+}
+function equipmentClick(id)
+{
+	console.log(id);
+	
+}
+
+function buildingClick(id)
+{
+	console.log(id);
+	var hasReqs = true;
+	var equipment = userData.colony.equipment;
+	var building = getBuildingInfo(id);
+	
+	console.log(building);
+	
+	for(var i = 0; i < building.pre_reqs.length; i++)
+		if(equipment.building.pre_reqs[i] == 0)
+			hasReqs = false;
+	if(hasReqs)
+	{
+		console.log("Has");
+	}
+	else
+		console.log("No Has");
+}
+
+function getBuildingInfo(id)
+{
+	console.log(buildingArray);
+
+	for(var i = 0; i < buildingArray.length; i++)
+	{
+		console.log(buildingArray[i]);
+		if(buildingArray[i].id == id)
+		{
+			console.log("found " + buildingArray[i].id);
+			return buildingArray[i];
+		}
+	}
 }
 function dilemas() {
   var structures = userData.colony.entities;

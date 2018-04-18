@@ -44,7 +44,7 @@ var plant = {
 
 
 var rover = {
-    id: "radar",
+    id: "rover",
     name: "Aluminum Radiation Shielding", 
     w: 50,
     h: 50,
@@ -52,3 +52,22 @@ var rover = {
     pre_reqs: ["generator", "radar-dish"],
     uses: {energy : -50},
 };
+
+var med_bay = {
+    id: "med_bay",
+    name: "Aluminum Radiation Shielding", 
+    w: 50,
+    h: 50,
+    info: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ornare massa elit, quis semper nisl interdum sit amet.",
+    pre_reqs: ["generator", "med_supplies"],
+    uses: {energy : -50},
+};
+
+var buildingArray = [
+    radar,
+    water_tank,
+    habitat,
+    plant,
+    rover,
+    med_bay
+];

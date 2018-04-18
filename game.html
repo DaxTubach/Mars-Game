@@ -211,7 +211,7 @@
 - The highest temperature is located near the equator about 86 degrees Fahrenheit and -284 degrees by the Martian poles.`,
     }
 
-    // Dilemma Array
+    // Dilemma Array - Contains every Dilemma that can be chosen randomly to display to user
     let dilemmas = [
       FreezingToDeath
     ];
@@ -223,11 +223,6 @@
     setTimeout(function () {
       displayDilemmaPopup(chosenDilemma);
     }, 5000);
-
-    // Temporary function to hide Dilemma Popup on click
-    $('.dilemma-popup').click(function () {
-      $('.dilemma-popup').css('display', 'none');
-    });
 
     function numberOfDilemmas() {
       return dilemmas.length;
@@ -260,6 +255,11 @@
         '<p>' + dilemmaInfo + '</p>'
       );
     }
+
+    // Temporary function to hide Dilemma Popup on click
+    $('.dilemma-popup').click(function () {
+      $('.dilemma-popup').css('display', 'none');
+    });
   </script>
 </body>
 

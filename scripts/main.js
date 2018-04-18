@@ -117,14 +117,14 @@ function loadImages() {
     .load(setupWorld);
 }
 
-function setEntity(id, x, y) {
+function setEntity(id, x, y, w, h) {
   settingEntity = false;
 
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       if (userData.colony.entities == undefined) var entities = [];
-      else entities = userData.colony.entities;
-      var entityData = { id: id, x: x, y: y };
+      else var entities = userData.colony.entities;
+      var entityData = { id: id, x: x, y: y , w : w, h : h};
 
       entities.push(entityData);
 
@@ -132,7 +132,11 @@ function setEntity(id, x, y) {
       docRef.update({
         'colony.entities': entities,
       });
-      loadEntities();
+
+      userData.colony.entities = entities;
+
+      loadEntity(entityData);
+
       console.log('Entity set at x : ' + x + ' y : ' + y);
     } else {
       console.log('boo');
@@ -170,13 +174,50 @@ function setupWorld() {
   gameLoop();
 }
 
+function loadEntity(e) {
+  
+        console.log("Loading");
+        console.log(e);
+        var entity = new PIXI.Sprite(PIXI.loader.resources[e.id].texture);
+        entity.x = worldToScreenX(e.x);
+        entity.y = worldToScreenY(e.y);
+        entity.width = worldToScreenScale(30);
+        entity.height = worldToScreenScale(30);
+    
+        entity.anchor.set(0.5, 0.5);
+        entityContainer.addChild(entity);
+
+        entity.buttonMode = true;
+        entity.interactive = true;
+
+        var entityObject = {
+          sprite: entity,
+          x: e.x,
+          y: e.y,
+          w: e.w,
+          h: e.h,
+        };
+
+        entitylist.push(entityObject);
+
+        entity.mouseover = function()
+        {
+          this.alpha = 0.5;
+        };
+
+        entity.mouseout = function()
+        {
+          this.alpha = 1;
+        };
+}
+
 function loadEntities() {
   if (camera.zoom < 500) {
     var w = 30;
     var h = 30;
     var entities = userData.colony.entities;
     
-    for (var i = 2; i < entities.length; i++) {
+    for (var i = 0; i < entities.length; i++) {
         console.log("Loading");
         console.log(entities[i]);
         var entity = new PIXI.Sprite(PIXI.loader.resources[entities[i].id].texture);
@@ -184,23 +225,13 @@ function loadEntities() {
         entity.y = worldToScreenY(entities[i].y);
         entity.width = worldToScreenScale(30);
         entity.height = worldToScreenScale(30);
-        entity.buttonMode = true;
-        entity.interactive = true;
+    
         entity.anchor.set(0.5, 0.5);
         entityContainer.addChild(entity);
 
-        entity.mouseover = function(mouseData){
-          this.alpha = 0.5;
-        }
+        entity.buttonMode = true;
+        entity.interactive = true;
 
-        entity.mouseout = function(entity){
-          this.alpha = 1;
-        }
-
-        entity.mousedown = function(entity){
-            
-        }
-        
         var entityObject = {
           sprite: entity,
           x: entities[i].x,
@@ -208,10 +239,25 @@ function loadEntities() {
           w: w,
           h: h,
         };
+
         entitylist.push(entityObject);
+
+        entity.mouseover = function()
+        {
+          this.alpha = 0.5;
+        };
+
+        entity.mouseout = function()
+        {
+          this.alpha = 1;
+        };
+        
+   
     }
   }
 }
+
+
 
 function createLabels() {
   addLocationTag('Olympus Mons', 2206884, 3365895);
@@ -393,7 +439,7 @@ function createInteractions() {
     }
 
     if (settingEntity) {
-      setEntity('plant', x, y);
+      setEntity('plant', x, y, 30, 30);   
     }
   };
 
@@ -452,7 +498,6 @@ function createInteractions() {
   create.height = 50;
   create.anchor.set(0.5);
   HUDcontainer.addChild(create);
-  g = new PIXI.Graphics();
 
   /*Colonists*/
   var colonists = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);

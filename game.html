@@ -54,11 +54,7 @@
 
   <div class="hud-menu"></div>
 
-  <div class="dilemma-popup">
-    DILEMMA
-    <br>
-    <br>Click me to hide
-  </div>
+  <div class="dilemma-popup"></div>
 
   <!-- HUD UI Functions -->
   <script>
@@ -104,7 +100,7 @@
       icon: 'images/science-lab-icon'
     }
 
-    // Arrays
+    // Arrays - Dynamically modifying these arrays will dynamically populate the HUD
     let people = [
       "Volvo Saab",
       "Tokyo Juan",
@@ -207,16 +203,62 @@
 
   <!-- Dilemma UI Functions -->
   <script>
+    // Dilemma Objects
+    let FreezingToDeath = {
+      name: 'Freezing To Death',
+      info: `- Mars has a very similar axial tilt creating seasons on Mars allowing for temperature to then be varied by the season itself as well as by location and time of day.       
+- The average weather on Mars is -81 degrees Fahrenheit. 
+- The highest temperature is located near the equator about 86 degrees Fahrenheit and -284 degrees by the Martian poles.`,
+    }
+
+    // Dilemma Array
+    let dilemmas = [
+      FreezingToDeath
+    ];
+
+    let dilemmaCount = numberOfDilemmas();
+    let chosenDilemma = chooseRandomDilemma(dilemmaCount);
+
+    // Temporary function to display Dilemma Popup after 5 sec
     setTimeout(function () {
-      displayDilemmaPopup();
+      displayDilemmaPopup(chosenDilemma);
     }, 5000);
 
+    // Temporary function to hide Dilemma Popup on click
     $('.dilemma-popup').click(function () {
       $('.dilemma-popup').css('display', 'none');
     });
 
-    function displayDilemmaPopup() {
+    function numberOfDilemmas() {
+      return dilemmas.length;
+    }
+
+    function chooseRandomDilemma(count) {
+      return Math.floor(Math.random() * count);
+    }
+
+    function displayDilemmaPopup(chosen) {
+      emptyDilemmaPopup();
       $('.dilemma-popup').css('display', 'block');
+
+      displayDilemmaTitle(dilemmas[chosen].name);
+      displayDilemmaInfo(dilemmas[chosen].info);
+    }
+
+    function emptyDilemmaPopup() {
+      $('.dilemma-popup').empty();
+    }
+
+    function displayDilemmaTitle(dilemmaName) {
+      $('.dilemma-popup').append(
+        '<h1>' + dilemmaName + '</h1>'
+      );
+    }
+
+    function displayDilemmaInfo(dilemmaInfo) {
+      $('.dilemma-popup').append(
+        '<p>' + dilemmaInfo + '</p>'
+      );
     }
   </script>
 </body>

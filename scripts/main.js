@@ -180,10 +180,10 @@ function setupWorld() {
   stage.addChild(parallaxCloudContainer);
   stage.addChild(labelContainer);
   stage.addChild(HUDcontainer);
-  /*infoText = new PIXI.Text('');
+  infoText = new PIXI.Text('');
   infoText.x = 10;
   infoText.y = 10;
-  HUDcontainer.addChild(infoText);*/
+  HUDcontainer.addChild(infoText);
 
   //Initial camera setup
   var tempMaxWidth = 1702000000 / window.innerWidth;
@@ -319,6 +319,12 @@ function addLocationTag(text, x, y) {
   testText.x = worldToScreenX(x);
   testText.y = worldToScreenY(y);
   testText.anchor.set(0.5, 0.5);
+  testText.interactive = true;
+  testText.buttonMode = true;
+  testText.mousedown = function(){
+  	console.log("Pressed");
+  	createDialog(testText.x,testText.y,testText,["Continue"],[]);
+  }
   labelContainer.addChild(testText);
   var textObject = {
     sprite: testText,
@@ -539,20 +545,21 @@ function getEntityInfo(collection_type, entity_name) {
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           // doc.data() is never undefined for query doc snapshots
-          if (doc.id == entity_name) {
+          if (doc.name == entity_name) {
             if (doc.data().info_text != null) {
               alert('found!');
               console.log(doc.id, ' => ', doc.data().info_text);
+              return doc.data().info_text;
             }
           }
         });
-        console.log(colonies);
-        updateHUD();
       })
       .catch(function(error) {
         console.log('Error getting documents: ', error);
       });
   }
+
+  return null;
 }
 
 function recenter(){

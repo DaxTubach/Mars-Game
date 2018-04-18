@@ -180,10 +180,10 @@ function setupWorld() {
   stage.addChild(parallaxCloudContainer);
   stage.addChild(labelContainer);
   stage.addChild(HUDcontainer);
-  infoText = new PIXI.Text('');
+  /*infoText = new PIXI.Text('');
   infoText.x = 10;
   infoText.y = 10;
-  HUDcontainer.addChild(infoText);
+  HUDcontainer.addChild(infoText);*/
 
   //Initial camera setup
   var tempMaxWidth = 1702000000 / window.innerWidth;
@@ -349,15 +349,100 @@ function addColonyTag(text, x, y) {
   textTags.push(textObject);
 }
 
-function createColonyDialog(x,y,rX,rY){
+/*General purpose dialogs*/
+function createDialog(x,y,w,h,text,buttons,functions){
+	updateHUD();
+	var gDialog = new PIXI.Graphics();
+	gDialog.fillAlpha = 0.5;
+
+	gDialog.beginFill(0x164289,0.5);
+	gDialog.lineStyle(2,0x000000);
+
+	var drawnX = (x>innerWidth/2)?x-w:x;
+	var drawnY = (y>innerHeight/2)?y-h:y;
+
+	//Automatically adjust to make sure full dialog is visible
+	gDialog.drawRect(drawnX,drawnY,w,h);
+	gDialog.endFill();
+
+
+	var text = new PIXI.Text(text,
+		{wordWrap:true,
+			wordWrapWidth:w,
+			fontSize:14,
+			fill:0xffffff,
+			stroke:0x000000,
+			strokeThickness:2});
+	text.x = drawnX;
+	text.y = drawnY;
+
+	HUDcontainer.addChild(gDialog);
+	HUDcontainer.addChild(text);
+
+	if(buttons.length > 0){
+		var yes = new PIXI.Text(buttons[0],{
+			fontSize:20,
+			fill:0x41a80a,
+			stroke:0x266605,
+			strokeThickness:3});
+		yes.anchor.set(0.5,0.5);
+		yes.buttonMode = true;
+		yes.interactive = true;
+		yes.mousedown = functions[0];
+		yes.x = w/2 + drawnX;
+		yes.y = h - h/6 + drawnY;
+
+		/*
+		var no = new PIXI.Text("No",{
+			fontSize:20,
+			fill:0xd81717,
+			stroke:0x770404,
+			strokeThickness:3});
+		no.mousedown = func2;
+		no.anchor.set(0.5,0.5);
+		no.interactive = true;
+		no.buttonMode = true;
+		no.x = w*3/4 + drawnX;
+		no.y = h - h/6 + drawnY;*/
+
+		HUDcontainer.addChild(yes);
+		//HUDcontainer.addChild(no);
+		dialog = {g:gDialog,text:text,buttons:[yes]};
+	}
+
+	else{
+		var ok = new PIXI.Text("");
+	}
+}
+
+function createColonyDialog(x,y,rX,rY,originalX,originalY){
+	if(heightMap==null)
+		return;
+
+
 	var percentX = x / maxX;
 	var percentY = y / maxY;
 
 	percentX = Math.floor(percentX * img.width);
 	percentY = Math.floor(percentY * img.height);
 
-	console.log(heightMap.data[percentX*4 + percentY * img.width * 4]);
+	//Formula for converting x y into greyscale value
+	//255 represents max height aka 15000ft (map is imperfect)
+	var grayScale = heightMap.data[percentX*4 + percentY * img.width * 4];
+	var topographicHeight = grayScale/255 * 25200 /*max height - minheight*/ - 8200; /*min height*/ 
+	var sunlight = rY < 851 ? Math.round(rY / 70) : Math.round((1702 - rY) / 70); //Distance max 12 from equator
+	var pressure = grayScale / 255 * .1631/*max press - min*/ + .0044/*min pressure*/;
+	var temperature = rY < 851 ? rY / 851 * 170 + 123 : (1702 - rY) / 851/*percent distance from equator*/ * 170/*dif max min*/ + 123/*min*/;
 
+	var text = "Height: "+Math.round(topographicHeight)+" meters"+
+	"\nPressure: "+Math.round(pressure*10000)/10000+" PSI"+
+	"\nSunlight: "+sunlight+" hours"+
+	"\nTemperature: "+Math.round(temperature)+" kelvin";
+
+	createDialog(originalX,originalY,250,125,text,["Place Colony"],[function(){return setColony(rX,rY)}]);
+	//console.log(heightMap.data[percentX*4 + percentY * img.width * 4]);
+
+	
 	//var height = heightMap.data[percentY * img.height + percentX];
 }
 
@@ -374,7 +459,7 @@ function setColony(x, y) {
     });
   colonyMade = true;
   getUser();
-  getColonyCoord();
+  getColonyCoord(()=>recenter());
 }
 
 function getUser() {
@@ -470,6 +555,18 @@ function getEntityInfo(collection_type, entity_name) {
   }
 }
 
+function recenter(){
+	camera.zoom = 100;
+    camera.x = userData.colony.x * 5000 + 2500 - window.innerWidth * camera.zoom / 200;
+    camera.y = userData.colony.y * 5000 + 2500 - window.innerHeight * camera.zoom / 200;
+    camera.screen_width = window.innerWidth * camera.zoom / 100;
+    camera.screen_height = window.innerHeight * camera.zoom / 100;
+    camera.maxX = window.innerWidth * camera.max_zoom / 100 - window.innerWidth * camera.zoom / 100;
+    camera.maxY =
+      window.innerHeight * camera.max_zoom / 100 - window.innerHeight * camera.zoom / 100;
+    updateWorldView(true);
+    loadEntities();
+}
 
 function createInteractions() {
   document.addEventListener('wheel', mouseWheelHandler, false);
@@ -479,11 +576,17 @@ function createInteractions() {
     var x = Math.trunc(screenToWorldX(moveData.data.global.x));
     var y = Math.trunc(screenToWorldY(moveData.data.global.y));
     //console.log(moveData.data.global.x + " " + moveData.data.global.y+" "+rX+" "+rY);
-    if (colonyMade) {
-      createColonyDialog(x,y,rX,rY);
+
+    if(dialog!=null){
+    	updateHUD();
+    	return;
     }
 
-    if (settingEntity) {
+    if (!colonyMade) {
+      createColonyDialog(x,y,rX,rY,moveData.data.global.x,moveData.data.global.y);
+    }
+
+    else if (settingEntity) {
       setEntity('plant', x, y, 30, 30);   
     }
   };
@@ -493,16 +596,7 @@ function createInteractions() {
   button.buttonMode = true;
   button.interactive = true;
   button.mousedown = function() {
-    camera.zoom = 100;
-    camera.x = userData.colony.x * 5000 + 2500 + window.innerWidth * camera.zoom / 100;
-    camera.y = userData.colony.y * 5000 + 2500 + window.innerHeight * camera.zoom / 100;
-    camera.screen_width = window.innerWidth * camera.zoom / 100;
-    camera.screen_height = window.innerHeight * camera.zoom / 100;
-    camera.maxX = window.innerWidth * camera.max_zoom / 100 - window.innerWidth * camera.zoom / 100;
-    camera.maxY =
-      window.innerHeight * camera.max_zoom / 100 - window.innerHeight * camera.zoom / 100;
-    updateWorldView(true);
-    loadEntities();
+    recenter();
   };
 
   button.x = window.innerWidth * 0.9;
@@ -544,47 +638,6 @@ function createInteractions() {
   create.anchor.set(0.5);
   HUDcontainer.addChild(create);
 
-  /*Colonists
-  var colonists = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
-  colonists.buttonMode = true;
-  colonists.interactive = true;
-  colonists.mouseup = function(moveData) {};
-
-  colonists.x = window.innerWidth * 0.03;
-  colonists.y = window.innerHeight * 0.05;
-  colonists.width = 50;
-  colonists.height = 50;
-  colonists.anchor.set(0.5);
-  HUDcontainer.addChild(colonists);
-  g = new PIXI.Graphics();
-
-  /*Equipment
-  var equipment = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
-  equipment.buttonMode = true;
-  equipment.interactive = true;
-  equipment.mouseup = function(moveData) {};
-
-  equipment.x = window.innerWidth * 0.03;
-  equipment.y = window.innerHeight * 0.15;
-  equipment.width = 50;
-  equipment.height = 50;
-  equipment.anchor.set(0.5);
-  HUDcontainer.addChild(equipment);
-  g = new PIXI.Graphics();
-
-  /*Structures
-  var structures = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
-  structures.buttonMode = true;
-  structures.interactive = true;
-  structures.mouseup = function(moveData) {};
-
-  structures.x = window.innerWidth * 0.03;
-  structures.y = window.innerHeight * 0.25;
-  structures.width = 50;
-  structures.height = 50;
-  structures.anchor.set(0.5);
-  HUDcontainer.addChild(structures);
-  g = new PIXI.Graphics();*/
 }
 
 function mouseWheelHandler(e) {
@@ -606,6 +659,7 @@ function generateClouds() {
     clouds.push({ sprite: cloud, x: x, y: y, w: w, h: h, zoomFactor: zoomFactor });
   }
 }
+
 function dilemas() {
   var structures = userData.colony.entities;
 

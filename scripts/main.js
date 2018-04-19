@@ -150,7 +150,7 @@ function loadImages() {
     .add('nuclear_generator', awsE + 'nuclear-generator.png')
     .add('research_lab', awsE + 'research-lab.png')
     .add('satellite_dish', awsE + 'satellite-dish.png')
-    .add('solar_panel_array', awsE + 'solar-panel-array.png')
+    .add('solar_array', awsE + 'solar-panel-array.png')
     .add('solar_panels', awsE + 'solar-panels.png')
     .add('moxie_station', awsE + 'moxy-station.png')
     .add('greenhouse', awsE + 'greenhouse.png')

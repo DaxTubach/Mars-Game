@@ -32,6 +32,7 @@
   <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-firestore.js"></script>
 
   <!--Our scripts-->
+  <script src="scripts/info.js"></script>
   <script type="text/javascript" src="auth.js"></script>
   <script src="scripts/keyboard.js"></script>
   <script src="scripts/game_world.js"></script>
@@ -86,49 +87,57 @@
 
   <!-- HUD UI Functions -->
   <script>
-    // Equipment Objects
-    let SolarPanel = {
+ // Equipment Objects
+ let SolarPanel = {
       name: 'Solar Panel',
+      id: 'solar_panel',
       icon: 'images/solar-panel-icon.png'
     }
 
     // Structure Objects
     let Headquarters = {
       name: 'Headquarters',
+      id: 'headquarters',
       icon: 'images/HQ-icon.png'
     }
 
     let Greenhouse = {
       name: 'Greenhouse',
+      id: 'greenhouse',
       icon: 'images/greenhouse-icon.png'
     }
 
     let MedBay = {
       name: 'Med Bay',
+      id: 'med_bay',
       icon: 'images/med-bay-icon.png'
     }
 
     let SolarPanelArray = {
       name: 'Solar Panel Array',
+      id: 'solar_array',
       icon: 'images/solar-panel-array-icon.png'
     }
 
     let PowerGenerator = {
       name: 'Generator',
+      id: 'generator',
       icon: 'images/generator-icon.png'
     }
 
     let FoodStorage = {
       name: 'Food Storage',
+      id: 'food_storage',
       icon: 'images/food-storage-icon.png'
     }
 
     let ScienceLab = {
       name: 'Science Lab',
+      id: 'science_lab',
       icon: 'images/science-lab-icon'
     }
 
-    // Arrays - Dynamically modifying these arrays will dynamically populate the HUD
+    // Arrays
     let people = [
       "Volvo Saab",
       "Tokyo Juan",
@@ -209,8 +218,8 @@
     function populateMenuWithEquipment() {
       for (let i = 0; i < equipmentArray.length; i++) {
         $('.hud-menu').append(
-          '<div class="hud-menu-container">' +
-          '<img src="' + equipmentArray[i].icon + 'class="hud-menu-icon"/>' +
+          '<div class="hud-menu-container"  onclick=equipmentClick("'+equipmentArray[i].id+'")>' +
+          '<img src="' + equipmentArray[i].icon +'" class="hud-menu-icon" />' +
           '<p>' + equipmentArray[i].name + '</p>' +
           '</div>'
         );
@@ -220,13 +229,14 @@
     function populateMenuWithStructures() {
       for (let i = 0; i < structuresArray.length; i++) {
         $('.hud-menu').append(
-          '<div class="hud-menu-container">' +
-          '<img src="' + structuresArray[i].icon + 'class="hud-menu-icon"/>' +
+          '<div class="hud-menu-container"  onclick=buildingClick("'+structuresArray[i].id+'")>' +
+          '<img src="' + structuresArray[i].icon +'" class="hud-menu-icon" id = "'+ structuresArray[i].name +'"/>' +
           '<p>' + structuresArray[i].name + '</p>' +
           '</div>'
         );
       }
     }
+
   </script>
 
   <!-- Resources HUD Functions -->

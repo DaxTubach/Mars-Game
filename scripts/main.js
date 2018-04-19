@@ -676,6 +676,48 @@ function generateClouds() {
   }
 }
 
+function equipmentClick(id)
+{
+	console.log(id);
+	
+}
+
+function buildingClick(id)
+{
+	console.log(id);
+	var hasReqs = true;
+	var equipment = userData.colony.equipment;
+	var building = getBuildingInfo(id);
+	
+//	console.log(building);
+	
+	for(var i = 0; i < building.pre_reqs.length; i++)
+		if(equipment[building.pre_reqs[i]] == 0)
+      hasReqs = false;
+      
+	if(hasReqs)
+	{
+		console.log("Has");
+	}
+	else
+		console.log("No Has");
+}
+
+function getBuildingInfo(id)
+{
+	console.log(JSON.stringify(buildingArray));
+
+	for(var i = 0; i < buildingArray.length; i++)
+	{
+		console.log(buildingArray[i]);
+		if(buildingArray[i].id == id)
+		{
+			//console.log("found " + buildingArray[i].id);
+			return buildingArray[i];
+		}
+	}
+}
+
 function dilemas() {
   var structures = userData.colony.entities;
 

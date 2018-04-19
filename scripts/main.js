@@ -726,6 +726,7 @@ function dilemas() {
 
   // Found Mineral Deposit (Extra Money!)
 }
+
 function gameLoop() {
   requestAnimationFrame(gameLoop);
 

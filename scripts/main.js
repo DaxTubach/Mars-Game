@@ -151,6 +151,9 @@ function loadImages() {
     .add('satellite_dish', awsE + 'satellite-dish.png')
     .add('solar_panel_array', awsE + 'solar-panel-array.png')
     .add('solar_panels', awsE + 'solar-panels.png')
+    .add('moxie_station', awsE + 'moxy-station.png')
+    .add('greenhouse', awsE + 'greenhouse.png')
+    .add('power_storage', awsE + 'generator.png')
     .load(setupWorld);
 }
 

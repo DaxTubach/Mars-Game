@@ -175,7 +175,6 @@ function setEntity(id, x, y) {
       });
 
       userData.colony.entities = entities;
-
       loadEntity(entityData);
 
       console.log('Entity set at x : ' + x + ' y : ' + y);
@@ -227,8 +226,8 @@ function loadEntity(e) {
         var entity = new PIXI.Sprite(PIXI.loader.resources[e.id].texture);
         entity.x = worldToScreenX(e.x);
         entity.y = worldToScreenY(e.y);
-        entity.width = worldToScreenScale(30);
-        entity.height = worldToScreenScale(30);
+        entity.width = worldToScreenScale(e.w);
+        entity.height = worldToScreenScale(e.h);
     
         entity.anchor.set(0.5, 0.5);
         entityContainer.addChild(entity);
@@ -259,8 +258,7 @@ function loadEntity(e) {
 
 function loadEntities() {
   if (camera.zoom < 500) {
-    var w = 30;
-    var h = 30;
+
     var entities = userData.colony.entities;
     
     for (var i = 0; i < entities.length; i++) {
@@ -269,8 +267,8 @@ function loadEntities() {
         var entity = new PIXI.Sprite(PIXI.loader.resources[entities[i].id].texture);
         entity.x = worldToScreenX(entities[i].x);
         entity.y = worldToScreenY(entities[i].y);
-        entity.width = worldToScreenScale(30);
-        entity.height = worldToScreenScale(30);
+        entity.width = worldToScreenScale(entities[i].w);
+        entity.height = worldToScreenScale(entities[i].h);
     
         entity.anchor.set(0.5, 0.5);
         entityContainer.addChild(entity);
@@ -282,8 +280,8 @@ function loadEntities() {
           sprite: entity,
           x: entities[i].x,
           y: entities[i].y,
-          w: w,
-          h: h,
+          w: entities[i].w,
+          h: entities[i].h,
         };
 
         entitylist.push(entityObject);

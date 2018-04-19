@@ -537,6 +537,12 @@
   <!-- Dilemma UI Functions -->
   <script>
     // Dilemma Objects
+    let CrashLanding = {
+      name: 'Crash Landing',
+      info: 'Your spacecraft lander has been destroyed on impact.',
+      button: 'Restart your mission'
+    }
+
     let FreezingToDeath = {
       name: 'Freezing To Death',
       info: 'Mars has a very similar axial tilt creating seasons on Mars ' +
@@ -559,7 +565,7 @@
     // Temporary function to display Dilemma Popup after 5 sec
     setTimeout(function () {
       displayDilemmaPopup(chosenDilemma);
-    }, 5000);
+    }, 20000);
 
     function numberOfDilemmas() {
       return dilemmas.length;

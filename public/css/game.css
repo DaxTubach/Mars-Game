@@ -126,6 +126,10 @@
   border-radius: 50%;
 }
 
+.hud-resource-icon {
+  height: 30px;
+}
+
 .dilemma-popup {
   display: none;
   padding: 20px;

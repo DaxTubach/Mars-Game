@@ -7,6 +7,7 @@
   <link href="css/game.css" rel="stylesheet">
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-97188606-1"></script>
@@ -32,6 +33,7 @@
   <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-firestore.js"></script>
 
   <!--Our scripts-->
+  <script src="scripts/info.js"></script>
   <script type="text/javascript" src="auth.js"></script>
   <script src="scripts/keyboard.js"></script>
   <script src="scripts/info.js"></script>
@@ -54,62 +56,123 @@
     <img class="hud-icon" src="images/structure-icon.png">
   </div>
 
-  <div class="hud-menu">
-    MENU
+  <div class="hud-menu"></div>
+
+  <div class="resources-hud">
+    <div id="air-resource" class="resource-container">
+      <div id="air-resource-value" class="resource-value-container"></div>
+      <div id="air-resource-icon" class="resource-icon-container">
+        <img src="images/oxygen-icon.png" class="hud-menu-icon">
+      </div>
+    </div>
+    <div id="water-resource" class="resource-container">
+      <div id="water-resource-value" class="resource-value-container"></div>
+      <div id="water-resource-icon" class="resource-icon-container">
+        <img src="images/water-icon-white.png" class="hud-menu-icon">
+      </div>
+    </div>
+    <div id="food-resource" class="resource-container">
+      <div id="food-resource-value" class="resource-value-container"></div>
+      <div id="food-resource-icon" class="resource-icon-container">
+        <img src="images/food-icon.png" class="hud-menu-icon">
+      </div>
+    </div>
+    <div id="power-resource" class="resource-container">
+      <div id="power-resource-value" class="resource-value-container"></div>
+      <div id="power-resource-icon" class="resource-icon-container">
+        <img src="images/power-icon.png" class="hud-menu-icon">
+      </div>
+    </div>
   </div>
 
-  <!-- HUD Functions -->
+  <div class="dilemma-popup"></div>
+
+  <!-- HUD UI Functions -->
   <script>
-    // Equipment Objects
-    let SolarPanel = {
-      name: 'Solar Panel',
-      id: 'solar_panel',
-      icon: 'images/solar-panel-icon.png'
-    }
-
     // Structure Objects
-    let Headquarters = {
-      name: 'Headquarters',
-      id: 'headquarters',
-      icon: 'images/HQ-icon.png'
-    }
+  let Biodome = {
+    name: 'Biodome',
+    id: 'biodome',
+    icon: 'images/biodome-icon.png'
+  }
 
-    let Greenhouse = {
-      name: 'Greenhouse',
-      id: 'greenhouse',
-      icon: 'images/greenhouse-icon.png'
-    }
+  let Drill = {
+    name: 'Drill',
+    id: 'drill',
+    icon: 'images/auger-icon.png'
+  }
 
-    let MedBay = {
-      name: 'Med Bay',
-      id: 'med_bay',
-      icon: 'images/med-bay-icon.png'
-    }
+  let MoxieStation = {
+    name: 'MOXIE Station',
+    id: 'moxie_station',
+    icon: 'images/moxie-equipment-icon.png'
+  }
 
-    let SolarPanelArray = {
-      name: 'Solar Panel Array',
-      id: 'solar_array',
-      icon: 'images/solar-panel-array-icon.png'
-    }
+  let LandingCraft = {
+    name: 'Landing Craft',
+    id: 'landing_craft',
+    icon: 'images/landing-craft-icon.png'
+  }
 
-    let PowerGenerator = {
-      name: 'Generator',
-      id: 'generator',
-      icon: 'images/generator-icon.png'
-    }
+  let Building = {
+    name: 'Building',
+    id: 'building',
+    icon: 'images/building-icon.png'
+  }
 
-    let FoodStorage = {
-      name: 'Food Storage',
-      id: 'food_storage',
-      icon: 'images/food-storage-icon.png'
-    }
+  let Greenhouse = {
+    name: 'Greenhouse',
+    id: 'greenhouse',
+    icon: 'images/greenhouse-icon.png'
+  }
 
-    let ScienceLab = {
-      name: 'Science Lab',
-      id: 'science_lab',
-      icon: 'images/science-lab-icon'
-    }
+  let MedBay = {
+    name: 'Med Bay',
+    id: 'med_bay',
+    icon: 'images/med-bay-icon.png'
+  }
 
+  let WaterTank = {
+    name: 'Water Tank',
+    id: 'water_tank',
+    icon: 'images/water-tank-icon.png'
+  }
+
+  let SolarPanelArray = {
+    name: 'Solar Panel Array',
+    id: 'solar_array',
+    icon: 'images/solar-panel-icon.png'
+  }
+
+  let PowerStorage = {
+    name: 'Power Storage',
+    id: 'power-storage',
+    icon: 'images/power-storage-icon.png'
+  }
+
+  let NuclearGenerator = {
+    name: 'Nuclear Generator',
+    id: 'nuclear_generator',
+    icon: 'images/nuclear-icon.png'
+  }
+
+  let StorageCrate = {
+    name: 'Storage Crate',
+    id: 'storage_crate',
+    icon: 'images/storage-icon.png'
+  }
+
+  let ResearchLab = {
+    name: 'Research Lab',
+    id: 'research_lab',
+    icon: 'images/research-lab-icon.png'
+  }
+
+  let RadarArray = {
+    name: 'Radar Array',
+    id: 'radar_array',
+    icon: 'images/radar-dish-icon.png'
+  }
     // Arrays
     let people = [
       "Volvo Saab",
@@ -117,18 +180,21 @@
       "Stratos Blue"
     ];
 
-    let equipmentArray = [
-      SolarPanel
-    ];
-
     let structuresArray = [
-      Headquarters,
+      Biodome,
+      Drill,
+      MoxieStation,
+      LandingCraft,
+      Building,
       Greenhouse,
       MedBay,
+      WaterTank,
       SolarPanelArray,
-      PowerGenerator,
-      FoodStorage,
-      ScienceLab
+      PowerStorage,
+      NuclearGenerator,
+      StorageCrate,
+      ResearchLab,
+      RadarArray
     ];
 
 
@@ -191,8 +257,8 @@
     function populateMenuWithEquipment() {
       for (let i = 0; i < equipmentArray.length; i++) {
         $('.hud-menu').append(
-          '<div class="hud-menu-container"  onclick=equipmentClick("'+equipmentArray[i].id+'")>' +
-          '<img src="' + equipmentArray[i].icon +'" class="hud-menu-icon" />' +
+          '<div class="hud-menu-container"  onclick=equipmentClick("' + equipmentArray[i].id + '")>' +
+          '<img src="' + equipmentArray[i].icon + '" class="hud-menu-icon" />' +
           '<p>' + equipmentArray[i].name + '</p>' +
           '</div>'
         );
@@ -202,14 +268,218 @@
     function populateMenuWithStructures() {
       for (let i = 0; i < structuresArray.length; i++) {
         $('.hud-menu').append(
-          '<div class="hud-menu-container"  onclick=buildingClick("'+structuresArray[i].id+'")>' +
-          '<img src="' + structuresArray[i].icon +'" class="hud-menu-icon" id = "'+ structuresArray[i].name +'"/>' +
+          '<div class="hud-menu-container"  onclick=buildingClick("' + structuresArray[i].id + '")>' +
+          '<img src="' + structuresArray[i].icon + '" class="hud-menu-icon" id = "' + structuresArray[i].name + '"/>' +
           '<p>' + structuresArray[i].name + '</p>' +
           '</div>'
         );
       }
     }
 
+  </script>
+
+  <!-- Resources HUD Functions -->
+  <script>
+    let startingResourceValue = 100;
+    let currentAirResourceValue = startingResourceValue;
+    let currentWaterResourceValue = startingResourceValue;
+    let currentFoodResourceValue = startingResourceValue;
+    let currentPowerResourceValue = startingResourceValue;
+
+    $('.resource-value-container').append(
+      '<span>' + startingResourceValue + '</span>'
+    );
+
+    window.setInterval(function () {
+      $('.resource-value-container').each(function () {
+        let resourceId = $(this).attr('id');
+        reduceResource(resourceId);
+      });
+    }, 10000);
+
+    function reduceResource(id) {
+      if (id == 'air-resource-value') {
+        let newAirResourceValue = currentAirResourceValue - 3;
+        currentAirResourceValue = newAirResourceValue;
+
+        if (newAirResourceValue > 0) {
+          resizeResourceBar(newAirResourceValue, id);
+          reduceResourceNumber(newAirResourceValue, id);
+        }
+
+        if (newAirResourceValue < 21) {
+          alertResource(id);
+        }
+      }
+
+      if (id == 'water-resource-value') {
+        let newWaterResourceValue = currentWaterResourceValue - 2;
+        currentWaterResourceValue = newWaterResourceValue;
+
+        if (newWaterResourceValue > 0) {
+          resizeResourceBar(newWaterResourceValue, id);
+          reduceResourceNumber(newWaterResourceValue, id);
+        }
+
+        if (newWaterResourceValue < 21) {
+          alertResource(id);
+        }
+      }
+
+      if (id == 'food-resource-value') {
+        let newFoodResourceValue = currentFoodResourceValue - 1;
+        currentFoodResourceValue = newFoodResourceValue;
+
+        if (newFoodResourceValue > 0) {
+          resizeResourceBar(newFoodResourceValue, id);
+          reduceResourceNumber(newFoodResourceValue, id);
+        }
+
+        if (newFoodResourceValue < 21) {
+          alertResource(id);
+        }
+      }
+
+      if (id == 'power-resource-value') {
+        let newPowerResourceValue = currentPowerResourceValue - 3;
+        currentPowerResourceValue = newPowerResourceValue;
+
+        if (newPowerResourceValue > 0) {
+          resizeResourceBar(newPowerResourceValue, id);
+          reduceResourceNumber(newPowerResourceValue, id);
+        }
+
+        if (newPowerResourceValue < 31) {
+          alertResource(id);
+        }
+      }
+    }
+
+    function alertResource(id) {
+      if (id == 'air-resource-value') {
+        $('#air-resource-icon').css('background', 'rgba(255, 85, 85, 1)');
+        $('#air-resource-icon').css('border', 'solid white 2px');
+        $('#' + id).css('background', 'rgba(255, 85, 85, 1)');
+        $('#' + id).css('border', 'solid white 2px');
+        $('#' + id).css('border-right', '0');
+      }
+
+      if (id == 'water-resource-value') {
+        $('#water-resource-icon').css('background', 'rgba(255, 85, 85, 1)');
+        $('#water-resource-icon').css('border', 'solid white 2px');
+        $('#' + id).css('background', 'rgba(255, 85, 85, 1)');
+        $('#' + id).css('border', 'solid white 2px');
+        $('#' + id).css('border-right', '0');
+      }
+
+      if (id == 'food-resource-value') {
+        $('#food-resource-icon').css('background', 'rgba(255, 85, 85, 1)');
+        $('#food-resource-icon').css('border', 'solid white 2px');
+        $('#' + id).css('background', 'rgba(255, 85, 85, 1)');
+        $('#' + id).css('border', 'solid white 2px');
+        $('#' + id).css('border-right', '0');
+      }
+
+      if (id == 'power-resource-value') {
+        $('#power-resource-icon').css('background', 'rgba(255, 85, 85, 1)');
+        $('#power-resource-icon').css('border', 'solid white 2px');
+        $('#' + id).css('background', 'rgba(255, 85, 85, 1)');
+        $('#' + id).css('border', 'solid white 2px');
+        $('#' + id).css('border-right', '0');
+      }
+    }
+
+    function resizeResourceBar(val, id) {
+      $('#' + id).css('width', val);
+    }
+
+    function reduceResourceNumber(val, id) {
+      emptyResourceValue(id);
+      $('#' + id).append(
+        '<span>' + val + '</span>'
+      );
+
+      function emptyResourceValue(id) {
+        $('#' + id).empty();
+      }
+    }
+  </script>
+
+  <!-- Dilemma UI Functions -->
+  <script>
+    // Dilemma Objects
+    let CrashLanding = {
+      name: 'Crash Landing',
+      info: 'Your spacecraft lander has been destroyed on impact.',
+      button: 'Restart your mission'
+    }
+
+    let FreezingToDeath = {
+      name: 'Freezing To Death',
+      info: 'Mars has a very similar axial tilt creating seasons on Mars ' +
+        'allowing for temperature to then be varied by the season itself ' +
+        'as well as by location and time of day.<br><br>' +
+        'The average weather on Mars is -81 degrees Fahrenheit.<br><br>' +
+        'The highest temperature is located near the equator about ' +
+        '86 degrees Fahrenheit and -284 degrees by the Martian poles.',
+      button1: 'Redirect more power to heating',
+    }
+
+    // Dilemma Array - Contains every Dilemma that can be chosen randomly to display to user
+    let dilemmas = [
+      FreezingToDeath
+    ];
+
+    let dilemmaCount = numberOfDilemmas();
+    let chosenDilemma = chooseRandomDilemma(dilemmaCount);
+
+    // Temporary function to display Dilemma Popup after 5 sec
+    setTimeout(function () {
+      displayDilemmaPopup(chosenDilemma);
+    }, 20000);
+
+    function numberOfDilemmas() {
+      return dilemmas.length;
+    }
+
+    function chooseRandomDilemma(count) {
+      return Math.floor(Math.random() * count);
+    }
+
+    function displayDilemmaPopup(chosen) {
+      emptyDilemmaPopup();
+      $('.dilemma-popup').css('display', 'block');
+
+      displayDilemmaTitle(dilemmas[chosen].name);
+      displayDilemmaInfo(dilemmas[chosen].info);
+      displayDilemmaButton(dilemmas[chosen].button1);
+    }
+
+    function emptyDilemmaPopup() {
+      $('.dilemma-popup').empty();
+    }
+
+    function displayDilemmaTitle(dilemmaName) {
+      $('.dilemma-popup').append(
+        '<p class="dilemma-title">' + dilemmaName + '</p>'
+      );
+    }
+
+    function displayDilemmaInfo(dilemmaInfo) {
+      $('.dilemma-popup').append(
+        '<p class="dilemma-info">' + dilemmaInfo + '</p>'
+      );
+    }
+
+    function displayDilemmaButton(dilemmaButton) {
+      $('.dilemma-popup').append(
+        '<button onclick="hideDilemmaPopup()" class="dilemma-button">' + dilemmaButton + '</button>' // CHANGE
+      );
+    }
+
+    function hideDilemmaPopup() {
+      $('.dilemma-popup').css('display', 'none');
+    }
   </script>
 </body>
 

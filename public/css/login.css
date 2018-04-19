@@ -8,6 +8,10 @@
   padding: 0;
 }
 
+audio { 
+   display:none;
+}
+
 html {
   height: 100%;
 }

@@ -19,6 +19,7 @@ var userData;
 var showGrid = false;
 var highlightedCell;
 var user;
+var buildingID = null;
 var freezeCamera = false;
 var colonyMade = true;
 var settingEntity = false;
@@ -138,16 +139,29 @@ function loadImages() {
     .add('astro', awsE + 'astronaut.png')
     .add('plant', awsE + 'plant.png')
     .add('rover', awsE + 'rover.png')
-    .add('water-tank', awsE + 'water-tank.png')
+    .add('water_tank', awsE + 'water-tank.png')
     .add('cloud', awsE + 'MartianCloud.png')
     .add('rock-small', awsE + 'rock-small.png')
     .add('mountain', awsE + 'mountain.png')
+    .add('biodome', awsE + 'biodome.png')
+    .add('building', awsE + 'building.png')
+    .add('drill', awsE + 'drill.png')
+    .add('med_bay', awsE + 'med-bay.png')
+    .add('nuclear_generator', awsE + 'nuclear-generator.png')
+    .add('research_lab', awsE + 'research-lab.png')
+    .add('satellite_dish', awsE + 'satellite-dish.png')
+    .add('solar_panel_array', awsE + 'solar-panel-array.png')
+    .add('solar_panels', awsE + 'solar-panels.png')
     .load(setupWorld);
 }
 
-function setEntity(id, x, y, w, h) {
+function setEntity(id, x, y) {
   settingEntity = false;
+  var building = getBuildingInfo(id);
 
+  var w = building.w;
+  var h = building.h;
+  console.log("WIdth" + w + " Height " +h)
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       if (userData.colony.entities == undefined) var entities = [];
@@ -162,7 +176,6 @@ function setEntity(id, x, y, w, h) {
       });
 
       userData.colony.entities = entities;
-
       loadEntity(entityData);
 
       console.log('Entity set at x : ' + x + ' y : ' + y);
@@ -214,8 +227,8 @@ function loadEntity(e) {
         var entity = new PIXI.Sprite(PIXI.loader.resources[e.id].texture);
         entity.x = worldToScreenX(e.x);
         entity.y = worldToScreenY(e.y);
-        entity.width = worldToScreenScale(30);
-        entity.height = worldToScreenScale(30);
+        entity.width = worldToScreenScale(e.w);
+        entity.height = worldToScreenScale(e.h);
     
         entity.anchor.set(0.5, 0.5);
         entityContainer.addChild(entity);
@@ -247,8 +260,7 @@ function loadEntity(e) {
 function loadEntities() {
 	entitiesFlag = true;
   if (camera.zoom < 500) {
-    var w = 30;
-    var h = 30;
+
     var entities = userData.colony.entities;
     
     for (var i = 0; i < entities.length; i++) {
@@ -257,8 +269,8 @@ function loadEntities() {
         var entity = new PIXI.Sprite(PIXI.loader.resources[entities[i].id].texture);
         entity.x = worldToScreenX(entities[i].x);
         entity.y = worldToScreenY(entities[i].y);
-        entity.width = worldToScreenScale(30);
-        entity.height = worldToScreenScale(30);
+        entity.width = worldToScreenScale(entities[i].w);
+        entity.height = worldToScreenScale(entities[i].h);
     
         entity.anchor.set(0.5, 0.5);
         entityContainer.addChild(entity);
@@ -270,8 +282,8 @@ function loadEntities() {
           sprite: entity,
           x: entities[i].x,
           y: entities[i].y,
-          w: w,
-          h: h,
+          w: entities[i].w,
+          h: entities[i].h,
         };
 
         entitylist.push(entityObject);
@@ -321,6 +333,12 @@ function addLocationTag(text, x, y) {
   testText.x = worldToScreenX(x);
   testText.y = worldToScreenY(y);
   testText.anchor.set(0.5, 0.5);
+  /*testText.interactive = true;
+  testText.buttonMode = true;
+  testText.mousedown = function(){
+  	console.log("Pressed");
+  	createDialog(testText.x,testText.y,testText,["Continue"],[]);
+  }*/
   labelContainer.addChild(testText);
   var textObject = {
     sprite: testText,
@@ -351,16 +369,107 @@ function addColonyTag(text, x, y) {
   textTags.push(textObject);
 }
 
-function createColonyDialog(x,y,rX,rY){
+/*General purpose dialogs*/
+function createDialog(x,y,w,h,text,buttons,functions){
+	updateHUD();
+	var gDialog = new PIXI.Graphics();
+	gDialog.fillAlpha = 0.5;
+
+	gDialog.beginFill(0x164289,0.5);
+	gDialog.lineStyle(2,0x000000);
+
+	var drawnX = (x>innerWidth/2)?x-w:x;
+	var drawnY = (y>innerHeight/2)?y-h:y;
+
+	//Automatically adjust to make sure full dialog is visible
+	gDialog.drawRect(drawnX,drawnY,w,h);
+	gDialog.endFill();
+
+
+	var text = new PIXI.Text(text,
+		{wordWrap:true,
+			wordWrapWidth:w,
+			fontSize:14,
+			fill:0xffffff,
+			stroke:0x000000,
+			strokeThickness:2});
+	text.x = drawnX;
+	text.y = drawnY;
+
+	HUDcontainer.addChild(gDialog);
+	HUDcontainer.addChild(text);
+
+	if(buttons.length > 0){
+		var yes = new PIXI.Text(buttons[0],{
+			fontSize:20,
+			fill:0x41a80a,
+			stroke:0x266605,
+			strokeThickness:3});
+		yes.anchor.set(0.5,0.5);
+		yes.buttonMode = true;
+		yes.interactive = true;
+		yes.mousedown = functions[0];
+		yes.x = w/2 + drawnX;
+		yes.y = h - h/6 + drawnY;
+
+		/*
+		var no = new PIXI.Text("No",{
+			fontSize:20,
+			fill:0xd81717,
+			stroke:0x770404,
+			strokeThickness:3});
+		no.mousedown = func2;
+		no.anchor.set(0.5,0.5);
+		no.interactive = true;
+		no.buttonMode = true;
+		no.x = w*3/4 + drawnX;
+		no.y = h - h/6 + drawnY;*/
+
+		HUDcontainer.addChild(yes);
+		//HUDcontainer.addChild(no);
+		dialog = {g:gDialog,text:text,buttons:[yes]};
+	}
+
+	else{
+		var ok = new PIXI.Text("");
+	}
+}
+
+function createColonyDialog(x,y,rX,rY,originalX,originalY){
+	if(heightMap==null)
+		return;
+
+
 	var percentX = x / maxX;
 	var percentY = y / maxY;
 
 	percentX = Math.floor(percentX * img.width);
 	percentY = Math.floor(percentY * img.height);
 
-	console.log(heightMap.data[percentX*4 + percentY * img.width * 4]);
+	//Formula for converting x y into greyscale value
+	//255 represents max height aka 15000ft (map is imperfect)
+	var grayScale = heightMap.data[percentX*4 + percentY * img.width * 4];
+	var topographicHeight = grayScale/255 * 25200 /*max height - minheight*/ - 8200; /*min height*/ 
+	var sunlight = rY < 851 ? Math.round(rY / 70) : Math.round((1702 - rY) / 70); //Distance max 12 from equator
+	var pressure = 1 - (grayScale / 255) * .1631/*max press - min*/ + .0044/*min pressure*/;
+	var temperature = rY < 851 ? rY / 851 * 170 + 123 : (1702 - rY) / 851/*percent distance from equator*/ * 170/*dif max min*/ + 123/*min*/;
 
+	var text = "Height: "+Math.round(topographicHeight)+" meters"+
+	"\nPressure: "+Math.round(pressure*10000)/10000+" PSI"+
+	"\nSunlight: "+sunlight+" hours"+
+	"\nTemperature: "+Math.round(temperature)+" kelvin";
+
+	createDialog(originalX,originalY,250,125,text,["Place Colony"],[function(){return setColony(rX,rY)}]);
+	//console.log(heightMap.data[percentX*4 + percentY * img.width * 4]);
+
+	
 	//var height = heightMap.data[percentY * img.height + percentX];
+}
+
+function createEntityDialog(x,y,originalX,originalY,id)
+{
+  createDialog(originalX,originalY,250,125,"",["Place Building"],[function(){return setEntity(id,x,y)}]);
+
 }
 
 function setColony(x, y) {
@@ -376,7 +485,7 @@ function setColony(x, y) {
     });
   colonyMade = true;
   getUser();
-  getColonyCoord();
+  getColonyCoord(()=>recenter());
 }
 
 function getUser() {
@@ -409,9 +518,7 @@ function getUser() {
 
 function getColonyCoord() {
   colonies = [];
-  db
-    .collection('users')
-    .get()
+  db.collection('users').get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
         // doc.data() is never undefined for query doc snapshots
@@ -456,22 +563,35 @@ function getEntityInfo(collection_type, entity_name) {
       .then(function(querySnapshot) {
         querySnapshot.forEach(function(doc) {
           // doc.data() is never undefined for query doc snapshots
-          if (doc.id == entity_name) {
+          if (doc.name == entity_name) {
             if (doc.data().info_text != null) {
               alert('found!');
               console.log(doc.id, ' => ', doc.data().info_text);
+              return doc.data().info_text;
             }
           }
         });
-        console.log(colonies);
-        updateHUD();
       })
       .catch(function(error) {
         console.log('Error getting documents: ', error);
       });
   }
+
+  return null;
 }
 
+function recenter(){
+	camera.zoom = 100;
+    camera.x = userData.colony.x * 5000 + 2500 - window.innerWidth * camera.zoom / 200;
+    camera.y = userData.colony.y * 5000 + 2500 - window.innerHeight * camera.zoom / 200;
+    camera.screen_width = window.innerWidth * camera.zoom / 100;
+    camera.screen_height = window.innerHeight * camera.zoom / 100;
+    camera.maxX = window.innerWidth * camera.max_zoom / 100 - window.innerWidth * camera.zoom / 100;
+    camera.maxY =
+      window.innerHeight * camera.max_zoom / 100 - window.innerHeight * camera.zoom / 100;
+    updateWorldView(true);
+    loadEntities();
+}
 
 function createInteractions() {
   document.addEventListener('wheel', mouseWheelHandler, false);
@@ -481,12 +601,18 @@ function createInteractions() {
     var x = Math.trunc(screenToWorldX(moveData.data.global.x));
     var y = Math.trunc(screenToWorldY(moveData.data.global.y));
     //console.log(moveData.data.global.x + " " + moveData.data.global.y+" "+rX+" "+rY);
-    if (colonyMade) {
-      createColonyDialog(x,y,rX,rY);
+
+    if(dialog!=null){
+    	updateHUD();
+    	return;
     }
 
-    if (settingEntity) {
-      setEntity('plant', x, y, 30, 30);   
+    if (!colonyMade) {
+      createColonyDialog(x,y,rX,rY,moveData.data.global.x,moveData.data.global.y);
+    }
+
+    else if (settingEntity) {
+      createEntityDialog(x,y,moveData.data.global.x,moveData.data.global.y, buildingID);
     }
   };
 
@@ -495,17 +621,7 @@ function createInteractions() {
   button.buttonMode = true;
   button.interactive = true;
   button.mousedown = function() {
-    camera.zoom = 100;
-    camera.x = userData.colony.x * 5000 + 2500 + window.innerWidth * camera.zoom / 100;
-    camera.y = userData.colony.y * 5000 + 2500 + window.innerHeight * camera.zoom / 100;
-    camera.screen_width = window.innerWidth * camera.zoom / 100;
-    camera.screen_height = window.innerHeight * camera.zoom / 100;
-    camera.maxX = window.innerWidth * camera.max_zoom / 100 - window.innerWidth * camera.zoom / 100;
-    camera.maxY =
-      window.innerHeight * camera.max_zoom / 100 - window.innerHeight * camera.zoom / 100;
-	updateWorldView(true);
-	if(!entitiesFlag)
-    	loadEntities();
+    recenter();
   };
 
   button.x = window.innerWidth * 0.9;
@@ -531,7 +647,7 @@ function createInteractions() {
   HUDcontainer.addChild(signout);
   g = new PIXI.Graphics();
 
-  /*Create Enitity*/
+  /*Create Enitity*//*
   var create = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
   create.buttonMode = true;
   create.interactive = true;
@@ -546,48 +662,7 @@ function createInteractions() {
   create.height = 50;
   create.anchor.set(0.5);
   HUDcontainer.addChild(create);
-
-  /*Colonists
-  var colonists = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
-  colonists.buttonMode = true;
-  colonists.interactive = true;
-  colonists.mouseup = function(moveData) {};
-
-  colonists.x = window.innerWidth * 0.03;
-  colonists.y = window.innerHeight * 0.05;
-  colonists.width = 50;
-  colonists.height = 50;
-  colonists.anchor.set(0.5);
-  HUDcontainer.addChild(colonists);
-  g = new PIXI.Graphics();
-
-  /*Equipment
-  var equipment = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
-  equipment.buttonMode = true;
-  equipment.interactive = true;
-  equipment.mouseup = function(moveData) {};
-
-  equipment.x = window.innerWidth * 0.03;
-  equipment.y = window.innerHeight * 0.15;
-  equipment.width = 50;
-  equipment.height = 50;
-  equipment.anchor.set(0.5);
-  HUDcontainer.addChild(equipment);
-  g = new PIXI.Graphics();
-
-  /*Structures
-  var structures = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
-  structures.buttonMode = true;
-  structures.interactive = true;
-  structures.mouseup = function(moveData) {};
-
-  structures.x = window.innerWidth * 0.03;
-  structures.y = window.innerHeight * 0.25;
-  structures.width = 50;
-  structures.height = 50;
-  structures.anchor.set(0.5);
-  HUDcontainer.addChild(structures);
-  g = new PIXI.Graphics();*/
+*/
 }
 
 function mouseWheelHandler(e) {
@@ -621,30 +696,35 @@ function buildingClick(id)
 	var hasReqs = true;
 	var equipment = userData.colony.equipment;
 	var building = getBuildingInfo(id);
+ // console.log(JSON.stringify(buildingArray));
+//	console.log(building);
 	
-	console.log(building);
-	
-	for(var i = 0; i < building.pre_reqs.length; i++)
-		if(equipment.building.pre_reqs[i] == 0)
-			hasReqs = false;
+//	for(var i = 0; i < building.pre_reqs.length; i++)
+	//	if(equipment[building.pre_reqs[i]] == 0)
+   //   hasReqs = false;
+      
 	if(hasReqs)
 	{
-		console.log("Has");
+    buildingID = id;
+    settingEntity = true;
+    console.log("Has");
 	}
-	else
+  else
+  {
 		console.log("No Has");
+  }
 }
 
 function getBuildingInfo(id)
 {
-	console.log(buildingArray);
+//	console.log(JSON.stringify(buildingArray));
 
 	for(var i = 0; i < buildingArray.length; i++)
 	{
 		console.log(buildingArray[i]);
 		if(buildingArray[i].id == id)
 		{
-			console.log("found " + buildingArray[i].id);
+			//console.log("found " + buildingArray[i].id);
 			return buildingArray[i];
 		}
 	}
@@ -666,6 +746,7 @@ function dilemas() {
 
   // Found Mineral Deposit (Extra Money!)
 }
+
 function gameLoop() {
   requestAnimationFrame(gameLoop);
 

@@ -62,25 +62,25 @@
     <div id="air-resource" class="resource-container">
       <div id="air-resource-value" class="resource-value-container"></div>
       <div id="air-resource-icon" class="resource-icon-container">
-        <img src="images/oxygen-icon.png" class="hud-menu-icon">
+        <img src="images/oxygen-icon.png" class="hud-resource-icon">
       </div>
     </div>
     <div id="water-resource" class="resource-container">
       <div id="water-resource-value" class="resource-value-container"></div>
       <div id="water-resource-icon" class="resource-icon-container">
-        <img src="images/water-icon-white.png" class="hud-menu-icon">
+        <img src="images/water-icon-white.png" class="hud-resource-icon">
       </div>
     </div>
     <div id="food-resource" class="resource-container">
       <div id="food-resource-value" class="resource-value-container"></div>
       <div id="food-resource-icon" class="resource-icon-container">
-        <img src="images/food-icon.png" class="hud-menu-icon">
+        <img src="images/food-icon.png" class="hud-resource-icon">
       </div>
     </div>
     <div id="power-resource" class="resource-container">
       <div id="power-resource-value" class="resource-value-container"></div>
       <div id="power-resource-icon" class="resource-icon-container">
-        <img src="images/power-icon.png" class="hud-menu-icon">
+        <img src="images/power-icon.png" class="hud-resource-icon">
       </div>
     </div>
   </div>
@@ -286,6 +286,11 @@
     let currentFoodResourceValue = startingResourceValue;
     let currentPowerResourceValue = startingResourceValue;
 
+    let airReductionVal = 3;
+    let waterReductionVal = 2;
+    let foodReductionVal = 1;
+    let powerReductionVal = 3;
+
     $('.resource-value-container').append(
       '<span>' + startingResourceValue + '</span>'
     );
@@ -299,7 +304,7 @@
 
     function reduceResource(id) {
       if (id == 'air-resource-value') {
-        let newAirResourceValue = currentAirResourceValue - 3;
+        let newAirResourceValue = currentAirResourceValue - airReductionVal;
         currentAirResourceValue = newAirResourceValue;
 
         if (newAirResourceValue > 0) {
@@ -313,7 +318,7 @@
       }
 
       if (id == 'water-resource-value') {
-        let newWaterResourceValue = currentWaterResourceValue - 2;
+        let newWaterResourceValue = currentWaterResourceValue - waterReductionVal;
         currentWaterResourceValue = newWaterResourceValue;
 
         if (newWaterResourceValue > 0) {
@@ -327,7 +332,7 @@
       }
 
       if (id == 'food-resource-value') {
-        let newFoodResourceValue = currentFoodResourceValue - 1;
+        let newFoodResourceValue = currentFoodResourceValue - foodReductionVal;
         currentFoodResourceValue = newFoodResourceValue;
 
         if (newFoodResourceValue > 0) {
@@ -341,7 +346,7 @@
       }
 
       if (id == 'power-resource-value') {
-        let newPowerResourceValue = currentPowerResourceValue - 3;
+        let newPowerResourceValue = currentPowerResourceValue - powerReductionVal;
         currentPowerResourceValue = newPowerResourceValue;
 
         if (newPowerResourceValue > 0) {
@@ -423,6 +428,11 @@
         'The highest temperature is located near the equator about ' +
         '86 degrees Fahrenheit and -284 degrees by the Martian poles.',
       button1: 'Redirect more power to heating',
+      reduceResource: function () {
+        let powerResourceId = 'power-resource-value';
+        powerReductionVal = 5;
+        reduceResource(powerResourceId);
+      }
     }
 
     // Dilemma Array - Contains every Dilemma that can be chosen randomly to display to user
@@ -473,7 +483,7 @@
 
     function displayDilemmaButton(dilemmaButton) {
       $('.dilemma-popup').append(
-        '<button onclick="hideDilemmaPopup()" class="dilemma-button">' + dilemmaButton + '</button>' // CHANGE
+        '<button onclick="hideDilemmaPopup(); FreezingToDeath.reduceResource()" class="dilemma-button">' + dilemmaButton + '</button>' // CHANGE
       );
     }
 

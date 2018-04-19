@@ -87,18 +87,144 @@
 
   <!-- HUD UI Functions -->
   <script>
- // Equipment Objects
- let SolarPanel = {
+    // Equipment Objects
+    let RadarDish = {
+      name: 'Radar Dish',
+      id: 'radar_dish',
+      icon: 'images/radar-dish-icon.png'
+    }
+
+    let HydroponicsEquipment = {
+      name: 'Hydroponics Equipment',
+      id: 'hydroponics_equipment',
+      icon: 'images/hydropnics-equipment-icon.png'
+    }
+
+    let FirstAidSupplies = {
+      name: 'First Aid Supplies',
+      id: 'first_aid_supplies',
+      icon: 'images/first-aid-icon.png'
+    }
+
+    let MoxieEquipment = {
+      name: 'Moxie Equipment',
+      id: 'moxie_equipment',
+      icon: 'images/moxie-equipment-icon.png'
+    }
+
+    let Auger = {
+      name: 'Auger',
+      id: 'auger',
+      icon: 'images/auger-icon.png'
+    }
+
+    let WaterStorage = {
+      name: 'Water Storage',
+      id: 'water_storage',
+      icon: 'images/water-storage-icon.png'
+    }
+
+    let SolarPanel = {
       name: 'Solar Panel',
       id: 'solar_panel',
       icon: 'images/solar-panel-icon.png'
     }
 
+    let PlantSeeds = {
+      name: 'Plant Seeds',
+      id: 'plant_seeds',
+      icon: 'images/plant-seeds-icon.png'
+    }
+
+    let Battery = {
+      name: 'Battery',
+      id: 'battery',
+      icon: 'images/battery-icon.png'
+    }
+
+    let ResearchEquipment = {
+      name: 'Research Equipment',
+      id: 'research_equipment',
+      icon: 'images/research-equipment-icon.png'
+    }
+
+    let NuclearReactor = {
+      name: 'Nuclear Reactor',
+      id: 'nuclear_reactor',
+      icon: 'images/nuclear-reactor-icon.png'
+    }
+
+    let PressurizedAirlockEquipment = {
+      name: 'Pressurized Airlock Equipment',
+      id: 'pressurized_airlock_equipment',
+      icon: 'images/airlock-equipment-icon.png'
+    }
+
+    let UvLights = {
+      name: 'UV Lights',
+      id: 'uv_lights',
+      icon: 'images/uv-lights-icon.png'
+    }
+
+    let EntertainmentSystem = {
+      name: 'Entertainment System',
+      id: 'entertainment_system',
+      icon: 'images/entertainment-system-icon.png'
+    }
+
+    let LifeSupport = {
+      name: 'Life Support',
+      id: 'life_support',
+      icon: 'images/life-support-icon.png'
+    }
+
+    let GrownPlants = {
+      name: 'Grown Plants',
+      id: 'grown_plants',
+      icon: 'images/grown-plants-icon.png'
+    }
+
+    let StorageTanks = {
+      name: 'Storage Tanks',
+      id: 'storage_tanks',
+      icon: 'images/storage-tanks-icon.png'
+    }
+
+    let SurgicalEquipment = {
+      name: 'Surgical Equipment',
+      id: 'surgical_equipment',
+      icon: 'images/surgical-equipment-icon.png'
+    }
+
     // Structure Objects
-    let Headquarters = {
-      name: 'Headquarters',
-      id: 'headquarters',
-      icon: 'images/HQ-icon.png'
+    let Biodome = {
+      name: 'Biodome',
+      id: 'biodome',
+      icon: 'images/biodome-icon.png'
+    }
+
+    let Drill = {
+      name: 'Drill',
+      id: 'drill',
+      icon: 'images/drill-icon'
+    }
+
+    let MoxieStation = {
+      name: 'MOXIE Station',
+      id: 'moxie_station',
+      icon: 'images/moxie-station-icon'
+    }
+
+    let LandingCraft = {
+      name: 'Landing Craft',
+      id: 'landing_craft',
+      icon: 'images/landing-craft-icon'
+    }
+
+    let Building = {
+      name: 'Building',
+      id: 'building',
+      icon: 'images/building-icon'
     }
 
     let Greenhouse = {
@@ -113,28 +239,46 @@
       icon: 'images/med-bay-icon.png'
     }
 
+    let WaterTank = {
+      name: 'Water Tank',
+      id: 'water_tank',
+      icon: 'images/water-tank-icon.png'
+    }
+
     let SolarPanelArray = {
       name: 'Solar Panel Array',
       id: 'solar_array',
       icon: 'images/solar-panel-array-icon.png'
     }
 
-    let PowerGenerator = {
-      name: 'Generator',
-      id: 'generator',
-      icon: 'images/generator-icon.png'
+    let PowerStorage = {
+      name: 'Power Storage',
+      id: 'power-storage',
+      icon: 'images/power-storage-icon.png'
     }
 
-    let FoodStorage = {
-      name: 'Food Storage',
-      id: 'food_storage',
-      icon: 'images/food-storage-icon.png'
+    let NuclearGenerator = {
+      name: 'Nuclear Generator',
+      id: 'nuclear_generator',
+      icon: 'images/nuclear-generator-icon.png'
     }
 
-    let ScienceLab = {
-      name: 'Science Lab',
-      id: 'science_lab',
-      icon: 'images/science-lab-icon'
+    let StorageCrate = {
+      name: 'Storage Crate',
+      id: 'storage_crate',
+      icon: 'images/storage-crate-icon.png'
+    }
+
+    let ResearchLab = {
+      name: 'Research Lab',
+      id: 'research_lab',
+      icon: 'images/research-lab-icon'
+    }
+
+    let RadarArray = {
+      name: 'Radar Array',
+      id: 'radar_array',
+      icon: 'images/radar-array-icon'
     }
 
     // Arrays
@@ -145,17 +289,41 @@
     ];
 
     let equipmentArray = [
-      SolarPanel
+      RadarDish,
+      HydroponicsEquipment,
+      FirstAidSupplies,
+      MoxieEquipment,
+      Auger,
+      WaterStorage,
+      SolarPanel,
+      PlantSeeds,
+      Battery,
+      ResearchEquipment,
+      NuclearReactor,
+      PressurizedAirlockEquipment,
+      UvLights,
+      EntertainmentSystem,
+      LifeSupport,
+      GrownPlants,
+      StorageTanks,
+      SurgicalEquipment
     ];
 
     let structuresArray = [
-      Headquarters,
+      Biodome,
+      Drill,
+      MoxieStation,
+      LandingCraft,
+      Building,
       Greenhouse,
       MedBay,
+      WaterTank,
       SolarPanelArray,
-      PowerGenerator,
-      FoodStorage,
-      ScienceLab
+      PowerStorage,
+      NuclearGenerator,
+      StorageCrate,
+      ResearchLab,
+      RadarArray
     ];
 
 
@@ -218,8 +386,8 @@
     function populateMenuWithEquipment() {
       for (let i = 0; i < equipmentArray.length; i++) {
         $('.hud-menu').append(
-          '<div class="hud-menu-container"  onclick=equipmentClick("'+equipmentArray[i].id+'")>' +
-          '<img src="' + equipmentArray[i].icon +'" class="hud-menu-icon" />' +
+          '<div class="hud-menu-container"  onclick=equipmentClick("' + equipmentArray[i].id + '")>' +
+          '<img src="' + equipmentArray[i].icon + '" class="hud-menu-icon" />' +
           '<p>' + equipmentArray[i].name + '</p>' +
           '</div>'
         );
@@ -229,8 +397,8 @@
     function populateMenuWithStructures() {
       for (let i = 0; i < structuresArray.length; i++) {
         $('.hud-menu').append(
-          '<div class="hud-menu-container"  onclick=buildingClick("'+structuresArray[i].id+'")>' +
-          '<img src="' + structuresArray[i].icon +'" class="hud-menu-icon" id = "'+ structuresArray[i].name +'"/>' +
+          '<div class="hud-menu-container"  onclick=buildingClick("' + structuresArray[i].id + '")>' +
+          '<img src="' + structuresArray[i].icon + '" class="hud-menu-icon" id = "' + structuresArray[i].name + '"/>' +
           '<p>' + structuresArray[i].name + '</p>' +
           '</div>'
         );

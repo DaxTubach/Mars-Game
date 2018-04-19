@@ -126,6 +126,10 @@
   border-radius: 50%;
 }
 
+.hud-resource-icon {
+  height: 30px;
+}
+
 .dilemma-popup {
   display: none;
   padding: 20px;
@@ -164,4 +168,8 @@
 }
 .dilemma-button:hover {
   background: rgba(0, 0, 0, 0.7);
+}
+
+.hud-menu-container:hover{
+  border-bottom: 2px solid whitesmoke;
 }

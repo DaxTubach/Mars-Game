@@ -23,6 +23,7 @@ var buildingID = null;
 var freezeCamera = false;
 var colonyMade = true;
 var settingEntity = false;
+var entitiesFlag = false;
 var infoText;
 var img;
 var g; //Pixi graphics drawing
@@ -260,6 +261,7 @@ function loadEntity(e) {
 }
 
 function loadEntities() {
+	entitiesFlag = true;
   if (camera.zoom < 500) {
 
     var entities = userData.colony.entities;
@@ -685,7 +687,6 @@ function generateClouds() {
     clouds.push({ sprite: cloud, x: x, y: y, w: w, h: h, zoomFactor: zoomFactor });
   }
 }
-
 function equipmentClick(id)
 {
 	console.log(id);
@@ -731,7 +732,6 @@ function getBuildingInfo(id)
 		}
 	}
 }
-
 function dilemas() {
   var structures = userData.colony.entities;
 

@@ -141,6 +141,15 @@ function loadImages() {
     .add('cloud', awsE + 'MartianCloud.png')
     .add('rock-small', awsE + 'rock-small.png')
     .add('mountain', awsE + 'mountain.png')
+    .add('biodome', awsE + 'biodome.png')
+    .add('building', awsE + 'building.png')
+    .add('drill', awsE + 'drill.png')
+    .add('med-bay', awsE + 'med-bay.png')
+    .add('nuclear-generator', awsE + 'nuclear-generator.png')
+    .add('research-lab', awsE + 'research-lab.png')
+    .add('satellite-dish', awsE + 'satellite-dish.png')
+    .add('solar-panel-array', awsE + 'solar-panel-array.png')
+    .add('solar-panels', awsE + 'solar-panels.png')
     .load(setupWorld);
 }
 
@@ -629,7 +638,7 @@ function createInteractions() {
   HUDcontainer.addChild(signout);
   g = new PIXI.Graphics();
 
-  /*Create Enitity*/
+  /*Create Enitity*//*
   var create = new PIXI.Sprite(PIXI.loader.resources['plant'].texture);
   create.buttonMode = true;
   create.interactive = true;
@@ -644,7 +653,7 @@ function createInteractions() {
   create.height = 50;
   create.anchor.set(0.5);
   HUDcontainer.addChild(create);
-
+*/
 }
 
 function mouseWheelHandler(e) {

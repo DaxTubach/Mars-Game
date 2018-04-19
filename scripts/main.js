@@ -189,10 +189,10 @@ function setupWorld() {
   stage.addChild(parallaxCloudContainer);
   stage.addChild(labelContainer);
   stage.addChild(HUDcontainer);
-  infoText = new PIXI.Text('');
+  /*infoText = new PIXI.Text('');
   infoText.x = 10;
   infoText.y = 10;
-  HUDcontainer.addChild(infoText);
+  HUDcontainer.addChild(infoText);*/
 
   //Initial camera setup
   var tempMaxWidth = 1702000000 / window.innerWidth;

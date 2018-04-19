@@ -364,7 +364,7 @@ function createMicrofeatures(){
 	else
 		FIRST_GEN[ENTITY_LARGE] = false;
 
-
+	/*
 	if(camera.zoom < ENTITY_LARGE_ZOOM)
 		for(var i=camera.x;i<camera.x+Math.floor(camera.screen_width);i+=25000){
 			for(var j=camera.y;j<camera.y+Math.floor(camera.screen_height);j+=25000){
@@ -385,7 +385,8 @@ function createMicrofeatures(){
 					d++;
 			}
 		}
-
+	*/
+	
 	if(microfeatures[ENTITY_SMALL].length == 0)
 		FIRST_GEN[ENTITY_SMALL] = true;
 	else

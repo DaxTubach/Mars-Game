@@ -319,12 +319,12 @@ function addLocationTag(text, x, y) {
   testText.x = worldToScreenX(x);
   testText.y = worldToScreenY(y);
   testText.anchor.set(0.5, 0.5);
-  testText.interactive = true;
+  /*testText.interactive = true;
   testText.buttonMode = true;
   testText.mousedown = function(){
   	console.log("Pressed");
   	createDialog(testText.x,testText.y,testText,["Continue"],[]);
-  }
+  }*/
   labelContainer.addChild(testText);
   var textObject = {
     sprite: testText,
@@ -437,7 +437,7 @@ function createColonyDialog(x,y,rX,rY,originalX,originalY){
 	var grayScale = heightMap.data[percentX*4 + percentY * img.width * 4];
 	var topographicHeight = grayScale/255 * 25200 /*max height - minheight*/ - 8200; /*min height*/ 
 	var sunlight = rY < 851 ? Math.round(rY / 70) : Math.round((1702 - rY) / 70); //Distance max 12 from equator
-	var pressure = grayScale / 255 * .1631/*max press - min*/ + .0044/*min pressure*/;
+	var pressure = 1 - (grayScale / 255) * .1631/*max press - min*/ + .0044/*min pressure*/;
 	var temperature = rY < 851 ? rY / 851 * 170 + 123 : (1702 - rY) / 851/*percent distance from equator*/ * 170/*dif max min*/ + 123/*min*/;
 
 	var text = "Height: "+Math.round(topographicHeight)+" meters"+

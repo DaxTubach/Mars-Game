@@ -23,6 +23,7 @@ var buildingID = null;
 var freezeCamera = false;
 var colonyMade = true;
 var settingEntity = false;
+var entitiesFlag = false;
 var infoText;
 var img;
 var g; //Pixi graphics drawing
@@ -149,8 +150,11 @@ function loadImages() {
     .add('nuclear_generator', awsE + 'nuclear-generator.png')
     .add('research_lab', awsE + 'research-lab.png')
     .add('satellite_dish', awsE + 'satellite-dish.png')
-    .add('solar_panel_array', awsE + 'solar-panel-array.png')
+    .add('solar_array', awsE + 'solar-panel-array.png')
     .add('solar_panels', awsE + 'solar-panels.png')
+    .add('moxie_station', awsE + 'moxy-station.png')
+    .add('greenhouse', awsE + 'greenhouse.png')
+    .add('power_storage', awsE + 'generator.png')
     .load(setupWorld);
 }
 
@@ -193,10 +197,10 @@ function setupWorld() {
   stage.addChild(parallaxCloudContainer);
   stage.addChild(labelContainer);
   stage.addChild(HUDcontainer);
-  infoText = new PIXI.Text('');
+  /*infoText = new PIXI.Text('');
   infoText.x = 10;
   infoText.y = 10;
-  HUDcontainer.addChild(infoText);
+  HUDcontainer.addChild(infoText);*/
 
   //Initial camera setup
   var tempMaxWidth = 1702000000 / window.innerWidth;
@@ -257,6 +261,7 @@ function loadEntity(e) {
 }
 
 function loadEntities() {
+	entitiesFlag = true;
   if (camera.zoom < 500) {
 
     var entities = userData.colony.entities;
@@ -682,7 +687,6 @@ function generateClouds() {
     clouds.push({ sprite: cloud, x: x, y: y, w: w, h: h, zoomFactor: zoomFactor });
   }
 }
-
 function equipmentClick(id)
 {
 	console.log(id);
@@ -728,7 +732,6 @@ function getBuildingInfo(id)
 		}
 	}
 }
-
 function dilemas() {
   var structures = userData.colony.entities;
 

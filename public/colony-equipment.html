@@ -19,7 +19,8 @@
       document.getElementById('continue').addEventListener('click', setEquipment, false);
       document.getElementById('sign-out').addEventListener('click', signOut, false);
     }
-
+    var equipment = {};
+    
     function setEquipment() {
       var user = firebase.auth().currentUser
       var uid = user.uid;

@@ -169,3 +169,7 @@
 .dilemma-button:hover {
   background: rgba(0, 0, 0, 0.7);
 }
+
+.hud-menu-container:hover{
+  border-bottom: 2px solid whitesmoke;
+}

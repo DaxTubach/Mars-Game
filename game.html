@@ -17,6 +17,7 @@
     gtag('js', new Date());
 
     gtag('config', 'UA-97188606-1');
+
   </script>
 
 
@@ -35,6 +36,7 @@
   <script src="scripts/info.js"></script>
   <script type="text/javascript" src="auth.js"></script>
   <script src="scripts/keyboard.js"></script>
+  <script src="scripts/info.js"></script>
   <script src="scripts/game_world.js"></script>
   <script src="scripts/main.js"></script>
   <style>
@@ -87,226 +89,97 @@
 
   <!-- HUD UI Functions -->
   <script>
-    // Equipment Objects
-    let RadarDish = {
-      name: 'Radar Dish',
-      id: 'radar_dish',
-      icon: 'images/radar-dish-icon.png'
-    }
-
-    let HydroponicsEquipment = {
-      name: 'Hydroponics Equipment',
-      id: 'hydroponics_equipment',
-      icon: 'images/hydroponics-equipment-icon.png'
-    }
-
-    let FirstAidSupplies = {
-      name: 'First Aid Supplies',
-      id: 'first_aid_supplies',
-      icon: 'images/medical-icon.png'
-    }
-
-    let MoxieEquipment = {
-      name: 'Moxie Equipment',
-      id: 'moxie_equipment',
-      icon: 'images/moxie-equipment-icon.png'
-    }
-
-    let Auger = {
-      name: 'Auger',
-      id: 'auger',
-      icon: 'images/auger-icon.png'
-    }
-
-    let WaterStorage = {
-      name: 'Water Storage',
-      id: 'water_storage',
-      icon: 'images/water-storage-icon.png'
-    }
-
-    let SolarPanel = {
-      name: 'Solar Panel',
-      id: 'solar_panel',
-      icon: 'images/solar-panel-icon.png'
-    }
-
-    let PlantSeeds = {
-      name: 'Plant Seeds',
-      id: 'plant_seeds',
-      icon: 'images/plant-seeds-icon.png'
-    }
-
-    let Battery = {
-      name: 'Battery',
-      id: 'battery',
-      icon: 'images/battery-icon.png'
-    }
-
-    let ResearchEquipment = {
-      name: 'Research Equipment',
-      id: 'research_equipment',
-      icon: 'images/research-equipment-icon.png'
-    }
-
-    let NuclearReactor = {
-      name: 'Nuclear Reactor',
-      id: 'nuclear_reactor',
-      icon: 'images/nuclear-icon.png'
-    }
-
-    let PressurizedAirlockEquipment = {
-      name: 'Pressurized Airlock Equipment',
-      id: 'pressurized_airlock_equipment',
-      icon: 'images/airlock-equipment-icon.png'
-    }
-
-    let UvLights = {
-      name: 'UV Lights',
-      id: 'uv_lights',
-      icon: 'images/uv-lights-icon.png'
-    }
-
-    let EntertainmentSystem = {
-      name: 'Entertainment System',
-      id: 'entertainment_system',
-      icon: 'images/entertainment-icon.png'
-    }
-
-    let LifeSupport = {
-      name: 'Life Support',
-      id: 'life_support',
-      icon: 'images/life-support-icon.png'
-    }
-
-    let GrownPlants = {
-      name: 'Grown Plants',
-      id: 'grown_plants',
-      icon: 'images/grown-plants-icon.png'
-    }
-
-    let StorageTanks = {
-      name: 'Storage Tanks',
-      id: 'storage_tanks',
-      icon: 'images/storage-icon.png'
-    }
-
-    let SurgicalEquipment = {
-      name: 'Surgical Equipment',
-      id: 'surgical_equipment',
-      icon: 'images/surgical-equipment-icon.png'
-    }
-
     // Structure Objects
-    let Biodome = {
-      name: 'Biodome',
-      id: 'biodome',
-      icon: 'images/biodome-icon.png'
-    }
+  let Biodome = {
+    name: 'Biodome',
+    id: 'biodome',
+    icon: 'images/biodome-icon.png'
+  }
 
-    let Drill = {
-      name: 'Drill',
-      id: 'drill',
-      icon: 'images/auger-icon.png'
-    }
+  let Drill = {
+    name: 'Drill',
+    id: 'drill',
+    icon: 'images/auger-icon.png'
+  }
 
-    let MoxieStation = {
-      name: 'MOXIE Station',
-      id: 'moxie_station',
-      icon: 'images/moxie-equipment-icon.png'
-    }
+  let MoxieStation = {
+    name: 'MOXIE Station',
+    id: 'moxie_station',
+    icon: 'images/moxie-equipment-icon.png'
+  }
 
-    let LandingCraft = {
-      name: 'Landing Craft',
-      id: 'landing_craft',
-      icon: 'images/landing-craft-icon.png'
-    }
+  let LandingCraft = {
+    name: 'Landing Craft',
+    id: 'landing_craft',
+    icon: 'images/landing-craft-icon.png'
+  }
 
-    let Building = {
-      name: 'Building',
-      id: 'building',
-      icon: 'images/building-icon.png'
-    }
+  let Building = {
+    name: 'Building',
+    id: 'building',
+    icon: 'images/building-icon.png'
+  }
 
-    let Greenhouse = {
-      name: 'Greenhouse',
-      id: 'greenhouse',
-      icon: 'images/greenhouse-icon.png'
-    }
+  let Greenhouse = {
+    name: 'Greenhouse',
+    id: 'greenhouse',
+    icon: 'images/greenhouse-icon.png'
+  }
 
-    let MedBay = {
-      name: 'Med Bay',
-      id: 'med_bay',
-      icon: 'images/med-bay-icon.png'
-    }
+  let MedBay = {
+    name: 'Med Bay',
+    id: 'med_bay',
+    icon: 'images/med-bay-icon.png'
+  }
 
-    let WaterTank = {
-      name: 'Water Tank',
-      id: 'water_tank',
-      icon: 'images/water-tank-icon.png'
-    }
+  let WaterTank = {
+    name: 'Water Tank',
+    id: 'water_tank',
+    icon: 'images/water-tank-icon.png'
+  }
 
-    let SolarPanelArray = {
-      name: 'Solar Panel Array',
-      id: 'solar_array',
-      icon: 'images/solar-panel-icon.png'
-    }
+  let SolarPanelArray = {
+    name: 'Solar Panel Array',
+    id: 'solar_array',
+    icon: 'images/solar-panel-icon.png'
+  }
 
-    let PowerStorage = {
-      name: 'Power Storage',
-      id: 'power-storage',
-      icon: 'images/power-storage-icon.png'
-    }
+  let PowerStorage = {
+    name: 'Power Storage',
+    id: 'power_storage',
+    icon: 'images/power-storage-icon.png'
+  }
 
-    let NuclearGenerator = {
-      name: 'Nuclear Generator',
-      id: 'nuclear_generator',
-      icon: 'images/nuclear-icon.png'
-    }
+  let NuclearGenerator = {
+    name: 'Nuclear Generator',
+    id: 'nuclear_generator',
+    icon: 'images/nuclear-icon.png'
+  }
 
-    let StorageCrate = {
-      name: 'Storage Crate',
-      id: 'storage_crate',
-      icon: 'images/storage-icon.png'
-    }
+  let StorageCrate = {
+    name: 'Storage Crate',
+    id: 'storage_crate',
+    icon: 'images/storage-icon.png'
+  }
 
-    let ResearchLab = {
-      name: 'Research Lab',
-      id: 'research_lab',
-      icon: 'images/research-lab-icon.png'
-    }
+  let ResearchLab = {
+    name: 'Research Lab',
+    id: 'research_lab',
+    icon: 'images/research-lab-icon.png'
+  }
 
-    let RadarArray = {
-      name: 'Radar Array',
-      id: 'radar_array',
-      icon: 'images/radar-dish-icon.png'
-    }
-
+  let RadarArray = {
+    name: 'Radar Array',
+    id: 'radar_array',
+    icon: 'images/radar-dish-icon.png'
+  }
     // Arrays
     let people = [
       "Volvo Saab",
       "Tokyo Juan",
-      "Stratos Blue"
-    ];
-
-    let equipmentArray = [
-      RadarDish,
-      HydroponicsEquipment,
-      FirstAidSupplies,
-      MoxieEquipment,
-      Auger,
-      WaterStorage,
-      SolarPanel,
-      PlantSeeds,
-      Battery,
-      ResearchEquipment,
-      NuclearReactor,
-      PressurizedAirlockEquipment,
-      UvLights,
-      EntertainmentSystem,
-      LifeSupport,
-      GrownPlants,
-      StorageTanks,
-      SurgicalEquipment
+      "Stratos Blue",
+      "Chauncey Fruzsina",
+      "Prasad Ferid"
     ];
 
     let structuresArray = [

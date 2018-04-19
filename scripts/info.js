@@ -128,7 +128,7 @@ var med_bay = {
     w: 50,
     h: 50,
     info: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ornare massa elit, quis semper nisl interdum sit amet.",
-    pre_reqs: ["generator", "surgical_equipment"],
+    pre_reqs: ["surgical_equipment"],
     uses: {energy : -50},
 };
 
@@ -148,18 +148,4 @@ var buildingArray = [
     solar_panel_array,
     power_storage,
     biodome
-];
-
-var equipmentIDArray = [
-    "radar_array",
-    "habitat",
-    "plant",
-    "rover",
-    "med_bay",
-    "moxie_station",
-    "drill",
-    "nuclear_generator",
-    "solar_panel_array",
-    "power_storage",
-    "biodome",
 ];

@@ -19,6 +19,7 @@ var userData;
 var showGrid = false;
 var highlightedCell;
 var user;
+var buildingID = null;
 var freezeCamera = false;
 var colonyMade = true;
 var settingEntity = false;
@@ -153,8 +154,12 @@ function loadImages() {
     .load(setupWorld);
 }
 
-function setEntity(id, x, y, w, h) {
+function setEntity(id, x, y) {
   settingEntity = false;
+  var building = getBuildingInfo(id);
+  
+  var w = building.width;
+  var h = building.height;
 
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
@@ -461,6 +466,12 @@ function createColonyDialog(x,y,rX,rY,originalX,originalY){
 	//var height = heightMap.data[percentY * img.height + percentX];
 }
 
+function createEntityDialog(x,y,originalX,originalY,id)
+{
+  createDialog(originalX,originalY,250,125,text,["Place Building"],[function(){return setEntity(id,x,y)}]);
+
+}
+
 function setColony(x, y) {
   var user = firebase.auth().currentUser;
   var uid = user.uid;
@@ -507,9 +518,7 @@ function getUser() {
 
 function getColonyCoord() {
   colonies = [];
-  db
-    .collection('users')
-    .get()
+  db.collection('users').get()
     .then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
         // doc.data() is never undefined for query doc snapshots
@@ -603,7 +612,7 @@ function createInteractions() {
     }
 
     else if (settingEntity) {
-      setEntity('plant', x, y, 30, 30);   
+      createEntityDialog(x,y,moveData.data.global.x,moveData.data.global.y, id);
     }
   };
 
@@ -697,10 +706,14 @@ function buildingClick(id)
       
 	if(hasReqs)
 	{
-		console.log("Has");
+    buildingID = id;
+    settingEntity = true;
+    console.log("Has");
 	}
-	else
+  else
+  {
 		console.log("No Has");
+  }
 }
 
 function getBuildingInfo(id)

@@ -262,7 +262,7 @@ function preRender() {
     drawColonyUnit();
     HUDcontainer.addChild(g);
   }
-  if (settingEntity) {
+  if (settingEntity && dialog==null) {
     drawEntityUnit();
     HUDcontainer.addChild(g);
   }

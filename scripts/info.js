@@ -138,7 +138,6 @@ var buildingArray = [
     radar_array,
     water_tank,
     habitat,
-    plant,
     rover,
     med_bay,
     greenhouse,

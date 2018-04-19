@@ -138,29 +138,29 @@ function loadImages() {
     .add('astro', awsE + 'astronaut.png')
     .add('plant', awsE + 'plant.png')
     .add('rover', awsE + 'rover.png')
-    .add('water-tank', awsE + 'water-tank.png')
+    .add('water_tank', awsE + 'water-tank.png')
     .add('cloud', awsE + 'MartianCloud.png')
     .add('rock-small', awsE + 'rock-small.png')
     .add('mountain', awsE + 'mountain.png')
     .add('biodome', awsE + 'biodome.png')
     .add('building', awsE + 'building.png')
     .add('drill', awsE + 'drill.png')
-    .add('med-bay', awsE + 'med-bay.png')
-    .add('nuclear-generator', awsE + 'nuclear-generator.png')
-    .add('research-lab', awsE + 'research-lab.png')
-    .add('satellite-dish', awsE + 'satellite-dish.png')
-    .add('solar-panel-array', awsE + 'solar-panel-array.png')
-    .add('solar-panels', awsE + 'solar-panels.png')
+    .add('med_bay', awsE + 'med-bay.png')
+    .add('nuclear_generator', awsE + 'nuclear-generator.png')
+    .add('research_lab', awsE + 'research-lab.png')
+    .add('satellite_dish', awsE + 'satellite-dish.png')
+    .add('solar_panel_array', awsE + 'solar-panel-array.png')
+    .add('solar_panels', awsE + 'solar-panels.png')
     .load(setupWorld);
 }
 
 function setEntity(id, x, y) {
   settingEntity = false;
   var building = getBuildingInfo(id);
-  
-  var w = building.width;
-  var h = building.height;
 
+  var w = building.w;
+  var h = building.h;
+  console.log("WIdth" + w + " Height " +h)
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       if (userData.colony.entities == undefined) var entities = [];
@@ -468,7 +468,7 @@ function createColonyDialog(x,y,rX,rY,originalX,originalY){
 
 function createEntityDialog(x,y,originalX,originalY,id)
 {
-  createDialog(originalX,originalY,250,125,text,["Place Building"],[function(){return setEntity(id,x,y)}]);
+  createDialog(originalX,originalY,250,125,"",["Place Building"],[function(){return setEntity(id,x,y)}]);
 
 }
 
@@ -612,7 +612,7 @@ function createInteractions() {
     }
 
     else if (settingEntity) {
-      createEntityDialog(x,y,moveData.data.global.x,moveData.data.global.y, id);
+      createEntityDialog(x,y,moveData.data.global.x,moveData.data.global.y, buildingID);
     }
   };
 
@@ -697,12 +697,12 @@ function buildingClick(id)
 	var hasReqs = true;
 	var equipment = userData.colony.equipment;
 	var building = getBuildingInfo(id);
-	
+ // console.log(JSON.stringify(buildingArray));
 //	console.log(building);
 	
-	for(var i = 0; i < building.pre_reqs.length; i++)
-		if(equipment[building.pre_reqs[i]] == 0)
-      hasReqs = false;
+//	for(var i = 0; i < building.pre_reqs.length; i++)
+	//	if(equipment[building.pre_reqs[i]] == 0)
+   //   hasReqs = false;
       
 	if(hasReqs)
 	{
@@ -718,7 +718,7 @@ function buildingClick(id)
 
 function getBuildingInfo(id)
 {
-	console.log(JSON.stringify(buildingArray));
+//	console.log(JSON.stringify(buildingArray));
 
 	for(var i = 0; i < buildingArray.length; i++)
 	{

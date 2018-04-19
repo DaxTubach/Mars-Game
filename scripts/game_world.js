@@ -46,7 +46,7 @@ function updateWorldView(forceUpdate){
 
 	background.position.set(worldToScreenX(0),worldToScreenY(0));
 
-	  infoText.text =
+	  /*infoText.text =
 	    'Camera zoom: ' +
 	    camera.zoom +
 	    '\nx: ' +
@@ -56,7 +56,7 @@ function updateWorldView(forceUpdate){
 	    '\nScreenWidth: ' +
 	    window.innerWidth * camera.zoom / 100 +
 	    '\nMaxX: ' +
-	    camera.maxX;
+	    camera.maxX;*/
 	  lastView = {
 	    zoom: camera.zoom,
 	    x: camera.x,
@@ -339,8 +339,8 @@ function generateLarge(x,y){
 function generateFeature(x,y,size){
 	//Make sure we don't generate in views we have already generated in
 	if(FIRST_GEN[size] == false)
-		if(x >= lastView.x && x <= lastView.x + lastView.screen_width
-			&& y >= lastView.y && y <= lastView.y + lastView.screen_height){
+		if(x > lastView.x && x + 4 < lastView.x + lastView.screen_width
+			&& y > lastView.y && y + 4 < lastView.y + lastView.screen_height){
 			return false;
 		}
 
@@ -386,7 +386,7 @@ function createMicrofeatures(){
 			}
 		}
 	*/
-	
+
 	if(microfeatures[ENTITY_SMALL].length == 0)
 		FIRST_GEN[ENTITY_SMALL] = true;
 	else
@@ -400,13 +400,13 @@ function createMicrofeatures(){
 			}
 		}
 
-	console.log(d);
+	//console.log(d);
 }
 
 //Returns true if rendered, false if removed
 function updateAndCullWorldObject(object, zoomCutoff,size){
-	if(object.x > camera.x-CULL_BUFFER[size] && object.x <= camera.screen_width + camera.x)
-		if(object.y > camera.y-CULL_BUFFER[size] && object.y <= camera.screen_height + camera.y)
+	if(object.x > camera.x && object.x < camera.screen_width + camera.x)
+		if(object.y > camera.y && object.y < camera.screen_height + camera.y)
 			if(camera.zoom < zoomCutoff){
 				object.sprite.x = worldToScreenX(object.x);
 				object.sprite.y = worldToScreenY(object.y);

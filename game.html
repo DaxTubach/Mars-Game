@@ -422,8 +422,15 @@
   <!-- Dilemma UI Functions -->
   <script>
     // Dilemma Objects
+    let LandingAnouncement = {
+      name: 'Successful Landing',
+      info: 'Your spacecraft has succesfully landed on the surface of Mars.<br><br>' +
+        'Place your Colony',
+      button: 'Start your mission'
+    }
+
     let CrashLanding = {
-      name: 'Crash Landing',
+      name: 'Successful Landing',
       info: 'Your spacecraft lander has been destroyed on impact.',
       button: 'Restart your mission'
     }
@@ -455,7 +462,7 @@
     // Temporary function to display Dilemma Popup after 5 sec
     setTimeout(function () {
       displayDilemmaPopup(chosenDilemma);
-    }, 20000);
+    }, 30000);
 
     function numberOfDilemmas() {
       return dilemmas.length;

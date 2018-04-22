@@ -31,6 +31,10 @@
   <script src="scripts/pixi.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
   <script src="https://www.gstatic.com/firebasejs/4.8.2/firebase-firestore.js"></script>
+ <!-- firechat-->
+ <link rel="stylesheet" href="https://cdn.firebase.com/libs/firechat/3.0.1/firechat.min.css" />
+ <script src="https://cdn.firebase.com/libs/firechat/3.0.1/firechat.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
   <!--Our scripts-->
   <script src="scripts/info.js"></script>
@@ -87,6 +91,9 @@
 
   <div class="dilemma-popup"></div>
 
+  <div id="firechat-container" class="clearfix"></div>
+
+
   <!-- HUD UI Functions -->
   <script>
     // Structure Objects
@@ -107,7 +114,7 @@
     id: 'moxie_station',
     icon: 'images/moxie-equipment-icon.png'
   }
-
+/*
   let LandingCraft = {
     name: 'Landing Craft',
     id: 'landing_craft',
@@ -119,7 +126,7 @@
     id: 'building',
     icon: 'images/building-icon.png'
   }
-
+*/
   let Greenhouse = {
     name: 'Greenhouse',
     id: 'greenhouse',
@@ -186,8 +193,8 @@
       Biodome,
       Drill,
       MoxieStation,
-      LandingCraft,
-      Building,
+  //    LandingCraft,
+  //    Building,
       Greenhouse,
       MedBay,
       WaterTank,

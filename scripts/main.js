@@ -149,7 +149,7 @@ function loadImages() {
     .add('med_bay', awsE + 'med-bay.png')
     .add('nuclear_generator', awsE + 'nuclear-generator.png')
     .add('research_lab', awsE + 'research-lab.png')
-    .add('satellite_dish', awsE + 'satellite-dish.png')
+    .add('radar_array', awsE + 'satellite-dish.png')
     .add('solar_array', awsE + 'solar-panel-array.png')
     .add('solar_panels', awsE + 'solar-panels.png')
     .add('moxie_station', awsE + 'moxy-station.png')
@@ -487,13 +487,51 @@ function setColony(x, y) {
       'colony.y': y,
     });
   colonyMade = true;
-  getUser();
+  //getUser();
   getColonyCoord(()=>recenter());
 }
+// Firechat 
+function initChat(user) {
+  // Get a Firebase Database ref
+
+  $(document).ready(function() {
+    var userAuth = firebase.auth().currentUser; 
+   // alert(userAuth.email);
+
+    chatRef = firebase.database().ref("chat");
+    chat = new Firechat(chatRef); 
+    chatUI = new FirechatUI(chatRef, document.getElementById("firechat-container"));
+  });
+
+}
+
+function setChat(user) {
+
+// universal chat 
+chatRoomID = "-L7oWyTLjpT6O8gMtoe-";
+chatUI._chat.enterRoom(chatRoomID); 
+
+chatUI._user = user;
+
+chatUI._chat.setUser(user.uid, "Hi", function (user) {
+  chatUI._chat.enterRoom(chatRoomID);
+}); 
+
+  // setChatUserToReadOnlyMode(true, user, chatUI, chatRef);
+}
+
 
 function getUser() {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
+
+      // firechat 
+      initChat(user);
+      //document.getElementById('user-name').textContent = user.email;
+      $(document).ready(function() {
+        setChat(user);
+      });
+
       const docRef = db.collection('users').doc(user.uid);
       docRef
         .get()

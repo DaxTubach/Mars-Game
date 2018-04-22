@@ -2,7 +2,7 @@
 // (5) radar, watertank, habitat, plant, rover 
 
 //Structures
-var radar_array = {
+var radararray = {
     id: "radar_array",
     name: "Radar Array", 
     w: 50,
@@ -58,13 +58,13 @@ var power_storage = {
     w: 50,
     h: 50,
     info: "A radar dish allows communication between players",
-    pre_reqs: ["generator", "radar-dish"],
+    pre_reqs: ["batteries"],
     uses: {energy : -50},
 };
 
 var solar_panel_array = {
-    id: "solar_panel_array",
-    name: "Solar Panel" , 
+    id: "solar_array",
+    name: "Solar Array" , 
     w: 50,
     h: 50,
     info: "A radar dish allows communication between players",
@@ -134,9 +134,8 @@ var med_bay = {
 };
 
 
-
 var buildingArray = [
-    radar_array,
+    radararray,
     water_tank,
     habitat,
     rover,
@@ -147,113 +146,114 @@ var buildingArray = [
     nuclear_generator,
     solar_panel_array,
     power_storage,
-    biodome
+    biodome,
+    research_lab
 ];
 
 // Equipment Objects
-let RadarDish = {
+var Radar_Dish = {
     name: 'Radar Dish',
     id: 'radar_dish',
     icon: 'images/radar-dish-icon.png'
   }
 
-  let HydroponicsEquipment = {
+  var HydroponicsEquipment = {
     name: 'Hydroponics Equipment',
     id: 'hydroponics_equipment',
     icon: 'images/hydroponics-equipment-icon.png'
   }
 
-  let FirstAidSupplies = {
+  var FirstAidSupplies = {
     name: 'First Aid Supplies',
     id: 'first_aid_supplies',
     icon: 'images/medical-icon.png'
   }
 
-  let MoxieEquipment = {
+  var MoxieEquipment = {
     name: 'Moxie Equipment',
     id: 'moxie_equipment',
     icon: 'images/moxie-equipment-icon.png'
   }
 
-  let Auger = {
+  var Auger = {
     name: 'Auger',
     id: 'auger',
     icon: 'images/auger-icon.png'
   }
 
-  let WaterStorage = {
+  var WaterStorage = {
     name: 'Water Storage',
     id: 'water_storage',
     icon: 'images/water-storage-icon.png'
   }
 
-  let SolarPanel = {
+  var SolarPanel = {
     name: 'Solar Panel',
     id: 'solar_panel',
     icon: 'images/solar-panel-icon.png'
   }
 
-  let PlantSeeds = {
+  var PlantSeeds = {
     name: 'Plant Seeds',
     id: 'plant_seeds',
     icon: 'images/plant-seeds-icon.png'
   }
 
-  let Battery = {
+  var Battery = {
     name: 'Battery',
     id: 'battery',
     icon: 'images/battery-icon.png'
   }
 
-  let ResearchEquipment = {
+  var ResearchEquipment = {
     name: 'Research Equipment',
     id: 'research_equipment',
     icon: 'images/research-equipment-icon.png'
   }
 
-  let NuclearReactor = {
+  var NuclearReactor = {
     name: 'Nuclear Reactor',
     id: 'nuclear_reactor',
     icon: 'images/nuclear-icon.png'
   }
 
-  let PressurizedAirlockEquipment = {
+  var PressurizedAirlockEquipment = {
     name: 'Pressurized Airlock Equipment',
     id: 'pressurized_airlock_equipment',
     icon: 'images/airlock-equipment-icon.png'
   }
 
-  let UvLights = {
+  var UvLights = {
     name: 'UV Lights',
     id: 'uv_lights',
     icon: 'images/uv-lights-icon.png'
   }
 
-  let EntertainmentSystem = {
+  var EntertainmentSystem = {
     name: 'Entertainment System',
     id: 'entertainment_system',
     icon: 'images/entertainment-icon.png'
   }
 
-  let LifeSupport = {
+  var LifeSupport = {
     name: 'Life Support',
     id: 'life_support',
     icon: 'images/life-support-icon.png'
   }
 
-  let GrownPlants = {
+  var GrownPlants = {
     name: 'Grown Plants',
     id: 'grown_plants',
     icon: 'images/grown-plants-icon.png'
   }
 
-  let StorageTanks = {
+  var StorageTanks = {
     name: 'Storage Tanks',
     id: 'storage_tanks',
     icon: 'images/storage-icon.png'
   }
 
-  let SurgicalEquipment = {
+  var SurgicalEquipment = {
     name: 'Surgical Equipment',
     id: 'surgical_equipment',
     icon: 'images/surgical-equipment-icon.png'
@@ -261,8 +261,8 @@ let RadarDish = {
 
   
 
-  let equipmentArray = [
-    RadarDish,
+  var equipmentArray = [
+    Radar_Dish,
     HydroponicsEquipment,
     FirstAidSupplies,
     MoxieEquipment,

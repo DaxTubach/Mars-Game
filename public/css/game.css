@@ -173,3 +173,48 @@
 .hud-menu-container:hover{
   border-bottom: 2px solid whitesmoke;
 }
+
+#firechat-container {
+  position: absolute;
+  top: 400px;
+  left: 20px;
+  width: 250px;
+  max-height: 300px;
+  display: inline;
+}
+#firechat .chat {
+  height: 250px !important;
+  overflow-y: hidden !important; /*removes chat scrollbar*/
+  border: 0 !important;
+  margin-bottom: 0px !important;
+}
+.clearfix label {
+  color: white;
+}
+
+#firechat div{
+  background: transparent !important;
+}
+
+#firechat .message{
+  color: white !important;
+  margin-bottom: 5px !important; 
+  border-bottom: 1px solid transparent !important; 
+  border-bottom: none !important; 
+}
+
+
+/* removes HQMarsChat room headers from chat UI*/
+#firechat-tab-list {
+  display: none;
+}
+#firechat-header{
+  display: none;
+}
+#firechat .icon {
+  display: none !important;
+}
+
+.tab-pane-menu {
+  display: none !important;
+}

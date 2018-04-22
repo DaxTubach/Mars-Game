@@ -1,4 +1,3 @@
-
 var type = 'WebGL';
 var stage;
 var renderer;
@@ -506,17 +505,15 @@ function initChat(user) {
 }
 
 function setChat(user) {
-
 // universal chat 
 chatRoomID = "-L7oWyTLjpT6O8gMtoe-";
 chatUI._chat.enterRoom(chatRoomID); 
-
 chatUI._user = user;
 
-chatUI._chat.setUser(user.uid, "Hi", function (user) {
+
+chatUI._chat.setUser(user.uid, userData.colony.Name, function (user) {
   chatUI._chat.enterRoom(chatRoomID);
 }); 
-
   // setChatUserToReadOnlyMode(true, user, chatUI, chatRef);
 }
 
@@ -524,13 +521,6 @@ chatUI._chat.setUser(user.uid, "Hi", function (user) {
 function getUser() {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
-
-      // firechat 
-      initChat(user);
-      //document.getElementById('user-name').textContent = user.email;
-      $(document).ready(function() {
-        setChat(user);
-      });
 
       const docRef = db.collection('users').doc(user.uid);
       docRef
@@ -543,6 +533,13 @@ function getUser() {
             userData = doc.data();
             // Kinda works, wont have data right away.
             console.log('CCC', userData);
+
+            // firechat 
+            initChat(user);
+            $(document).ready(function() {
+              setChat(user);
+            });
+
           } else {
             // Doc.data() will be undefined in this case
             console.log('No such document!');

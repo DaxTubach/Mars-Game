@@ -176,17 +176,23 @@
 
 #firechat-container {
   position: absolute;
-  top: 400px;
+  bottom: 15px;
   left: 20px;
   width: 250px;
   max-height: 300px;
   display: inline;
+}
+#firechat .full {
+  width: 150px !important;
 }
 #firechat .chat {
   height: 250px !important;
   overflow-y: hidden !important; /*removes chat scrollbar*/
   border: 0 !important;
   margin-bottom: 0px !important;
+}
+#firechat #firechat-tabs {
+  height: 300px !important
 }
 .clearfix label {
   color: white;
@@ -218,3 +224,7 @@
 .tab-pane-menu {
   display: none !important;
 }
+
+#firechat textarea {
+  color: white !important;
+ }
